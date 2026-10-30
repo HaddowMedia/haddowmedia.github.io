@@ -58,11 +58,21 @@ header.bar{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; backgr
 header .wrap{display:flex; align-items:center; justify-content:space-between; gap:16px; padding-block:12px}
 .mark{font-family:var(--display); font-size:24px; text-decoration:none; display:flex; align-items:center; gap:8px}
 .mark i{width:10px; height:10px; border-radius:50%; background:var(--red); display:inline-block}
-nav{display:flex; gap:18px; flex-wrap:wrap}
-nav a{text-decoration:none; color:var(--muted)}
+header .wrap{flex-wrap:wrap}
+nav{display:flex; gap:22px; align-items:baseline}
+nav a{display:flex; align-items:baseline; gap:6px; text-decoration:none; color:var(--muted); white-space:nowrap; padding-block:4px; border-bottom:2px solid transparent}
+nav a i{font:400 13px var(--mono); letter-spacing:.06em; color:var(--red); font-style:normal}
+nav a span{font-family:var(--display); font-style:italic; font-size:19px; line-height:1}
 nav a:hover, nav a.on{color:var(--ink)}
-nav a.hire{color:var(--red)}
-@media (max-width:620px){ nav .hide-s{display:none} nav{gap:14px} }
+nav a.on{border-bottom-color:var(--red)}
+nav a.hire span{color:var(--red)}
+@media (max-width:980px){
+  header .wrap{padding-block:10px 0; gap:6px}
+  nav{order:2; width:100%; gap:22px; overflow-x:auto; scrollbar-width:none; padding-bottom:6px;
+    margin-left:calc(-1 * var(--gut-l)); margin-right:calc(-1 * var(--gut-r)); padding-left:var(--gut-l); padding-right:var(--gut-r);
+    -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 var(--gut-l), #000 calc(100% - 28px), transparent)}
+  nav::-webkit-scrollbar{display:none}
+}
 .playhead{position:absolute; left:0; bottom:-1px; height:2px; width:100%; background:var(--red); transform-origin:left; transform:scaleX(0)}
 
 /* hero */
@@ -268,12 +278,12 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 <header class="bar">
   <div class="wrap">
     <a class="mark" href="#top"><i></i>Haddow Media</a>
-    <nav class="mono" id="nav">
-      <a href="#work">Work</a>
-      <a href="#shot" class="hide-s">Play</a>
-      <a href="#about" class="hide-s">About</a>
-      <a href="#cv">CV</a>
-      <a href="#hire" class="hire">Hire</a>
+    <nav id="nav" aria-label="Chapters">
+      <a href="#work"><i>I</i><span>The Reels</span></a>
+      <a href="#shot"><i>II</i><span>Call the Shot</span></a>
+      <a href="#about"><i>III</i><span>About Max</span></a>
+      <a href="#cv"><i>IV</i><span>The CV</span></a>
+      <a href="#hire" class="hire"><i>V</i><span>Commission</span></a>
     </nav>
   </div>
   <div class="playhead" id="playhead"></div>
@@ -529,7 +539,13 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     let cur = -1;
     acts.forEach((el,i)=>{ if(el && el.getBoundingClientRect().top < innerHeight*0.4) cur = i; });
     navLinks.forEach((a,i)=>a.classList.toggle('on', i===cur));
+    if(cur !== lastAct){
+      lastAct = cur;
+      const nav = document.getElementById('nav'), a = navLinks[cur];
+      if(a && nav.scrollWidth > nav.clientWidth) nav.scrollTo({left: a.offsetLeft - nav.offsetLeft - 16, behavior: reduce?'auto':'smooth'});
+    }
   }
+  let lastAct = -1;
   addEventListener('scroll', onScroll, {passive:true}); onScroll();
 
   const thumb = id => 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';

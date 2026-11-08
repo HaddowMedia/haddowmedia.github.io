@@ -6,7 +6,7 @@
 <link rel="canonical" href="https://haddowmedia.co.uk/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#0F0F0F">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="64x64">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Haddow Media">
@@ -31,7 +31,7 @@
       "@id": "https://haddowmedia.co.uk/#org",
       "name": "Haddow Media",
       "url": "https://haddowmedia.co.uk/",
-      "logo": "https://haddowmedia.co.uk/apple-touch-icon.png",
+      "logo": "https://haddowmedia.co.uk/logo-round.png",
       "image": "https://haddowmedia.co.uk/og.png",
       "description": "Independent documentary and video production studio in London making portrait films, heritage and place films, and short-form social video.",
       "email": "haddowmedia96@gmail.com",
@@ -117,7 +117,9 @@ p{margin:0}
 header.bar{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
 header .wrap{display:flex; align-items:center; justify-content:space-between; gap:16px; padding-block:12px}
 .mark{font-family:var(--display); font-size:24px; text-decoration:none; display:flex; align-items:center; gap:8px}
-.logo{display:block; width:104px; height:34px; background:var(--ink); -webkit-mask:url(img/logo.png) left center/contain no-repeat; mask:url(img/logo.png) left center/contain no-repeat}
+.logo{display:block; width:122px; height:auto}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .logo{filter:invert(1)} }
+:root[data-theme="dark"] .logo{filter:invert(1)}
 header .wrap{flex-wrap:wrap}
 nav{display:flex; gap:22px; align-items:baseline}
 nav a{display:flex; align-items:baseline; gap:6px; text-decoration:none; color:var(--muted); white-space:nowrap; padding-block:4px; border-bottom:2px solid transparent}
@@ -358,7 +360,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
 <header class="bar">
   <div class="wrap">
-    <a class="mark" href="#top" aria-label="Haddow Media, back to top"><span class="logo"></span></a>
+    <a class="mark" href="#top" aria-label="Haddow Media, back to top"><img class="logo" src="img/logo.png" alt="Haddow Media" width="122" height="40"></a>
     <nav id="nav" aria-label="Chapters">
       <a href="#work"><i>I</i><span>The Work</span></a>
       <a href="#shot"><i>II</i><span>Call the Shot</span></a>
@@ -608,7 +610,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
      desc:'Our founder’s documentary about his grandad, now in production. The trailer gives a first look.'},
     {id:'OaNAgC1RfS0', img:'film-heart', title:'The Heart of Midlothian', kind:'Presented short documentary', year:'', tag:'Presented by Jake Middleton',
      desc:'A short, presented documentary about a historical cultural symbol and how its meaning has been turned on its head.'},
-    {id:'BOCdvzqjq4Q', img:'film-skye', title:'The Impact of Tourism', sub:'Isle of Skye', kind:'Documentary', year:'', tag:'Isle of Skye',
+    {id:'BOCdvzqjq4Q', img:'film-skye', title:'Isle of Skye', sub:'Impact of Tourism', kind:'Documentary', year:'', tag:'Isle of Skye',
      desc:'From the Old Man of Storr to Neist Point and Portree harbour: what happens to an island when the whole world wants to see it.'}
   ];
   const minis = [

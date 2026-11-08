@@ -1,10 +1,70 @@
 <!doctype html>
 <html lang="en-GB">
 <meta charset="utf-8">
-<title>Haddow Media</title>
+<title>Haddow Media | Documentary &amp; Video Production Studio in London</title>
+<meta name="description" content="Haddow Media is a London documentary and video production studio. We make portrait films, heritage and place films, and short-form social video. See our work and book a film online.">
+<link rel="canonical" href="https://haddowmedia.co.uk/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#0F0F0F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Haddow Media">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://haddowmedia.co.uk/">
+<meta property="og:title" content="Haddow Media | Documentary &amp; Video Production in London">
+<meta property="og:description" content="We make films about people, places and the history between them. Portrait films, place films and short-form video, booked online.">
+<meta property="og:image" content="https://haddowmedia.co.uk/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Haddow Media: We make films about people, places and the history between them.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Haddow Media | Documentary &amp; Video Production in London">
+<meta name="twitter:description" content="We make films about people, places and the history between them.">
+<meta name="twitter:image" content="https://haddowmedia.co.uk/og.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://haddowmedia.co.uk/#org",
+      "name": "Haddow Media",
+      "url": "https://haddowmedia.co.uk/",
+      "logo": "https://haddowmedia.co.uk/apple-touch-icon.png",
+      "image": "https://haddowmedia.co.uk/og.png",
+      "description": "Independent documentary and video production studio in London making portrait films, heritage and place films, and short-form social video.",
+      "email": "haddowmedia96@gmail.com",
+      "areaServed": "United Kingdom",
+      "address": {"@type": "PostalAddress", "addressLocality": "London", "addressCountry": "GB"},
+      "founder": {"@type": "Person", "@id": "https://haddowmedia.co.uk/maxhm/#max", "name": "Max Haddow-Mendes", "url": "https://haddowmedia.co.uk/maxhm/"},
+      "sameAs": [
+        "https://www.youtube.com/@haddow-media",
+        "https://www.instagram.com/haddow_media",
+        "https://www.tiktok.com/@haddowmedia"
+      ],
+      "makesOffer": [
+        {"@type": "Offer", "price": "600", "priceCurrency": "GBP", "url": "https://haddowmedia.co.uk/#hire",
+         "itemOffered": {"@type": "Service", "name": "Portrait film", "serviceType": "Documentary film production", "description": "A short documentary about a person who matters to you: one filming day, a finished film up to 5 minutes, one round of revisions."}},
+        {"@type": "Offer", "price": "850", "priceCurrency": "GBP", "url": "https://haddowmedia.co.uk/#hire",
+         "itemOffered": {"@type": "Service", "name": "Place film", "serviceType": "Heritage and venue film production", "description": "A 3 to 5 minute film about a museum, heritage site, venue or business, plus a 60-second cut."}},
+        {"@type": "Offer", "price": "400", "priceCurrency": "GBP", "url": "https://haddowmedia.co.uk/#hire",
+         "itemOffered": {"@type": "Service", "name": "Short-form social pack", "serviceType": "Social media video production", "description": "Half-day shoot and three vertical edits for Instagram, TikTok and YouTube Shorts."}}
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://haddowmedia.co.uk/#website",
+      "url": "https://haddowmedia.co.uk/",
+      "name": "Haddow Media",
+      "inLanguage": "en-GB",
+      "publisher": {"@id": "https://haddowmedia.co.uk/#org"}
+    }
+  ]
+}
+</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Max Haddow-Mendes — documentary and experimental filmmaker, videographer and editor based in London.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -199,7 +259,7 @@ section.act-body{padding-block:48px 72px}
 @media (max-width:760px){ .facts{grid-template-columns:repeat(2,minmax(0,1fr))} }
 .facts div{background:var(--paper); padding:16px 14px; min-width:0}
 .facts span{display:block; color:var(--muted)}
-.facts b{display:block; font-family:var(--display); font-weight:400; font-size:clamp(24px,5vw,32px); line-height:1.05; margin-top:6px}
+.facts b{display:block; font-family:var(--display); font-weight:400; font-size:clamp(24px,5vw,32px); line-height:1.05; margin-top:6px; overflow-wrap:break-word; hyphens:auto}
 
 /* cv */
 .cv-top{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); gap:36px; align-items:start}
@@ -524,13 +584,13 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     {href:'https://youtu.be/NPfmA9y58Cs', id:'NPfmA9y58Cs', title:'Crichton Castle', short:'Crichton Castle', kind:'Short doc'}
   ];
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  const img = id => id ? '<img alt="" loading="lazy" src="'+thumb(id)+'" onerror="this.remove()">' : '';
+  const img = (id, alt) => id ? '<img alt="'+(alt?esc(alt)+' – still from the film':'')+'" loading="lazy" src="'+thumb(id)+'" onerror="this.remove()">' : '';
 
   document.getElementById('reels').innerHTML = films.map((f,i)=>{
     const t = f.red ? '<span style="color:#E0353C">'+f.title+'</span>' : f.title;
     return '<article class="reel reveal">'+
       '<a class="frame" href="https://youtu.be/'+f.id+'" target="_blank" rel="noopener" aria-label="Watch '+f.title+' on YouTube">'+
-        '<div class="card"><span class="t">'+t+'</span>'+(f.sub?'<span class="s">'+f.sub+'</span>':'')+'</div>'+img(f.id)+
+        '<div class="card"><span class="t">'+t+'</span>'+(f.sub?'<span class="s">'+f.sub+'</span>':'')+'</div>'+img(f.id, f.title)+
         '<span class="no">'+pad(i+1)+'</span><span class="play">&#9654; Watch</span></a>'+
       '<div class="meta mono"><span>'+f.kind+'</span><span>'+f.year+'</span></div>'+
       '<h3>'+f.title+(f.sub?': <em>'+f.sub+'</em>':'')+'</h3>'+
@@ -540,7 +600,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
   document.getElementById('minis').innerHTML = minis.map(m=>
     '<a class="mini" href="'+m.href+'" target="_blank" rel="noopener">'+
-      '<div class="frame"><div class="card"><span class="t">'+esc(m.short)+'</span></div>'+img(m.id)+'</div>'+
+      '<div class="frame"><div class="card"><span class="t">'+esc(m.short)+'</span></div>'+img(m.id, m.title)+'</div>'+
       '<b>'+esc(m.title)+'</b><span class="mono k">'+m.kind+'</span></a>').join('');
 
 

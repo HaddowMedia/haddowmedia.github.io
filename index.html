@@ -117,7 +117,7 @@ p{margin:0}
 header.bar{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
 header .wrap{display:flex; align-items:center; justify-content:space-between; gap:16px; padding-block:12px}
 .mark{font-family:var(--display); font-size:24px; text-decoration:none; display:flex; align-items:center; gap:8px}
-.mark i{width:10px; height:10px; border-radius:50%; background:var(--red); display:inline-block}
+.logo{display:block; width:104px; height:34px; background:var(--ink); -webkit-mask:url(img/logo.png) left center/contain no-repeat; mask:url(img/logo.png) left center/contain no-repeat}
 header .wrap{flex-wrap:wrap}
 nav{display:flex; gap:22px; align-items:baseline}
 nav a{display:flex; align-items:baseline; gap:6px; text-decoration:none; color:var(--muted); white-space:nowrap; padding-block:4px; border-bottom:2px solid transparent}
@@ -190,6 +190,7 @@ section.act-body{padding-block:48px 72px}
 @media (min-width:860px){
   .rail.reels{grid-auto-flow:row; grid-template-columns:repeat(2,minmax(0,1fr)); gap:44px 28px; overflow:visible; margin:0; padding:0}
   .reels-nav{display:none}
+  .rail.reels > :first-child{grid-column:1/-1}
 }
 .frame{display:block; position:relative; aspect-ratio:16/9; max-width:100%; background:var(--frame); color:var(--frame-ink); text-decoration:none; overflow:hidden}
 .frame .card{position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:24px; gap:10px}
@@ -211,7 +212,7 @@ section.act-body{padding-block:48px 72px}
 .also{margin-top:56px}
 .rail.minis{grid-auto-columns:58%}
 @media (min-width:620px){ .rail.minis{grid-auto-columns:34%} }
-@media (min-width:860px){ .rail.minis{grid-auto-flow:row; grid-template-columns:repeat(4,minmax(0,1fr)); overflow:visible; margin:0; padding:0} }
+@media (min-width:860px){ .rail.minis{grid-auto-flow:row; grid-template-columns:repeat(5,minmax(0,1fr)); overflow:visible; margin:0; padding:0} }
 .mini{text-decoration:none}
 .mini .frame .card .t{font-size:22px}
 .mini b{display:block; font-family:var(--display); font-weight:400; font-size:21px; line-height:1.15; margin-top:10px}
@@ -240,10 +241,26 @@ section.act-body{padding-block:48px 72px}
 .gbtn{margin-top:12px; align-self:flex-start; background:var(--frame-red); color:#fff; border:0; padding:11px 16px; font:500 15px var(--body); cursor:pointer}
 .result h3{font-size:clamp(40px,6vw,64px); margin-top:14px; color:var(--frame-red)}
 .result p{margin-top:14px; color:#D6D4CE; max-width:48ch}
+.still{display:block; width:100%; max-width:100%; aspect-ratio:16/9; object-fit:cover; margin-top:14px; background:#1b1b1a}
 .from{margin-top:14px; color:var(--frame-red)}
 .from i{font-family:var(--display); font-size:17px; letter-spacing:0; text-transform:none}
 .watch{color:var(--frame-ink); text-decoration:none; border-bottom:1px solid var(--frame-red); padding-bottom:2px}
 .watch i{font-style:italic; text-transform:none}
+.founder{display:block; width:100%; max-width:100%; aspect-ratio:4/5; object-fit:cover; object-position:30% 30%; margin:8px 0 12px; filter:grayscale(1) contrast(1.05)}
+.rail.gal{grid-auto-columns:62%}
+@media (min-width:620px){ .rail.gal{grid-auto-columns:38%} }
+@media (min-width:860px){ .rail.gal{grid-auto-columns:24%} }
+.gal figure{margin:0; cursor:zoom-in}
+.gal img{display:block; width:100%; max-width:100%; aspect-ratio:4/5; object-fit:cover; background:var(--line)}
+.gal.photos img{aspect-ratio:3/2}
+.gal figcaption{font-size:13px; color:var(--muted); margin-top:8px}
+.k{color:var(--muted)}
+.lb{position:fixed; inset:0; z-index:50; background:rgba(5,5,5,.94); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) max(16px, env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 24px) max(16px, env(safe-area-inset-left,0px))}
+.lb[hidden]{display:none!important}
+.lb img{max-width:100%; max-height:78vh; object-fit:contain}
+.lb p{color:#D6D4CE; text-align:center; max-width:60ch}
+.lb-x{position:absolute; top:calc(env(safe-area-inset-top,0px) + 10px); right:max(12px, env(safe-area-inset-right,0px)); width:44px; height:44px; border:1px solid #3A3936; background:transparent; color:#fff; font-size:26px; cursor:pointer}
 .gbtn-alt{border-color:var(--frame-line); color:var(--frame-ink); align-self:flex-start}
 
 /* about */
@@ -259,7 +276,7 @@ section.act-body{padding-block:48px 72px}
 @media (max-width:760px){ .facts{grid-template-columns:repeat(2,minmax(0,1fr))} }
 .facts div{background:var(--paper); padding:16px 14px; min-width:0}
 .facts span{display:block; color:var(--muted)}
-.facts b{display:block; font-family:var(--display); font-weight:400; font-size:clamp(24px,5vw,32px); line-height:1.05; margin-top:6px; overflow-wrap:break-word; hyphens:auto}
+.facts b{display:block; font-family:var(--display); font-weight:400; font-size:clamp(18px,4.4vw,32px); line-height:1.1; margin-top:6px; overflow-wrap:break-word}
 
 /* cv */
 .cv-top{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); gap:36px; align-items:start}
@@ -341,7 +358,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
 <header class="bar">
   <div class="wrap">
-    <a class="mark" href="#top"><i></i>Haddow Media</a>
+    <a class="mark" href="#top" aria-label="Haddow Media, back to top"><span class="logo"></span></a>
     <nav id="nav" aria-label="Chapters">
       <a href="#work"><i>I</i><span>The Work</span></a>
       <a href="#shot"><i>II</i><span>Call the Shot</span></a>
@@ -377,7 +394,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   <section class="act-body">
     <div class="wrap">
       <div class="rail-head reels-nav">
-        <span class="count" id="reel-count"><b>01</b> / 04 · swipe</span>
+        <span class="count" id="reel-count"><b>01</b> / 05 · swipe</span>
         <div class="rail-nav"><button type="button" data-rail="reels" data-dir="-1" aria-label="Previous film">&larr;</button><button type="button" data-rail="reels" data-dir="1" aria-label="Next film">&rarr;</button></div>
       </div>
       <div class="rail reels" id="reels"></div>
@@ -420,8 +437,9 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         </div>
         <div class="scene-b reveal">
           <span class="mono">Who's behind it</span>
+          <img class="founder" src="img/max-fairypools.jpg" alt="Max Haddow-Mendes on location at the Fairy Pools, Isle of Skye" loading="lazy">
           <h3>Max Haddow-Mendes</h3>
-          <p>Haddow Media was founded by Max Haddow-Mendes, a Lancaster University Film Studies graduate with an HNC in Television Production. He films, edits and produces every project. <a href="https://haddowmedia.github.io/maxhm/" target="_blank" rel="noopener">Read Max's CV &#8599;</a></p>
+          <p>Haddow Media was founded by Max Haddow-Mendes, a Lancaster University Film Studies graduate with an HNC in Television Production. He films, edits and produces every project. <a href="https://haddowmedia.co.uk/maxhm/">Read Max's CV &#8599;</a></p>
         </div>
       </div>
       <div class="facts mono reveal">
@@ -430,8 +448,22 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         <div><span>Founded by</span><b>Max Haddow-Mendes</b></div>
         <div><span>In production</span><b><i>Vic</i></b></div>
       </div>
+
+      <div class="also">
+        <div class="rail-head"><span class="mono">Behind the scenes</span><span class="mono k">Tap to enlarge</span></div>
+        <div class="rail gal bts" id="bts"></div>
+      </div>
+      <div class="also">
+        <div class="rail-head"><span class="mono">Through the lens</span><a class="mono k" href="https://haddowmedia.co.uk/maxhm/#photos">Full gallery &#8599;</a></div>
+        <div class="rail gal photos" id="photos"></div>
+      </div>
     </div>
   </section>
+  <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button type="button" class="lb-x" id="lb-x" aria-label="Close">&times;</button>
+    <img id="lb-img" alt="">
+    <p class="mono" id="lb-cap"></p>
+  </div>
 
   <!-- ACT IV -->
   <div class="inter" id="hire"><div class="wrap"><div class="box reveal">
@@ -568,29 +600,32 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
   /* films */
   const films = [
-    {id:'sQ3KlFUEUUA', title:'The Third Web', kind:'Interactive fiction', year:'2023', tag:'Dissertation · Lancaster University',
+    {id:'sQ3KlFUEUUA', img:'film-thirdweb', title:'The Third Web', kind:'Interactive fiction', year:'2023', tag:'Dissertation · Lancaster University',
      desc:'A classical Hollywood narrative the audience steers. Every outcome was filmed so viewers could choose the story live; this screening cut plays the illusion of choice on its own.'},
     {id:'UzqtdUVBWYs', title:'Lancaster', sub:'A City With a Living History', kind:'Silent city symphony', year:'2023', tag:'Arts Beats Festival', red:true,
      desc:'A silent portrait of Lancaster in black and white, where a single isolated red traces the city’s roots in the transatlantic slave trade.'},
-    {id:'8en_0AMpEnM', title:'Vic', kind:'Feature documentary · Trailer', year:'In progress', tag:'In development',
+    {id:'8en_0AMpEnM', img:'film-vic', title:'Vic', kind:'Feature documentary · Trailer', year:'In progress', tag:'In development',
      desc:'Our founder’s documentary about his grandad, now in production. The trailer gives a first look.'},
-    {id:'OaNAgC1RfS0', title:'The Heart of Midlothian', kind:'Presented short documentary', year:'', tag:'',
-     desc:'A short, presented documentary about a historical cultural symbol and how its meaning has been turned on its head.'}
+    {id:'OaNAgC1RfS0', img:'film-heart', title:'The Heart of Midlothian', kind:'Presented short documentary', year:'', tag:'Presented by Jake Middleton',
+     desc:'A short, presented documentary about a historical cultural symbol and how its meaning has been turned on its head.'},
+    {id:'BOCdvzqjq4Q', img:'film-skye', title:'The Impact of Tourism', sub:'Isle of Skye', kind:'Documentary', year:'', tag:'Isle of Skye',
+     desc:'From the Old Man of Storr to Neist Point and Portree harbour: what happens to an island when the whole world wants to see it.'}
   ];
   const minis = [
-    {href:'https://drive.google.com/file/d/1xvB9yPLp9BqG_gPS5XYQYAuxzD6hxi9U/view?usp=sharing', title:'Armadale Castle, Gardens & Museum of the Isles', short:'Armadale', kind:'Commission · 2023'},
+    {href:'https://drive.google.com/file/d/1xvB9yPLp9BqG_gPS5XYQYAuxzD6hxi9U/view?usp=sharing', img:'film-armadale', title:'Armadale Castle, Gardens & Museum of the Isles', short:'Armadale', kind:'Commission · 2023'},
     {href:'https://drive.google.com/file/d/1pQIz4xmOn127S6B1ZcPIbgfhkEZ09ckU/view?usp=sharing', title:'Stewart Dawber on the River Creedy', short:'River Creedy', kind:'Portrait'},
-    {href:'https://youtu.be/4xDeb9Mbi2c', id:'4xDeb9Mbi2c', title:'The Portuguese Cannon', short:'The Portuguese Cannon', kind:'Short doc'},
-    {href:'https://youtu.be/NPfmA9y58Cs', id:'NPfmA9y58Cs', title:'Crichton Castle', short:'Crichton Castle', kind:'Short doc'}
+    {href:'https://youtu.be/4xDeb9Mbi2c', img:'film-cannon', title:'The Portuguese Cannon', short:'The Portuguese Cannon', kind:'Presented by Jake Middleton'},
+    {href:'https://youtu.be/NPfmA9y58Cs', img:'film-crichton', title:'Crichton Castle', short:'Crichton Castle', kind:'Presented by David Weinczok'},
+    {img:'film-sea2018', title:'Southeast Asia 2018', short:'Southeast Asia', kind:'Travel film · 2018'}
   ];
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  const img = (id, alt) => id ? '<img alt="'+(alt?esc(alt)+' – still from the film':'')+'" loading="lazy" src="'+thumb(id)+'" onerror="this.remove()">' : '';
+  const img = (id, alt, local) => (local||id) ? '<img alt="'+(alt?esc(alt)+' – still from the film':'')+'" loading="lazy" src="'+(local?'img/'+local+'.jpg':thumb(id))+'" onerror="this.remove()">' : '';
 
   document.getElementById('reels').innerHTML = films.map((f,i)=>{
     const t = f.red ? '<span style="color:#E0353C">'+f.title+'</span>' : f.title;
     return '<article class="reel reveal">'+
       '<a class="frame" href="https://youtu.be/'+f.id+'" target="_blank" rel="noopener" aria-label="Watch '+f.title+' on YouTube">'+
-        '<div class="card"><span class="t">'+t+'</span>'+(f.sub?'<span class="s">'+f.sub+'</span>':'')+'</div>'+img(f.id, f.title)+
+        '<div class="card"><span class="t">'+t+'</span>'+(f.sub?'<span class="s">'+f.sub+'</span>':'')+'</div>'+img(f.id, f.title, f.img)+
         '<span class="no">'+pad(i+1)+'</span><span class="play">&#9654; Watch</span></a>'+
       '<div class="meta mono"><span>'+f.kind+'</span><span>'+f.year+'</span></div>'+
       '<h3>'+f.title+(f.sub?': <em>'+f.sub+'</em>':'')+'</h3>'+
@@ -599,10 +634,40 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   }).join('');
 
   document.getElementById('minis').innerHTML = minis.map(m=>
-    '<a class="mini" href="'+m.href+'" target="_blank" rel="noopener">'+
-      '<div class="frame"><div class="card"><span class="t">'+esc(m.short)+'</span></div>'+img(m.id, m.title)+'</div>'+
-      '<b>'+esc(m.title)+'</b><span class="mono k">'+m.kind+'</span></a>').join('');
+    (m.href?'<a class="mini" href="'+m.href+'" target="_blank" rel="noopener">':'<div class="mini">')+
+      '<div class="frame"><div class="card"><span class="t">'+esc(m.short)+'</span></div>'+img(m.id, m.title, m.img)+'</div>'+
+      '<b>'+esc(m.title)+'</b><span class="mono k">'+m.kind+'</span>'+(m.href?'</a>':'</div>')).join('');
 
+
+  /* galleries + lightbox */
+  const bts = [
+    ['bts-direct','The Third Web: blocking a scene outside the Lancaster University students\u2019 union shop'],
+    ['bts-floor','The Third Web: rolling on the spilled-yoghurt scene'],
+    ['bts-counter','The Third Web: shooting at the till'],
+    ['bts-boom','The Third Web: camera and boom set up'],
+    ['bts-monitor','The Third Web: checking the frame'],
+    ['bts-door','The Third Web: the doorway shot'],
+    ['skye-d600','Isle of Skye: setting up by the Skye Bridge'],
+    ['skye-interview','Isle of Skye: interviews at the Old Man of Storr']
+  ];
+  const photos = [
+    ['photo-glenfinnan','Glenfinnan Viaduct'],['photo-quiraing','The Quiraing, Isle of Skye'],['photo-cuillin','The Cuillin at dusk, Isle of Skye'],
+    ['photo-storr','The Old Man of Storr in fog'],['photo-boats','Low tide at sunset'],['photo-portree','Portree harbour']
+  ];
+  const fig = ([f,c]) => '<figure data-src="img/'+f+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+f+'.jpg" alt="'+esc(c)+'" loading="lazy"><figcaption>'+esc(c)+'</figcaption></figure>';
+  document.getElementById('bts').innerHTML = bts.map(fig).join('');
+  document.getElementById('photos').innerHTML = photos.map(fig).join('');
+  const lb = document.getElementById('lb'), lbImg = document.getElementById('lb-img'), lbCap = document.getElementById('lb-cap');
+  let lbFrom = null;
+  function openLb(el){ lbFrom = el; lbImg.src = el.dataset.src; lbImg.alt = el.dataset.cap; lbCap.textContent = el.dataset.cap; lb.hidden = false; document.getElementById('lb-x').focus(); }
+  function closeLb(){ lb.hidden = true; lbImg.removeAttribute('src'); if(lbFrom) lbFrom.focus(); }
+  document.querySelectorAll('.gal figure').forEach(f=>{
+    f.addEventListener('click',()=>openLb(f));
+    f.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(f); } });
+  });
+  document.getElementById('lb-x').addEventListener('click', closeLb);
+  lb.addEventListener('click', e=>{ if(e.target===lb) closeLb(); });
+  addEventListener('keydown', e=>{ if(e.key==='Escape' && !lb.hidden) closeLb(); });
 
   /* rails: counters + arrows */
   function rail(id, countId, total){
@@ -655,23 +720,23 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     black:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="#000" stroke="currentColor"/><text x="28" y="23" font-size="8" fill="#E0353C" text-anchor="middle" font-family="monospace">?</text></svg>'
   };
   const scenes = [
-    {film:'The Third Web', id:'sQ3KlFUEUUA', slug:'Int. Workplace — Day', text:'Our hero finally comes face to face with the manager who has been <em>exploiting him</em> for every task.', opts:[
+    {film:'The Third Web', id:'sQ3KlFUEUUA', still:'img/film-thirdweb-manager.jpg', slug:'Int. Workplace — Day', text:'Our hero finally comes face to face with the manager who has been <em>exploiting him</em> for every task.', opts:[
       {s:'low', n:'Low angle on the manager', h:'Show who holds the power', k:'P', note:'Shooting up at the manager makes him loom over the scene, so the audience feels the pressure our hero is under.'},
       {s:'srs', n:'Shot, reverse shot, tight singles', h:'Make it a duel', k:'I', note:'Classical Hollywood grammar. Cutting between two close faces turns a conversation into a stand-off.'},
       {s:'black', n:'Stop the film and hand over the choice', h:'Let the viewer decide', k:'O', note:'This is how The Third Web was made: at key moments the film stops and the audience picks what the hero does next. Every outcome was filmed.'}]},
-    {film:'Vic', id:'8en_0AMpEnM', slug:'Int. Grandad’s living room — Day', text:'Grandad turns the pages of a family photo album. He stops on one picture and <em>goes quiet</em>.', opts:[
+    {film:'Vic', id:'8en_0AMpEnM', still:'img/film-vic-close.jpg', slug:'Int. Grandad’s kitchen — Day', text:'Grandad sits at his kitchen table and starts telling a story he has told a hundred times. Then his voice <em>catches</em>.', opts:[
       {s:'ecu', n:'Extreme close-up on his eyes', h:'Feel the memory land', k:'I', note:'Nothing but his face. The audience reads the photo through his reaction and never needs to see it.'},
       {s:'ots', n:'Over the shoulder, onto the photo', h:'Share what he sees', k:'O', note:'We look with him. The image does the talking, and the viewer gets a moment to connect the dots.'},
       {s:'wide', n:'Wide, from the doorway', h:'Give him space', k:'P', note:'Distance makes the silence heavier. It also makes us intruders, which can be uncomfortable in a good way.'}]},
-    {film:'Lancaster: A City With a Living History', id:'UzqtdUVBWYs', slug:'Ext. Lancaster streets — Day', text:'A silent film with no dialogue. The audience has to see the city’s <em>roots in the slave trade</em> without a single word spoken.', opts:[
+    {film:'Lancaster: A City With a Living History', id:'UzqtdUVBWYs', still:'https://i.ytimg.com/vi/UzqtdUVBWYs/hqdefault.jpg', slug:'Ext. Lancaster streets — Day', text:'A silent film with no dialogue. The audience has to see the city’s <em>roots in the slave trade</em> without a single word spoken.', opts:[
       {s:'isolate', n:'Black and white, with one colour left in', h:'Let red lead the eye', k:'I', note:'This is what the film does: everything is shot in black and white except red, which picks out the traces of the city’s past.'},
       {s:'title', n:'A silent-film intertitle', h:'Say it in one card', k:'O', note:'True to the silent era. One line of text on black frames everything that follows.'},
       {s:'broll', n:'Dissolve archive images over today’s streets', h:'Layer then and now', k:'P', note:'Past and present share the frame, so the audience can’t look at the street without seeing its history.'}]},
-    {film:'The Heart of Midlothian', id:'OaNAgC1RfS0', slug:'Ext. Royal Mile, Edinburgh — Day', text:'A heart is set into the cobbles. People walk around it, and some <em>stop to spit on it</em>.', opts:[
+    {film:'The Heart of Midlothian', id:'OaNAgC1RfS0', still:'img/film-heart-feet.jpg', slug:'Ext. Royal Mile, Edinburgh — Day', text:'A heart is set into the cobbles. People walk around it, and some <em>stop to spit on it</em>.', opts:[
       {s:'top', n:'Overhead, the heart filling the frame', h:'Wait for someone to step in', k:'O', note:'Lock off from above and let passers-by enter the frame. The ritual plays out by itself.'},
       {s:'present', n:'Presenter to camera beside it', h:'Tell its story directly', k:'I', note:'A presented documentary puts a guide on screen, so the audience hears why a symbol people once respected is now spat on.'},
       {s:'ecu', n:'Close-up on a passer-by’s face', h:'Catch the moment', k:'P', note:'Candid and human, but you need to ask permission afterwards.'}]},
-    {film:'Crichton Castle', id:'NPfmA9y58Cs', slug:'Ext. Crichton Castle — Morning', text:'The castle stands roofless above the valley. Wind moves through the empty courtyard where <em>a household once lived</em>.', opts:[
+    {film:'Crichton Castle', id:'NPfmA9y58Cs', still:'img/film-crichton.jpg', slug:'Ext. Crichton Castle — Morning', text:'The castle stands roofless above the valley. Wind moves through the empty courtyard where <em>a household once lived</em>.', opts:[
       {s:'push', n:'Slow push-in', h:'Draw us towards the past', k:'I', note:'A gentle dolly forward invites the viewer to lean in, as if listening for voices.'},
       {s:'hold', n:'Static wide, held for ten seconds', h:'Trust the stillness', k:'O', note:'A city-symphony move. Hold long enough and the audience starts filling the space themselves.'},
       {s:'hand', n:'Handheld walk-through', h:'Put us there now', k:'P', note:'Footsteps and breath make the history physical and present, rather than polished and distant.'}]}
@@ -690,6 +755,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     game.innerHTML =
       '<div><div class="top mono"><span>Scene '+(step+1)+' of '+scenes.length+'</span><span>'+sc.slug+'</span></div>'+
       '<div class="from mono">From <i>'+sc.film+'</i></div>'+
+      '<img class="still" src="'+sc.still+'" alt="Still from '+sc.film+'" onerror="this.remove()">'+
       '<p class="scene">'+sc.text+'</p>'+dots()+'<div id="note"></div></div>'+
       '<div class="opts">'+sc.opts.map((o,i)=>'<button class="opt" type="button" data-i="'+i+'">'+shots[o.s]+'<span><b>'+o.n+'</b><small>'+o.h+'</small></span></button>').join('')+'</div>';
     game.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>choose(+b.dataset.i)));

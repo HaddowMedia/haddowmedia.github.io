@@ -216,33 +216,104 @@ section.act-body{padding-block:clamp(24px,5vw,40px) clamp(32px,6vw,56px)}
 .mini span.k{color:var(--muted)}
 .mini:hover b{color:var(--red)}
 
-/* game */
-.game{background:var(--frame); color:var(--frame-ink); padding:28px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:32px; min-height:420px}
-@media (max-width:820px){ .game{grid-template-columns:1fr; padding:20px; gap:22px} }
-.game .top{display:flex; justify-content:space-between; gap:12px; color:var(--frame-muted)}
-.game .scene{font-family:var(--body); font-weight:500; font-size:clamp(21px,3vw,28px); line-height:1.3; margin-top:18px}
+/* game: Call the Shot — a camera monitor you reframe live */
+.game{background:var(--frame); color:var(--frame-ink); padding:20px; display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:24px; align-items:start}
+@media (max-width:860px){ .game{grid-template-columns:1fr; padding:0; background:transparent; gap:16px} }
+.strip5{grid-column:1/-1; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:6px}
+.strip5 .cell{position:relative; aspect-ratio:16/9; background:#1d1b19; border:1px solid var(--frame-line); overflow:hidden}
+.strip5 .cell.now{border-color:var(--frame-red)}
+.strip5 .cell span{position:absolute; left:4px; bottom:2px; font:600 10px var(--mono); letter-spacing:.08em; color:var(--frame-muted); z-index:3}
+.strip5 .cell.now span{color:var(--frame-red)}
+.mon{position:relative; aspect-ratio:16/9; overflow:hidden; background:#050505; max-width:100%; --fx:50%; --fy:45%}
+.mon .cam{position:absolute; inset:0; transform-origin:var(--fx) var(--fy); transition:transform 1s cubic-bezier(.2,.7,.2,1), filter .7s ease, opacity .5s}
+.mon .cam img{display:block; width:100%; height:100%; object-fit:cover}
+.mon .ghost{position:absolute; inset:0; opacity:0; transition:opacity .8s; mix-blend-mode:screen; pointer-events:none}
+.mon .ghost img{width:100%; height:100%; object-fit:cover; transform:scaleX(-1) scale(1.2); filter:sepia(1) contrast(1.2) brightness(.8)}
+.mon .ov{position:absolute; inset:0; pointer-events:none; z-index:2}
+.hud{position:absolute; inset:10px; pointer-events:none; z-index:4; font:600 11px var(--mono); letter-spacing:.1em; text-transform:uppercase; color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.7)}
+.hud::before,.hud::after{content:""; position:absolute; width:18px; height:18px; border:2px solid rgba(255,255,255,.75)}
+.hud::before{left:0; top:0; border-right:0; border-bottom:0}
+.hud::after{right:0; bottom:0; border-left:0; border-top:0}
+.hud .rec{position:absolute; left:26px; top:2px; display:flex; align-items:center; gap:6px}
+.hud .rec i{width:8px; height:8px; border-radius:50%; background:#E0353C; animation:recb 1.2s steps(2) infinite}
+@keyframes recb{50%{opacity:.15}}
+.hud .tc{position:absolute; right:26px; top:2px; font-variant-numeric:tabular-nums}
+.hud .lbl{position:absolute; left:0; bottom:0; max-width:80%; background:rgba(10,9,8,.72); padding:5px 8px; color:var(--frame-red); text-shadow:none}
+.hud .lbl b{color:#fff; font-weight:600}
+.mon.small .hud, .mon.small .ov .txt{display:none}
+.mon .flash{position:absolute; inset:0; background:#fff; opacity:0; z-index:5; pointer-events:none}
+.mon .flash.go{animation:flash .5s ease-out}
+@keyframes flash{0%{opacity:.85}100%{opacity:0}}
+.mon .slate{position:absolute; left:50%; top:50%; z-index:6; transform:translate(-50%,-50%) scale(.9); background:#0A0908; border:2px solid var(--frame-ink); padding:10px 16px; text-align:center; opacity:0; pointer-events:none}
+.mon .slate b{display:block; font:700 26px var(--display); text-transform:uppercase; letter-spacing:.03em}
+.mon .slate small{font:600 11px var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--frame-red)}
+.mon .slate.go{animation:slate 1s ease forwards}
+@keyframes slate{0%{opacity:0; transform:translate(-50%,-50%) scale(.85)}15%,70%{opacity:1; transform:translate(-50%,-50%) scale(1)}100%{opacity:0}}
+/* framings */
+.fx-ecu .cam{transform:scale(2.9)}
+.fx-insert .cam{transform:scale(2.3)}
+.fx-ots .cam{transform:scale(1.4) translateX(-4%)}
+.fx-ots .ov{background:radial-gradient(ellipse 34% 75% at 6% 100%, rgba(5,5,5,.96) 60%, transparent 62%)}
+.fx-wide .cam{transform:scale(.62)}
+.fx-wide .ov{box-shadow:inset 0 0 0 2px rgba(255,255,255,.08)}
+.fx-two .cam{transform:scale(1.15)}
+.fx-dutch .cam{transform:rotate(-12deg) scale(1.4)}
+.fx-tele .cam{transform:scale(1.9); filter:contrast(1.1) saturate(.85)}
+.fx-tele .ov{background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55))}
+.fx-low .cam{transform:perspective(500px) rotateX(-16deg) scale(1.75); transform-origin:80% 95%}
+.fx-low .ov{background:linear-gradient(0deg, rgba(5,5,5,.55), transparent 35%)}
+.fx-srs .cam{transform:scale(1.7)}
+.fx-srs .ov{background:linear-gradient(90deg, transparent calc(50% - 1px), #050505 calc(50% - 1px), #050505 calc(50% + 1px), transparent calc(50% + 1px))}
+.fx-isolate .cam{filter:grayscale(1) contrast(1.25)}
+.fx-isolate .ov{background:radial-gradient(circle at var(--fx) var(--fy), rgba(224,53,60,.38), transparent 18%); mix-blend-mode:color}
+.fx-title .cam{filter:brightness(.18) blur(3px)}
+.fx-broll .cam{filter:sepia(.55) contrast(1.1)}
+.fx-broll .ghost{opacity:.45}
+.fx-top .cam{transform:scale(1.6) rotate(3deg)}
+.fx-top .ov{background:repeating-linear-gradient(0deg, transparent 0 32px, rgba(255,255,255,.06) 32px 33px), repeating-linear-gradient(90deg, transparent 0 32px, rgba(255,255,255,.06) 32px 33px)}
+.fx-present .cam{transform:scale(1.15) translateX(6%)}
+.fx-pov .cam{transform:scale(1.5)}
+.fx-pov .ov{background:radial-gradient(circle at 50% 42%, transparent 16%, #050505 17%), radial-gradient(transparent, transparent)}
+.fx-black .cam{filter:brightness(0)}
+.fx-cut .cam{transform:scale(1.25)}
+.fx-push .cam{animation:push 6s ease-out forwards}
+@keyframes push{from{transform:scale(1)}to{transform:scale(1.65)}}
+.fx-hold .cam{transform:scale(1)}
+.fx-hand .cam{animation:hand 2.4s ease-in-out infinite; transform:scale(1.2)}
+@keyframes hand{0%,100%{transform:scale(1.2) translate(0,0) rotate(0)}25%{transform:scale(1.2) translate(1.2%,-.8%) rotate(.6deg)}50%{transform:scale(1.2) translate(-.8%,.9%) rotate(-.5deg)}75%{transform:scale(1.2) translate(.6%,.5%) rotate(.3deg)}}
+.mon .ov .txt{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 12%; font:700 clamp(18px,4.6vw,30px)/1.05 var(--display); text-transform:uppercase; color:var(--frame-ink)}
+.mon .ov .txt small{font:600 11px var(--mono); letter-spacing:.14em; color:var(--frame-red); margin-bottom:8px}
+.mon .ov .third{position:absolute; left:6%; bottom:20%; background:var(--frame-red); color:#121110; font:700 13px var(--display); letter-spacing:.06em; text-transform:uppercase; padding:4px 8px}
+.panel-g{display:flex; flex-direction:column; gap:12px; min-width:0}
+.panel-g .from{color:var(--frame-red)}
+.game .scene{font-family:var(--body); font-weight:500; font-size:clamp(19px,2.6vw,24px); line-height:1.3; margin:0}
 .game .scene em{color:var(--frame-red); font-style:normal}
-.dots{display:flex; gap:6px; margin-top:22px}
-.dots i{width:22px; height:3px; background:var(--frame-line)}
-.dots i.on{background:var(--frame-red)}
-.opts{display:flex; flex-direction:column; gap:10px; justify-content:center}
-.opt{display:grid; grid-template-columns:56px minmax(0,1fr); gap:14px; align-items:center; text-align:left; width:100%; padding:12px; background:transparent; border:1px solid var(--frame-line); color:var(--frame-ink); font:15px var(--body); cursor:pointer}
-.opt:hover:not(:disabled){border-color:var(--frame-red)}
-.opt:disabled{cursor:default; opacity:.45}
-.opt.picked{opacity:1; border-color:var(--frame-red); background:#241A0C}
-.opt svg{width:56px; height:38px; display:block}
-.opt b{display:block; font-weight:600}
-.opt small{color:var(--frame-muted)}
-.note{border-left:2px solid var(--frame-red); padding:4px 0 4px 14px; color:#D6D4CE; margin-top:8px}
+.gchips{display:grid; gap:8px}
+.chip{display:grid; grid-template-columns:44px minmax(0,1fr); gap:12px; align-items:center; text-align:left; width:100%; padding:10px 12px; background:#1A1816; border:1px solid var(--frame-line); color:var(--frame-ink); font:15px var(--body); cursor:pointer; transition:border-color .2s, background .2s}
+.chip svg{width:44px; height:30px; display:block}
+.chip b{display:block; font-weight:600; line-height:1.25}
+.chip small{color:var(--frame-muted)}
+.chip:hover:not(:disabled){border-color:var(--frame-muted)}
+.chip[aria-pressed="true"]{border-color:var(--frame-red); background:#241A0C}
+.chip:disabled{cursor:default}
+.chip:disabled:not([aria-pressed="true"]){opacity:.35}
+.action{display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:14px; border:0; background:var(--frame-red); color:#121110; font:700 20px var(--display); letter-spacing:.08em; text-transform:uppercase; cursor:pointer}
+.action:disabled{background:#2A2622; color:#6F6A63; cursor:default}
+.action i{width:10px; height:10px; border-radius:50%; background:#E0353C; display:inline-block}
+.action:disabled i{background:#6F6A63}
+.note{border-left:2px solid var(--frame-red); padding:4px 0 4px 14px; color:#D6D4CE}
 .note .mono{color:var(--frame-red); display:block; margin-bottom:4px}
-.gbtn{margin-top:12px; align-self:flex-start; background:var(--frame-red); color:#fff; border:0; padding:11px 16px; font:500 15px var(--body); cursor:pointer}
-.result h3{font-size:clamp(40px,6vw,64px); margin-top:14px; color:var(--frame-red)}
-.result p{margin-top:14px; color:#D6D4CE; max-width:48ch}
-.still{display:block; width:100%; max-width:100%; aspect-ratio:16/9; object-fit:cover; margin-top:14px; background:#1b1b1a}
-.from{margin-top:14px; color:var(--frame-red)}
-.from i{font-style:normal}
+.gbtn{background:var(--frame-red); color:#121110; border:0; padding:11px 16px; font:600 15px var(--body); cursor:pointer}
 .watch{color:var(--frame-ink); text-decoration:none; border-bottom:1px solid var(--frame-red); padding-bottom:2px}
 .watch i{font-style:normal}
+.cut5{grid-column:1/-1; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px}
+@media (max-width:640px){ .cut5{grid-template-columns:repeat(2,minmax(0,1fr))} .cut5 > :first-child{grid-column:1/-1} }
+.cut5 figure{margin:0; min-width:0}
+.cut5 figcaption{font:600 11px var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--frame-muted); margin-top:6px}
+.cut5 figcaption b{display:block; color:var(--frame-ink); font-weight:600}
+.result{grid-column:1/-1}
+.result h3{font-size:clamp(40px,8vw,64px); margin-top:6px; color:var(--frame-red)}
+.result p{margin-top:10px; color:#D6D4CE; max-width:56ch}
 /* colour reveal: black and white until it reaches the middle of the screen (or is hovered) */
 .bw img, img.bw{filter:grayscale(1); transition:filter .8s ease}
 .bw.live img, img.bw.live, .bw:hover img, img.bw:hover{filter:none}
@@ -414,7 +485,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   <div class="inter" id="shot"><div class="wrap"><div class="box reveal">
     <div class="act">Act II · Interactive</div>
     <h2>Call the <em>shot</em></h2>
-    <p>Five real scenes from our films. You're behind the camera: choose how you'd shoot each one, then watch how we did it.</p>
+    <p>Five real scenes from our films. Pick a shot to reframe the monitor, then call <b>Action!</b> to lock in your take.</p>
   </div></div></div>
   <section class="act-body">
     <div class="wrap"><div class="game" id="game" aria-live="polite"></div></div>
@@ -773,43 +844,81 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     O:{name:'The Observer', text:'You step back and let the world speak. Balanced frames and patient holds give viewers room to reach their own conclusions.'},
     P:{name:'The Provocateur', text:'You like to unsettle. Tilted frames, handheld energy and hard cuts keep the audience on edge and paying attention.'}
   };
+  const focus = [['30%','42%'],['50%','40%'],['50%','50%'],['50%','55%'],['50%','45%']];
+  const label = {ecu:'Extreme close-up',insert:'Insert',ots:'Over the shoulder',wide:'Wide',two:'Two-shot',dutch:'Dutch angle',tele:'Long lens',low:'Low angle',srs:'Shot / reverse shot',isolate:'Isolated red',title:'Title card',broll:'Archive dissolve',top:'Overhead',present:'Presenter to camera',pov:'Point of view',black:'Cut to black',cut:'Hard cut',push:'Push-in',hold:'Static hold',hand:'Handheld'};
+  const overlay = (s, sc) => s==='title' ? '<div class="txt"><small>Lancaster</small>A city with a living history</div>'
+    : s==='black' ? '<div class="txt"><small>The film stops</small>What does Oliver do next?</div>'
+    : s==='present' ? '<span class="third">Presented by Jake Middleton</span>'
+    : s==='hold' ? '<div class="txt" style="justify-content:flex-end;padding-bottom:9%"><small>Hold</small></div>' : '';
+  function mon(i, s, small){
+    const sc = scenes[i], f = focus[i]||['50%','45%'];
+    return '<div'+(small?'':' id="gmon"')+' class="mon'+(small?' small':'')+(s?' fx-'+s:'')+'" style="--fx:'+f[0]+';--fy:'+f[1]+'">'+
+      '<div class="cam"><img src="'+sc.still+'" alt="Still from '+sc.film+'" onerror="this.style.opacity=0"></div>'+
+      '<div class="ghost"><img src="'+sc.still+'" alt=""></div><div class="ov">'+(s?overlay(s,sc):'')+'</div>'+
+      (small?'':'<div class="hud"><span class="rec"><i></i>Rec</span><span class="tc" id="gtc">00:00:00:00</span><span class="lbl" id="glbl">'+(s?'<b>'+label[s]+'</b>':'Unframed · choose a shot')+'</span></div><div class="flash"></div><div class="slate"><small>Scene '+(i+1)+' · Take 1</small><b>Action!</b></div>')+
+    '</div>';
+  }
   const game = document.getElementById('game');
-  let step = 0, picks = [];
-  const dots = () => '<div class="dots">'+scenes.map((_,i)=>'<i class="'+(i<=step?'on':'')+'"></i>').join('')+'</div>';
+  let step = 0, picks = [], sel = -1, t0 = performance.now();
+  (function gtick(){ const el = document.getElementById('gtc'); if(el){ const f=Math.floor((performance.now()-t0)/40); el.textContent='00:'+pad(Math.floor(f/1500)%60)+':'+pad(Math.floor(f/25)%60)+':'+pad(f%25); } if(!reduce) requestAnimationFrame(gtick); })();
+  function strip(){
+    return '<div class="strip5" aria-label="Your takes">'+scenes.map((_,i)=>'<div class="cell'+(i===step?' now':'')+'">'+(picks[i]?mon(i,picks[i].s,true):'')+'<span>'+pad(i+1)+'</span></div>').join('')+'</div>';
+  }
+  function setFrame(s){
+    const m = document.getElementById('gmon'); if(!m) return;
+    m.className = 'mon'+(s?' fx-'+s:'');
+    m.querySelector('.ov').innerHTML = s?overlay(s,scenes[step]):'';
+    document.getElementById('glbl').innerHTML = s?'<b>'+label[s]+'</b>':'Unframed · choose a shot';
+    const cam = m.querySelector('.cam'); if(s==='push'||s==='hand'){ cam.style.animation='none'; cam.offsetWidth; cam.style.animation=''; }
+  }
   function render(){
     if(step >= scenes.length) return renderEnd();
-    const sc = scenes[step];
-    game.innerHTML =
-      '<div><div class="top mono"><span>Scene '+(step+1)+' of '+scenes.length+'</span><span>'+sc.slug+'</span></div>'+
-      '<div class="from mono">From <i>'+sc.film+'</i></div>'+
-      '<img class="still" src="'+sc.still+'" alt="Still from '+sc.film+'" onerror="this.remove()">'+
-      '<p class="scene">'+sc.text+'</p>'+dots()+'<div id="note"></div></div>'+
-      '<div class="opts">'+sc.opts.map((o,i)=>'<button class="opt" type="button" data-i="'+i+'">'+shots[o.s]+'<span><b>'+o.n+'</b><small>'+o.h+'</small></span></button>').join('')+'</div>';
-    game.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>choose(+b.dataset.i)));
+    const sc = scenes[step]; sel = -1;
+    game.innerHTML = strip()+
+      '<div>'+mon(step,'')+'</div>'+
+      '<div class="panel-g">'+
+        '<div class="from mono">Scene '+(step+1)+' of '+scenes.length+' · <i>'+sc.film+'</i></div>'+
+        '<p class="scene">'+sc.text+'</p>'+
+        '<div class="gchips" role="group" aria-label="Choose a shot">'+sc.opts.map((o,i)=>'<button class="chip" type="button" aria-pressed="false" data-i="'+i+'">'+shots[o.s]+'<span><b>'+o.n+'</b><small>'+o.h+'</small></span></button>').join('')+'</div>'+
+        '<button class="action" type="button" id="action" disabled><i></i>Action!</button>'+
+        '<div id="note"></div>'+
+      '</div>';
+    game.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
+      sel = +b.dataset.i;
+      game.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c===b));
+      setFrame(sc.opts[sel].s);
+      document.getElementById('action').disabled = false;
+    }));
+    document.getElementById('action').addEventListener('click', take);
   }
-  function choose(i){
-    const o = scenes[step].opts[i];
-    picks.push(o.k);
-    game.querySelectorAll('.opt').forEach((b,j)=>{ b.disabled = true; if(j===i) b.classList.add('picked'); });
-    const note = game.querySelector('#note');
-    const sc = scenes[step];
-    note.innerHTML = '<div class="note" style="margin-top:22px"><span class="mono">Director’s note</span>'+o.note+'</div>'+
-      '<div class="row" style="margin-top:12px"><button class="gbtn" type="button" id="next" style="margin-top:0">'+(step===scenes.length-1?'See your style':'Next scene')+'</button>'+
+  function take(){
+    if(sel<0) return;
+    const sc = scenes[step], o = sc.opts[sel];
+    picks[step] = {k:o.k, s:o.s, n:o.n};
+    game.querySelectorAll('.chip').forEach(c=>c.disabled = true);
+    const a = document.getElementById('action'); a.disabled = true; a.innerHTML = '<i></i>Cut! That’s a take';
+    const m = document.getElementById('gmon');
+    if(!reduce){ m.querySelector('.flash').classList.add('go'); m.querySelector('.slate').classList.add('go'); }
+    const cell = game.querySelectorAll('.strip5 .cell')[step]; cell.insertAdjacentHTML('afterbegin', mon(step,o.s,true));
+    const note = document.getElementById('note');
+    note.innerHTML = '<div class="note"><span class="mono">Director’s note</span>'+o.note+'</div>'+
+      '<div class="row" style="margin-top:12px"><button class="gbtn" type="button" id="next">'+(step===scenes.length-1?'See your director’s cut':'Next scene →')+'</button>'+
       '<a class="watch mono" href="https://youtu.be/'+sc.id+'" target="_blank" rel="noopener">Watch <i>'+sc.film+'</i> &#8599;</a></div>';
-    const nx = game.querySelector('#next'); nx.addEventListener('click',()=>{ step++; render(); game.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'}); });
-    if(matchMedia('(max-width:820px)').matches) note.scrollIntoView({behavior: reduce?'auto':'smooth', block:'nearest'});
+    document.getElementById('next').addEventListener('click',()=>{ step++; render(); game.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'}); });
+    if(matchMedia('(max-width:860px)').matches) note.scrollIntoView({behavior: reduce?'auto':'smooth', block:'nearest'});
   }
   function renderEnd(){
-    const c = {I:0,O:0,P:0}; picks.forEach(k=>c[k]++);
+    const c = {I:0,O:0,P:0}; picks.forEach(p=>c[p.k]++);
     const top = Object.keys(c).sort((a,b)=>c[b]-c[a])[0];
     const p = profiles[top];
     game.innerHTML =
-      '<div class="result"><div class="top mono"><span>That’s a wrap</span><span>'+c.I+' close · '+c.O+' observed · '+c.P+' bold</span></div>'+
-      '<h3>'+p.name+'</h3><p>'+p.text+'</p>'+
-      '<p>Every one of these choices is a real decision we make on set and in the edit. If you’d like to see how we make them, the work is above.</p></div>'+
-      '<div class="opts"><button class="gbtn" type="button" id="again">Shoot it again</button>'+
+      '<div class="result"><div class="mono" style="color:var(--frame-muted)">That’s a wrap · your director’s cut</div>'+
+      '<h3>'+p.name+'</h3><p>'+p.text+'</p></div>'+
+      '<div class="cut5">'+picks.map((pk,i)=>'<figure>'+mon(i,pk.s,true)+'<figcaption><b>'+label[pk.s]+'</b>'+scenes[i].film+'</figcaption></figure>').join('')+'</div>'+
+      '<div class="result"><p>Every one of these choices is a real decision we make on set and in the edit.</p>'+
+      '<div class="row" style="margin-top:16px"><button class="gbtn" type="button" id="again">Shoot it again</button>'+
       '<a class="btn gbtn-alt" href="#work">Watch the work</a>'+
-      '<a class="btn gbtn-alt" href="#hire">Commission a film</a></div>';
+      '<a class="btn gbtn-alt" href="#hire">Tell us your story</a></div></div>';
     game.querySelector('#again').addEventListener('click',()=>{ step=0; picks=[]; render(); });
   }
   render();

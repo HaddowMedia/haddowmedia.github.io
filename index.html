@@ -1102,7 +1102,7 @@ ${[[18,40],[18,100],[290,46],[290,110]].map(([x,y])=>`<rect class="d k" x="${x}"
     const sc = scenes[step], o = sc.opts[sel];
     picks[step] = {k:o.k, s:o.s, n:o.n, b:boardKey[step][sel]};
     game.querySelectorAll('.chip').forEach(c=>c.disabled = true);
-    const a = document.getElementById('action'); a.disabled = true; a.innerHTML = '<i></i>Cut! That’s a take';
+    const a = document.getElementById('action'); a.disabled = true; a.hidden = true;
     const m = document.getElementById('gmon');
     if(!reduce){ m.querySelector('.flash').classList.add('go'); m.querySelector('.slate').classList.add('go'); }
     m.classList.add('printed');

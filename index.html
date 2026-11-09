@@ -90,6 +90,7 @@
   color-scheme:dark }
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{animation:none!important; transition:none!important} }
 body{background:var(--paper); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden}
@@ -339,6 +340,7 @@ label{display:flex; flex-direction:column; gap:6px; font-size:14px; font-weight:
 input,select,textarea{font:16px var(--body); color:var(--ink); background:var(--paper); border:1px solid var(--line); padding:11px 12px; border-radius:0; width:100%}
 textarea{min-height:120px; resize:vertical}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--red); outline-offset:0; border-color:transparent}
+.honey{position:absolute; left:-9999px; width:1px; height:1px; opacity:0}
 .err{color:var(--red); font-size:13px}
 .composed{margin-top:24px; border:1px solid var(--ink); padding:20px; background:var(--card)}
 .composed pre{white-space:pre-wrap; font:14px/1.55 var(--mono); margin:12px 0; padding:14px; background:var(--paper); border:1px solid var(--line); overflow-x:auto}
@@ -531,11 +533,16 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
             <option>Not sure yet</option><option>Under £500</option><option>£500 – £1,500</option><option>£1,500 – £3,000</option><option>£3,000+</option>
           </select>
         </label>
-        <div class="full row"><button class="btn primary" type="submit">Write my enquiry</button><span class="err" id="f-err" hidden></span></div>
+        <input type="text" name="_honey" id="f-honey" tabindex="-1" autocomplete="off" aria-hidden="true" class="honey">
+        <div class="full row"><button class="btn primary" type="submit" id="f-send">Send enquiry</button><span class="err" id="f-err" hidden></span></div>
       </form>
+      <div class="composed sent" id="sent" hidden role="status">
+        <span class="mono red">Enquiry sent</span>
+        <p style="margin-top:8px">Thanks, <span id="sent-name"></span>. Your enquiry is with us and we'll reply to <span class="addr" id="sent-email"></span> within a few days.</p>
+      </div>
       <div class="composed" id="composed" hidden>
-        <span class="mono red">Your enquiry is ready</span>
-        <p style="margin-top:8px">Copy it and email it to <span class="addr">haddowmedia96@gmail.com</span>.</p>
+        <span class="mono red">We couldn't send that</span>
+        <p style="margin-top:8px">Something went wrong on our side. Please copy your enquiry and email it to <span class="addr">haddowmedia96@gmail.com</span>.</p>
         <pre id="composed-text"></pre>
         <div class="row">
           <button class="btn primary" type="button" id="copy-enq">Copy enquiry</button>
@@ -815,12 +822,32 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       err.textContent = 'Add your name, a valid email and a few lines about the story.'; err.hidden = false; return;
     }
     err.hidden = true;
+    if(document.getElementById('f-honey').value) return;
     const text = 'Hi Haddow Media,\n\nI’d like to commission a film.\n\nType: '+v('f-pkg')+'\nIdeal delivery: '+(v('f-date')||'Flexible')+'\nBudget: '+v('f-budget')+
       '\n\nThe story:\n'+v('f-story')+'\n\n'+v('f-name')+'\n'+v('f-email');
     document.getElementById('composed-text').textContent = text;
     document.getElementById('mail-enq').href = 'mailto:'+EMAIL+'?subject='+encodeURIComponent('Film commission: '+v('f-pkg'))+'&body='+encodeURIComponent(text);
-    const box = document.getElementById('composed'); box.hidden = false;
-    box.scrollIntoView({behavior: reduce?'auto':'smooth', block:'nearest'});
+    const btn = document.getElementById('f-send');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    document.getElementById('composed').hidden = true;
+    fetch('https://formsubmit.co/ajax/'+EMAIL, {
+      method:'POST', headers:{'Content-Type':'application/json', 'Accept':'application/json'},
+      body: JSON.stringify({
+        _subject:'New film enquiry: '+v('f-pkg')+' from '+v('f-name'), _template:'table', _replyto:v('f-email'), _captcha:'false',
+        Name:v('f-name'), Email:v('f-email'), 'Type of film':v('f-pkg'), 'Ideal delivery':v('f-date')||'Flexible', Budget:v('f-budget'), Story:v('f-story')
+      })
+    }).then(r=>r.json().then(j=>({ok:r.ok, j}))).then(({ok,j})=>{
+      if(!ok || String(j.success)!=='true') throw new Error(j.message||'send failed');
+      document.getElementById('sent-name').textContent = v('f-name').split(' ')[0];
+      document.getElementById('sent-email').textContent = v('f-email');
+      form.hidden = true;
+      const box = document.getElementById('sent'); box.hidden = false;
+      box.scrollIntoView({behavior: reduce?'auto':'smooth', block:'nearest'});
+    }).catch(()=>{
+      btn.disabled = false; btn.textContent = 'Send enquiry';
+      const box = document.getElementById('composed'); box.hidden = false;
+      box.scrollIntoView({behavior: reduce?'auto':'smooth', block:'nearest'});
+    });
   });
   function copy(text, msgEl, btn){
     const done = ok => { if(msgEl) msgEl.textContent = ok ? 'Copied' : 'Select the text above and copy it'; if(btn){ const t=btn.textContent; btn.textContent = ok?'Copied':t; setTimeout(()=>btn.textContent=t,1600);} };

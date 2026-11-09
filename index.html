@@ -273,11 +273,12 @@ section.act-body{padding-block:clamp(24px,5vw,40px) clamp(32px,6vw,56px)}
 .mon .stamp{position:absolute; right:7%; bottom:16%; z-index:5; border:3px solid #C23B32; color:#C23B32; font:700 18px/1 var(--display); letter-spacing:.1em; text-transform:uppercase; padding:6px 10px; transform:rotate(-8deg) scale(1.6); opacity:0; pointer-events:none}
 .mon.printed .stamp{animation:stamp .45s cubic-bezier(.3,1.6,.5,1) .35s forwards}
 @keyframes stamp{to{opacity:.9; transform:rotate(-8deg) scale(1)}}
-.draw .k, .draw .t, .draw .ws, .draw .rs{stroke-dasharray:1; stroke-dashoffset:1; animation:drawon 1.2s ease-out forwards}
-.draw .f, .draw .d, .draw .w, .draw .kk, .draw .r, .draw .dk, .draw .wk, .draw .lower{fill-opacity:0; animation:fillon .6s ease .55s forwards}
+.draw path{fill-opacity:0; animation:drawon 1.2s ease-out forwards, fillon .6s ease .55s forwards}
+.draw line, .draw rect, .draw ellipse, .draw circle, .draw polygon{fill-opacity:0; stroke-opacity:0; animation:fillon .6s ease .45s forwards, strokeon .5s ease .15s forwards}
 .draw text{opacity:0; animation:fadein .4s ease .9s forwards}
-@keyframes drawon{to{stroke-dashoffset:0}} @keyframes fillon{to{fill-opacity:1}} @keyframes fadein{to{opacity:1}}
-@media (prefers-reduced-motion: reduce){ .draw *{animation:none!important; stroke-dashoffset:0!important; fill-opacity:1!important; opacity:1!important} }
+@keyframes drawon{to{stroke-dashoffset:0}}
+.draw path{animation-fill-mode:forwards} @keyframes fillon{to{fill-opacity:1}} @keyframes strokeon{to{stroke-opacity:1}} @keyframes fadein{to{opacity:1}}
+@media (prefers-reduced-motion: reduce){ .draw *{animation:none!important; stroke-dashoffset:0!important; fill-opacity:1!important; stroke-opacity:1!important} .draw text{opacity:1!important} }
 .sb .k{fill:none; stroke:#2A2622; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
 .sb .t{fill:none; stroke:#2A2622; stroke-width:1.1; stroke-linecap:round; opacity:.75}
 .sb .f{fill:#D8D0C0} .sb .d{fill:#8C8377} .sb .w{fill:#F7F3EA} .sb .kk{fill:#2A2622}
@@ -493,8 +494,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     <p>Five real scenes from our films. Pick a shot and watch it get storyboarded, then call <b>Action!</b> to print your take.</p>
   </div></div></div>
   <section class="act-body">
-    <div class="wrap"><div class="game" id="game" aria-live="polite"></div>
-      <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter></svg></div>
+    <div class="wrap"><div class="game" id="game" aria-live="polite"></div></div>
   </section>
 
   <!-- ACT III -->
@@ -1006,11 +1006,15 @@ ${[[18,40],[18,100],[290,46],[290,110]].map(([x,y])=>`<rect class="d k" x="${x}"
 
   const boardKey = [['low','srs','black'],['ecu','ots','wide'],['isolate','title','broll'],['top','present','ecu2'],['push','hold','hand']];
   const label = {low:'Low angle',srs:'Shot / reverse shot',black:'Stop the film',ecu:'Extreme close-up',ots:'Over the shoulder',wide:'Wide from the doorway',isolate:'B&W, isolated red',title:'Title card',broll:'Archive dissolve',top:'Overhead',present:'Presenter to camera',ecu2:'Close-up, passer-by',push:'Slow push-in',hold:'Static hold',hand:'Handheld'};
+  let boardSeq = 0;
   function boardSVG(k, draw){
     const txt=[]; const body = B[k].replace(/<text[\s\S]*?<\/text>/g, m=>{ txt.push(m); return ''; });
-    return '<svg class="sb'+(draw?' draw':'')+'" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Storyboard: '+label[k]+'"><g filter="url(#rough)">'+body+'</g>'+txt.join('')+'</svg>';
+    const fid = 'rough'+(++boardSeq);
+    return '<svg class="sb'+(draw?' draw':'')+'" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Storyboard: '+label[k]+'">'+
+      '<defs><filter id="'+fid+'" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter></defs>'+
+      '<g filter="url(#'+fid+')">'+body+'</g>'+txt.join('')+'</svg>';
   }
-  function primeDraw(root){ root.querySelectorAll('.draw .k, .draw .t, .draw .ws, .draw .rs').forEach(el=>el.setAttribute('pathLength','1')); }
+  function primeDraw(root){ root.querySelectorAll('.draw path').forEach(el=>{ try{ const L = el.getTotalLength(); el.style.strokeDasharray = L; el.style.strokeDashoffset = L; el.style.setProperty('--len', L); }catch(_){ } }); }
   function mon(i, k, small){
     const sc = scenes[i];
     return '<div'+(small?'':' id="gmon"')+' class="mon'+(small?' small':'')+(k?' has-board':'')+(small&&k?' printed':'')+'">'+
@@ -1029,7 +1033,8 @@ ${[[18,40],[18,100],[290,46],[290,110]].map(([x,y])=>`<rect class="d k" x="${x}"
     const m = document.getElementById('gmon'); if(!m) return;
     let bd = m.querySelector('.board'); if(bd) bd.remove();
     m.classList.toggle('has-board', !!k);
-    if(k){ m.querySelector('.photo').insertAdjacentHTML('afterend','<div class="board">'+boardSVG(k,true)+'</div>'); primeDraw(m); }
+    if(k){ m.querySelector('.photo').insertAdjacentHTML('afterend','<div class="board">'+boardSVG(k,true)+'</div>'); primeDraw(m);
+      const svg = m.querySelector('.board svg'); clearTimeout(setFrame.t); setFrame.t = setTimeout(()=>{ if(svg){ svg.classList.remove('draw'); svg.querySelectorAll('path').forEach(el=>{ el.style.strokeDasharray=''; el.style.strokeDashoffset=''; }); } }, 1900); }
     document.getElementById('glbl').innerHTML = k?'<b>'+label[k]+'</b>':'Pick a shot to storyboard it';
     const rt = m.querySelector('.rec-t'); if(rt) rt.textContent = k?'Storyboard':'Scene';
   }

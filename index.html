@@ -129,6 +129,7 @@ nav a span{font-family:var(--display); font-style:italic; font-size:19px; line-h
 nav a:hover, nav a.on{color:var(--ink)}
 nav a.on{border-bottom-color:var(--red)}
 nav a.hire span{color:var(--red)}
+nav a.founder-link{padding-left:18px; border-left:1px solid var(--line)}
 @media (max-width:980px){
   header .wrap{padding-block:10px 0; gap:6px}
   nav{order:2; width:100%; gap:22px; overflow-x:auto; scrollbar-width:none; padding-bottom:6px;
@@ -370,6 +371,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       <a href="#shot"><i>II</i><span>Call the Shot</span></a>
       <a href="#studio"><i>III</i><span>The Studio</span></a>
       <a href="#hire" class="hire"><i>IV</i><span>Commission</span></a>
+      <a href="/maxhm/" class="founder-link" title="Max Haddow-Mendes: CV, credits and experience"><i>&#8599;</i><span>Meet Max</span></a>
     </nav>
   </div>
   <div class="playhead" id="playhead"></div>
@@ -602,7 +604,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
   /* scroll playhead + active nav */
   const ph = document.getElementById('playhead');
-  const navLinks = [...document.querySelectorAll('#nav a')];
+  const navLinks = [...document.querySelectorAll('#nav a[href^="#"]')];
   const acts = navLinks.map(a => document.querySelector(a.getAttribute('href')));
   function onScroll(){
     const max = document.documentElement.scrollHeight - innerHeight;

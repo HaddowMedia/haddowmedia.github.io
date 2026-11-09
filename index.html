@@ -685,6 +685,19 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     if(!reduce) requestAnimationFrame(tick);
   })();
 
+  /* phone menu: centre the second-row items in the gaps between the first-row items */
+  function brickNav(){
+    const links = [...document.querySelectorAll('#nav a')];
+    links.forEach(l=>l.style.transform='');
+    if(links.length!==5 || !matchMedia('(max-width:980px)').matches) return;
+    const r = links.map(l=>l.getBoundingClientRect());
+    if(Math.abs(r[3].top - r[0].top) < 4) return;
+    const gaps = [(r[0].right + r[1].left)/2, (r[1].right + r[2].left)/2];
+    [3,4].forEach((k,j)=>{ const c = r[k].left + r[k].width/2; links[k].style.transform = 'translateX('+(gaps[j]-c).toFixed(1)+'px)'; });
+  }
+  brickNav(); addEventListener('resize', brickNav);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(brickNav);
+
   /* scroll playhead + active nav */
   const ph = document.getElementById('playhead');
   const navLinks = [...document.querySelectorAll('#nav a[href^="#"]')];

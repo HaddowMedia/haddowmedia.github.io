@@ -67,7 +67,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Caveat:wght@600;700&display=swap">
 <style>
 /* Layout: the site plays like a reel — slate opener, intertitles between acts, swipeable frames on phones, an amber playhead tracking the scroll. Dark cinema ground, tungsten-amber accent, condensed sans to match the logo. */
 :root{
@@ -226,7 +226,23 @@ section.act-body{padding-block:clamp(24px,5vw,40px) clamp(32px,6vw,56px)}
 .strip5 .cell.now span{color:var(--frame-red)}
 .mon{position:relative; aspect-ratio:16/9; overflow:hidden; background:#050505; max-width:100%; --fx:50%; --fy:45%}
 .mon .cam{position:absolute; inset:0; transform-origin:var(--fx) var(--fy); transition:transform 1s cubic-bezier(.2,.7,.2,1), filter .7s ease, opacity .5s}
-.mon .cam img{display:block; width:100%; height:100%; object-fit:cover}
+.mon .skwrap{position:absolute; inset:0; overflow:hidden; background:#F2EDE1; filter:url(#sk)}
+.mon .cam img{position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover}
+.mon .ph-cam{opacity:0; transition:opacity 1.4s ease, transform 1s cubic-bezier(.2,.7,.2,1), filter .7s ease}
+.mon.dev .ph-cam{opacity:1}
+.mon .paper{position:absolute; inset:0; z-index:1; pointer-events:none; opacity:1; transition:opacity 1s; mix-blend-mode:multiply;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E")}
+.mon.dev .paper{opacity:0}
+.mon:not(.dev){background:#F2EDE1}
+.mon .skwrap{transition:opacity .6s}
+.mon .anno{position:absolute; z-index:4; right:7%; top:16%; max-width:46%; text-align:right; font:700 clamp(18px,4.6vw,26px)/1 "Caveat", "Comic Sans MS", cursive; color:#B5541A; transform:rotate(-3deg); pointer-events:none; transition:opacity .6s}
+.mon.dev .anno{opacity:0}
+.mon:not(.dev) .hud{color:#2A2622; text-shadow:none}
+.mon:not(.dev) .hud::before, .mon:not(.dev) .hud::after{border-color:rgba(42,38,34,.6)}
+.mon:not(.dev) .hud .rec i{background:#2A2622; animation:none}
+.mon:not(.dev) .hud .lbl{background:rgba(242,237,225,.85); color:#B5541A; font:700 16px/1 "Caveat", cursive; letter-spacing:.02em; text-transform:none}
+.mon:not(.dev) .hud .lbl b{color:#2A2622; font-weight:700}
+.mon:not(.dev) .ov .txt{color:#2A2622}
 .mon .ghost{position:absolute; inset:0; opacity:0; transition:opacity .8s; mix-blend-mode:screen; pointer-events:none}
 .mon .ghost img{width:100%; height:100%; object-fit:cover; transform:scaleX(-1) scale(1.2); filter:sepia(1) contrast(1.2) brightness(.8)}
 .mon .ov{position:absolute; inset:0; pointer-events:none; z-index:2}
@@ -250,7 +266,7 @@ section.act-body{padding-block:clamp(24px,5vw,40px) clamp(32px,6vw,56px)}
 .mon .slate.go{animation:slate 1s ease forwards}
 @keyframes slate{0%{opacity:0; transform:translate(-50%,-50%) scale(.85)}15%,70%{opacity:1; transform:translate(-50%,-50%) scale(1)}100%{opacity:0}}
 /* framings */
-.fx-ecu .cam{transform:scale(2.9)}
+.fx-ecu .cam{transform:scale(2.3)}
 .fx-insert .cam{transform:scale(2.3)}
 .fx-ots .cam{transform:scale(1.4) translateX(-4%)}
 .fx-ots .ov{background:radial-gradient(ellipse 34% 75% at 6% 100%, rgba(5,5,5,.96) 60%, transparent 62%)}
@@ -258,23 +274,25 @@ section.act-body{padding-block:clamp(24px,5vw,40px) clamp(32px,6vw,56px)}
 .fx-wide .ov{box-shadow:inset 0 0 0 2px rgba(255,255,255,.08)}
 .fx-two .cam{transform:scale(1.15)}
 .fx-dutch .cam{transform:rotate(-12deg) scale(1.4)}
-.fx-tele .cam{transform:scale(1.9); filter:contrast(1.1) saturate(.85)}
+.fx-tele .cam{transform:scale(1.7)}
 .fx-tele .ov{background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55))}
-.fx-low .cam{transform:perspective(500px) rotateX(-16deg) scale(1.75); transform-origin:80% 95%}
+.fx-low .cam{transform:perspective(500px) rotateX(-16deg) scale(1.5); transform-origin:45% 100%}
 .fx-low .ov{background:linear-gradient(0deg, rgba(5,5,5,.55), transparent 35%)}
 .fx-srs .cam{transform:scale(1.7)}
 .fx-srs .ov{background:linear-gradient(90deg, transparent calc(50% - 1px), #050505 calc(50% - 1px), #050505 calc(50% + 1px), transparent calc(50% + 1px))}
-.fx-isolate .cam{filter:grayscale(1) contrast(1.25)}
+.fx-isolate.dev .ph-cam{filter:grayscale(1) contrast(1.25)}
 .fx-isolate .ov{background:radial-gradient(circle at var(--fx) var(--fy), rgba(224,53,60,.38), transparent 18%); mix-blend-mode:color}
-.fx-title .cam{filter:brightness(.18) blur(3px)}
-.fx-broll .cam{filter:sepia(.55) contrast(1.1)}
+.fx-title.dev .cam{filter:brightness(.18) blur(3px)}
+.fx-title:not(.dev) .skwrap{opacity:.3}
+.fx-broll.dev .ph-cam{filter:sepia(.55) contrast(1.1)}
 .fx-broll .ghost{opacity:.45}
 .fx-top .cam{transform:scale(1.6) rotate(3deg)}
 .fx-top .ov{background:repeating-linear-gradient(0deg, transparent 0 32px, rgba(255,255,255,.06) 32px 33px), repeating-linear-gradient(90deg, transparent 0 32px, rgba(255,255,255,.06) 32px 33px)}
 .fx-present .cam{transform:scale(1.15) translateX(6%)}
 .fx-pov .cam{transform:scale(1.5)}
 .fx-pov .ov{background:radial-gradient(circle at 50% 42%, transparent 16%, #050505 17%), radial-gradient(transparent, transparent)}
-.fx-black .cam{filter:brightness(0)}
+.fx-black.dev .cam{filter:brightness(0)}
+.fx-black:not(.dev) .skwrap{opacity:.25}
 .fx-cut .cam{transform:scale(1.25)}
 .fx-push .cam{animation:push 6s ease-out forwards}
 @keyframes push{from{transform:scale(1)}to{transform:scale(1.65)}}
@@ -485,10 +503,20 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   <div class="inter" id="shot"><div class="wrap"><div class="box reveal">
     <div class="act">Act II · Interactive</div>
     <h2>Call the <em>shot</em></h2>
-    <p>Five real scenes from our films. Pick a shot to reframe the monitor, then call <b>Action!</b> to lock in your take.</p>
+    <p>Five real scenes from our films. Pick a shot to storyboard it, then call <b>Action!</b> to see it come to life.</p>
   </div></div></div>
   <section class="act-body">
-    <div class="wrap"><div class="game" id="game" aria-live="polite"></div></div>
+    <div class="wrap"><div class="game" id="game" aria-live="polite"></div>
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="sk" color-interpolation-filters="sRGB" x="0" y="0" width="100%" height="100%">
+        <feColorMatrix type="saturate" values="0" result="g"/>
+        <feGaussianBlur in="g" stdDeviation="1.7" result="b"/>
+        <feConvolveMatrix in="b" order="3" kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1" preserveAlpha="true" result="e"/>
+        <feColorMatrix in="e" type="matrix" values="-9 0 0 0 1.08  -9 0 0 0 1.08  -9 0 0 0 1.08  0 0 0 1 0" result="lines"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3" result="t"/>
+        <feDisplacementMap in="lines" in2="t" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="wob"/>
+        <feComponentTransfer in="g" result="tone"><feFuncR type="discrete" tableValues=".72 .9 1 1 1"/><feFuncG type="discrete" tableValues=".72 .9 1 1 1"/><feFuncB type="discrete" tableValues=".72 .9 1 1 1"/></feComponentTransfer>
+        <feBlend in="wob" in2="tone" mode="multiply"/>
+      </filter></svg></div>
   </section>
 
   <!-- ACT III -->
@@ -844,18 +872,19 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     O:{name:'The Observer', text:'You step back and let the world speak. Balanced frames and patient holds give viewers room to reach their own conclusions.'},
     P:{name:'The Provocateur', text:'You like to unsettle. Tilted frames, handheld energy and hard cuts keep the audience on edge and paying attention.'}
   };
-  const focus = [['30%','42%'],['50%','40%'],['50%','50%'],['50%','55%'],['50%','45%']];
+  const focus = [['28%','36%'],['63%','42%'],['50%','50%'],['50%','62%'],['55%','45%']];
   const label = {ecu:'Extreme close-up',insert:'Insert',ots:'Over the shoulder',wide:'Wide',two:'Two-shot',dutch:'Dutch angle',tele:'Long lens',low:'Low angle',srs:'Shot / reverse shot',isolate:'Isolated red',title:'Title card',broll:'Archive dissolve',top:'Overhead',present:'Presenter to camera',pov:'Point of view',black:'Cut to black',cut:'Hard cut',push:'Push-in',hold:'Static hold',hand:'Handheld'};
   const overlay = (s, sc) => s==='title' ? '<div class="txt"><small>Lancaster</small>A city with a living history</div>'
     : s==='black' ? '<div class="txt"><small>The film stops</small>What does Oliver do next?</div>'
     : s==='present' ? '<span class="third">Presented by Jake Middleton</span>'
     : s==='hold' ? '<div class="txt" style="justify-content:flex-end;padding-bottom:9%"><small>Hold</small></div>' : '';
-  function mon(i, s, small){
+  const anno = {ecu:'tight on the eyes',insert:'detail: hand on handle',ots:'over his shoulder \u2192 photo',wide:'wide from the door',two:'both in frame',dutch:'tilt 12\u00b0 \u21bb',tele:'long lens, far away',low:'camera low, look up \u2191',srs:'cut A \u2194 B',isolate:'B&W \u2014 keep the red!',title:'card: white on black',broll:'dissolve archive over',top:'straight down \u2193',present:'presenter, frame left',pov:'through the keyhole',black:'STOP \u2014 audience picks',cut:'cut!',push:'slow push in \u2192\u2190',hold:'lock off, 10 secs',hand:'handheld, walk in ~'};
+  function mon(i, s, small, dev){
     const sc = scenes[i], f = focus[i]||['50%','45%'];
-    return '<div'+(small?'':' id="gmon"')+' class="mon'+(small?' small':'')+(s?' fx-'+s:'')+'" style="--fx:'+f[0]+';--fy:'+f[1]+'">'+
-      '<div class="cam"><img src="'+sc.still+'" alt="Still from '+sc.film+'" onerror="this.style.opacity=0"></div>'+
+    return '<div'+(small?'':' id="gmon"')+' class="mon'+(small?' small':'')+(s?' fx-'+s:'')+((small||dev)?' dev':'')+'" style="--fx:'+f[0]+';--fy:'+f[1]+'">'+
+      '<div class="skwrap"><div class="cam"><img src="'+sc.still+'" alt="" onerror="this.style.opacity=0"></div></div><div class="cam ph-cam"><img src="'+sc.still+'" alt="Still from '+sc.film+'" onerror="this.style.opacity=0"></div><div class="paper"></div>'+(!small&&s?'<span class="anno">'+anno[s]+'</span>':'')+
       '<div class="ghost"><img src="'+sc.still+'" alt=""></div><div class="ov">'+(s?overlay(s,sc):'')+'</div>'+
-      (small?'':'<div class="hud"><span class="rec"><i></i>Rec</span><span class="tc" id="gtc">00:00:00:00</span><span class="lbl" id="glbl">'+(s?'<b>'+label[s]+'</b>':'Unframed · choose a shot')+'</span></div><div class="flash"></div><div class="slate"><small>Scene '+(i+1)+' · Take 1</small><b>Action!</b></div>')+
+      (small?'':'<div class="hud"><span class="rec"><i></i><span class="rec-t">Storyboard</span></span><span class="tc" id="gtc">00:00:00:00</span><span class="lbl" id="glbl">'+(s?'<b>'+label[s]+'</b>':'Pick a shot to sketch it')+'</span></div><div class="flash"></div><div class="slate"><small>Scene '+(i+1)+' · Take 1</small><b>Action!</b></div>')+
     '</div>';
   }
   const game = document.getElementById('game');
@@ -868,7 +897,9 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     const m = document.getElementById('gmon'); if(!m) return;
     m.className = 'mon'+(s?' fx-'+s:'');
     m.querySelector('.ov').innerHTML = s?overlay(s,scenes[step]):'';
-    document.getElementById('glbl').innerHTML = s?'<b>'+label[s]+'</b>':'Unframed · choose a shot';
+    const an = m.querySelector('.anno'); if(an) an.remove();
+    if(s) m.querySelector('.paper').insertAdjacentHTML('afterend','<span class="anno">'+anno[s]+'</span>');
+    document.getElementById('glbl').innerHTML = s?'<b>'+label[s]+'</b>':'Pick a shot to sketch it';
     const cam = m.querySelector('.cam'); if(s==='push'||s==='hand'){ cam.style.animation='none'; cam.offsetWidth; cam.style.animation=''; }
   }
   function render(){
@@ -899,6 +930,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     const a = document.getElementById('action'); a.disabled = true; a.innerHTML = '<i></i>Cut! That’s a take';
     const m = document.getElementById('gmon');
     if(!reduce){ m.querySelector('.flash').classList.add('go'); m.querySelector('.slate').classList.add('go'); }
+    setTimeout(()=>{ m.classList.add('dev'); const rt = m.querySelector('.rec-t'); if(rt) rt.textContent = 'Rec'; }, reduce?0:450);
     const cell = game.querySelectorAll('.strip5 .cell')[step]; cell.insertAdjacentHTML('afterbegin', mon(step,o.s,true));
     const note = document.getElementById('note');
     note.innerHTML = '<div class="note"><span class="mono">Director’s note</span>'+o.note+'</div>'+

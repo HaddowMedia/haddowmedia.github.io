@@ -243,7 +243,10 @@ section.act-body{padding-block:clamp(24px,5vw,40px) clamp(32px,6vw,56px)}
 .from i{font-style:normal}
 .watch{color:var(--frame-ink); text-decoration:none; border-bottom:1px solid var(--frame-red); padding-bottom:2px}
 .watch i{font-style:normal}
-.founder{display:block; width:100%; max-width:100%; aspect-ratio:4/5; object-fit:cover; object-position:30% 30%; margin:8px 0 12px; filter:grayscale(1) contrast(1.05)}
+/* colour reveal: black and white until it reaches the middle of the screen (or is hovered) */
+.bw img, img.bw{filter:grayscale(1); transition:filter .8s ease}
+.bw.live img, img.bw.live, .bw:hover img, img.bw:hover{filter:none}
+.founder{display:block; width:100%; max-width:100%; aspect-ratio:4/5; object-fit:cover; object-position:30% 30%; margin:8px 0 12px}
 .rail.gal{grid-auto-columns:62%}
 @media (min-width:620px){ .rail.gal{grid-auto-columns:38%} }
 @media (min-width:860px){ .rail.gal{grid-auto-columns:24%} }
@@ -438,7 +441,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         </div>
         <div class="scene-b reveal">
           <span class="mono">Who's behind it</span>
-          <img class="founder" src="img/max-fairypools.jpg" alt="Max Haddow&#8209;Mendes on location at the Fairy Pools, Isle of Skye" loading="lazy">
+          <img class="founder bw" src="img/max-fairypools.jpg" alt="Max Haddow&#8209;Mendes on location at the Fairy Pools, Isle of Skye" loading="lazy">
           <h3>Max Haddow&#8209;Mendes</h3>
           <p>Haddow Media was founded by Max Haddow&#8209;Mendes, a Lancaster University Film Studies graduate with an HNC in Television Production. He films, edits and produces every project. <a href="https://haddowmedia.co.uk/maxhm/">Read Max's CV &#8599;</a></p>
         </div>
@@ -641,7 +644,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
   document.getElementById('reels').innerHTML = films.map((f,i)=>{
     const t = f.red ? '<span style="color:#E0353C">'+f.title+'</span>' : f.title;
-    return '<article class="reel reveal">'+
+    return '<article class="reel reveal bw">'+
       '<a class="frame" href="https://youtu.be/'+f.id+'" target="_blank" rel="noopener" aria-label="Watch '+f.title+' on YouTube">'+
         '<div class="card"><span class="t">'+t+'</span>'+(f.sub?'<span class="s">'+f.sub+'</span>':'')+'</div>'+img(f.id, f.title, f.img)+
         '<span class="no">'+pad(i+1)+'</span><span class="play">&#9654; Watch</span></a>'+
@@ -652,7 +655,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   }).join('');
 
   document.getElementById('minis').innerHTML = minis.map(m=>
-    (m.href?'<a class="mini" href="'+m.href+'" target="_blank" rel="noopener">':'<div class="mini">')+
+    (m.href?'<a class="mini bw" href="'+m.href+'" target="_blank" rel="noopener">':'<div class="mini bw">')+
       '<div class="frame"><div class="card"><span class="t">'+esc(m.short)+'</span></div>'+img(m.id, m.title, m.img)+'</div>'+
       '<b>'+esc(m.title)+'</b><span class="mono k">'+m.kind+'</span>'+(m.href?'</a>':'</div>')).join('');
 
@@ -672,7 +675,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     ['photo-glenfinnan','Glenfinnan Viaduct'],['photo-quiraing','The Quiraing, Isle of Skye'],['photo-cuillin','The Cuillin at dusk, Isle of Skye'],
     ['photo-storr','The Old Man of Storr in fog'],['photo-boats','Low tide at sunset'],['photo-portree','Portree harbour']
   ];
-  const fig = ([f,c]) => '<figure data-src="img/'+f+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+f+'.jpg" alt="'+esc(c)+'" loading="lazy"><figcaption>'+esc(c)+'</figcaption></figure>';
+  const fig = ([f,c]) => '<figure class="bw" data-src="img/'+f+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+f+'.jpg" alt="'+esc(c)+'" loading="lazy"><figcaption>'+esc(c)+'</figcaption></figure>';
   document.getElementById('bts').innerHTML = bts.map(fig).join('');
   document.getElementById('photos').innerHTML = photos.map(fig).join('');
   const lb = document.getElementById('lb'), lbImg = document.getElementById('lb-img'), lbCap = document.getElementById('lb-cap');
@@ -686,6 +689,12 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   document.getElementById('lb-x').addEventListener('click', closeLb);
   lb.addEventListener('click', e=>{ if(e.target===lb) closeLb(); });
   addEventListener('keydown', e=>{ if(e.key==='Escape' && !lb.hidden) closeLb(); });
+
+  /* colour washes in as each image reaches the middle of the screen */
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('live', e.isIntersecting)), {rootMargin:'-35% 0px -35% 0px'});
+    document.querySelectorAll('.bw').forEach(c=>io.observe(c));
+  } else document.querySelectorAll('.bw').forEach(c=>c.classList.add('live'));
 
   /* rails: counters + arrows */
   function rail(id, countId, total){

@@ -340,6 +340,8 @@ label{display:flex; flex-direction:column; gap:6px; font-size:14px; font-weight:
 input,select,textarea{font:16px var(--body); color:var(--ink); background:var(--paper); border:1px solid var(--line); padding:11px 12px; border-radius:0; width:100%}
 textarea{min-height:120px; resize:vertical}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--red); outline-offset:0; border-color:transparent}
+.when-extra{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px}
+@media (max-width:640px){ .when-extra{grid-template-columns:1fr} }
 .honey{position:absolute; left:-9999px; width:1px; height:1px; opacity:0}
 .err{color:var(--red); font-size:13px}
 .composed{margin-top:24px; border:1px solid var(--ink); padding:20px; background:var(--card)}
@@ -526,7 +528,19 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
             <option>Something else</option>
           </select>
         </label>
-        <label>Ideal delivery date<input id="f-date" name="date" type="date"></label>
+        <label>When do you need the finished film?
+          <select id="f-when" name="when">
+            <option>No fixed deadline</option>
+            <option>Within a month</option>
+            <option>In 1–3 months</option>
+            <option>In 3 months or more</option>
+            <option value="event">For a specific date or event</option>
+          </select>
+        </label>
+        <div class="full when-extra" id="when-extra" hidden>
+          <label>Date it's needed by<input id="f-date" name="date" type="date"></label>
+          <label>What's it for?<input id="f-event" name="event" placeholder="e.g. a 90th birthday, a launch, an exhibition opening"></label>
+        </div>
         <label class="full">The story<textarea id="f-story" name="story" placeholder="Who or what is the film about, and who will watch it?" required></textarea></label>
         <label>Rough budget
           <select id="f-budget" name="budget">
@@ -814,6 +828,11 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     form.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'});
     document.getElementById('f-name').focus({preventScroll:true});
   }));
+  const whenSel = document.getElementById('f-when');
+  whenSel.addEventListener('change', ()=>{ document.getElementById('when-extra').hidden = whenSel.value!=='event'; });
+  const whenText = v => whenSel.value==='event'
+    ? 'By '+(v('f-date') ? new Date(v('f-date')).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : 'a specific date')+(v('f-event')?' — '+v('f-event'):'')
+    : whenSel.value;
   form.addEventListener('submit', e=>{
     e.preventDefault();
     const v = id => document.getElementById(id).value.trim();
@@ -823,7 +842,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     }
     err.hidden = true;
     if(document.getElementById('f-honey').value) return;
-    const text = 'Hi Haddow Media,\n\nI’d like to commission a film.\n\nType: '+v('f-pkg')+'\nIdeal delivery: '+(v('f-date')||'Flexible')+'\nBudget: '+v('f-budget')+
+    const text = 'Hi Haddow Media,\n\nI’d like to commission a film.\n\nType: '+v('f-pkg')+'\nNeeded: '+whenText(v)+'\nBudget: '+v('f-budget')+
       '\n\nThe story:\n'+v('f-story')+'\n\n'+v('f-name')+'\n'+v('f-email');
     document.getElementById('composed-text').textContent = text;
     document.getElementById('mail-enq').href = 'mailto:'+EMAIL+'?subject='+encodeURIComponent('Film commission: '+v('f-pkg'))+'&body='+encodeURIComponent(text);
@@ -834,7 +853,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       method:'POST', headers:{'Content-Type':'application/json', 'Accept':'application/json'},
       body: JSON.stringify({
         _subject:'New film enquiry: '+v('f-pkg')+' from '+v('f-name'), _template:'table', _replyto:v('f-email'), _captcha:'false',
-        Name:v('f-name'), Email:v('f-email'), 'Type of film':v('f-pkg'), 'Ideal delivery':v('f-date')||'Flexible', Budget:v('f-budget'), Story:v('f-story')
+        Name:v('f-name'), Email:v('f-email'), 'Type of film':v('f-pkg'), 'Needed':whenText(v), Budget:v('f-budget'), Story:v('f-story')
       })
     }).then(r=>r.json().then(j=>({ok:r.ok, j}))).then(({ok,j})=>{
       if(!ok || String(j.success)!=='true') throw new Error(j.message||'send failed');

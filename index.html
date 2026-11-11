@@ -348,6 +348,32 @@ section.act-body{padding-block:clamp(24px,5vw,40px) clamp(32px,6vw,56px)}
 .lb-nav:disabled{opacity:0; cursor:default}
 .lb-count{position:absolute; top:calc(env(safe-area-inset-top,0px) + 22px); left:max(16px, env(safe-area-inset-left,0px)); color:#A39E94; font:600 13px/1 system-ui,sans-serif; letter-spacing:.08em; font-variant-numeric:tabular-nums}
 .lb img{touch-action:pan-y; user-select:none; -webkit-user-select:none; transition:opacity .2s}
+.fm{position:fixed; inset:0; z-index:45; background:rgba(5,5,5,.78); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center;
+  padding:calc(env(safe-area-inset-top,0px) + 24px) max(16px, env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 24px) max(16px, env(safe-area-inset-left,0px))}
+.fm[hidden]{display:none!important}
+html.fm-open, html.fm-open body{overflow:hidden}
+.fm-card{position:relative; width:100%; max-width:720px; max-height:100%; overflow-y:auto; overscroll-behavior:contain; background:var(--card); border:1px solid var(--line); animation:fmIn .28s ease}
+@keyframes fmIn{from{opacity:0; transform:translateY(16px)}to{opacity:1; transform:none}}
+@media (max-width:640px){ .fm{align-items:flex-end; padding:calc(env(safe-area-inset-top,0px) + 40px) 0 0} .fm-card{max-height:100%; border-left:0; border-right:0; border-bottom:0; animation-name:fmUp} }
+@keyframes fmUp{from{transform:translateY(40px); opacity:0}to{transform:none; opacity:1}}
+.fm-x{position:absolute; top:10px; right:10px; z-index:2; width:40px; height:40px; border:0; background:rgba(10,9,8,.75); color:#fff; font-size:24px; line-height:1; cursor:pointer}
+.fm-hero{position:relative; display:block; aspect-ratio:16/9; max-width:100%; background:var(--frame); overflow:hidden; text-decoration:none}
+.fm-hero img{display:block; width:100%; height:100%; object-fit:cover}
+.fm-hero .play{position:absolute; left:16px; bottom:16px; background:var(--red); color:var(--red-ink); font:600 13px var(--mono); letter-spacing:.1em; text-transform:uppercase; padding:8px 12px}
+.fm-hero .play.off{background:rgba(10,9,8,.8); color:var(--muted)}
+.fm-text{padding:20px; padding-bottom:calc(20px + env(safe-area-inset-bottom,0px)); display:flex; flex-direction:column; gap:12px}
+.fm-text .meta{display:flex; justify-content:space-between; gap:12px; color:var(--muted)}
+.fm-text h3{font-size:clamp(28px,7vw,40px)}
+.fm-roles{color:var(--red); letter-spacing:.06em}
+.fm-desc{color:var(--ink); opacity:.85; font-size:16px; max-width:62ch}
+.fm-people{color:var(--muted)}
+.fm-stills{display:grid; grid-auto-flow:column; grid-auto-columns:42%; gap:8px; overflow-x:auto; scrollbar-width:none; margin-inline:-20px; padding-inline:20px}
+.fm-stills::-webkit-scrollbar{display:none}
+@media (min-width:641px){ .fm-stills{grid-auto-columns:30%} }
+.fm-stills figure{margin:0; cursor:zoom-in}
+.fm-stills img{display:block; width:100%; aspect-ratio:16/10; object-fit:cover; background:var(--line)}
+.fm-credit{font-size:13px; color:var(--muted)}
+.fm-actions{display:flex; gap:10px; flex-wrap:wrap; padding-top:4px}
 .gbtn-alt{border-color:var(--frame-line); color:var(--frame-ink); align-self:flex-start}
 
 /* about */
@@ -550,6 +576,9 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       </div>
     </div>
   </section>
+  <div class="fm" id="fm" hidden role="dialog" aria-modal="true" aria-labelledby="fm-title">
+    <div class="fm-card"><button type="button" class="fm-x" id="fm-x" aria-label="Close">&times;</button><div id="fm-body"></div></div>
+  </div>
   <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
     <button type="button" class="lb-x" id="lb-x" aria-label="Close">&times;</button>
     <button type="button" class="lb-nav lb-prev" id="lb-prev" aria-label="Previous photo">&#8249;</button>
@@ -747,12 +776,65 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
   const img = (id, alt, local) => (local||id) ? '<img alt="'+(alt?esc(alt)+' – still from the film':'')+'" loading="lazy" src="'+(local?'img/'+local+'.jpg':thumb(id))+'" onerror="this.remove()">' : '';
 
+  /* film details shown in the pop-up card */
+  const INFO = {
+    'Vic': {roles:'Director · Self-produced', stills:[['film-vic','Vic at his kitchen table'],['film-vic-close','Vic, close'],['film-vic-mug','Vic with a mug of tea'],['film-vic-poster','The Vic poster']], status:'In production'},
+    'Lancaster': {roles:'Director · Cinematographer · Editor', notes:'Selected for the Arts Beats Festival, Lancaster, 2023. Shot in black and white, with only red left in the frame.'},
+    'The Heart of Midlothian': {roles:'Director · Editor', stills:[['film-heart','The Heart of Midlothian on the Royal Mile'],['film-heart-feet','Passers-by at the heart']], people:'Presented by Jake Middleton'},
+    'The Third Web': {roles:'Writer · Director · Camera · Producer', stills:[['film-thirdweb','Oliver on the shop floor'],['film-thirdweb-manager','Oliver faces his manager'],['film-thirdweb-dog','Oliver and the dog'],['bts-direct','Behind the scenes: blocking a scene'],['bts-crew','Behind the scenes: cast and crew'],['bts-monitor','Behind the scenes: checking the frame']], notes:'Made as an interactive film: at key moments the story stops and the audience chooses what Oliver does next. Every outcome was filmed. Lancaster University dissertation, 2023.'},
+    'Isle of Skye': {roles:'Director · Cinematographer · Editor · Narrator · Sound', stills:[['skye-storr','The Old Man of Storr'],['skye-interview','Interviews at the Storr'],['skye-portree','Portree harbour'],['skye-talisker','Talisker Distillery'],['skye-d600','Setting up by the Skye Bridge']]},
+    'The Portuguese Cannon': {roles:'Director · Editor', stills:[['film-cannon','The Portuguese Cannon'],['film-cannon-calton','Calton Hill, Edinburgh']], people:'Presented by Jake Middleton'},
+    'Crichton Castle': {roles:'Writer · Director · Editor · Casting', stills:[['film-crichton','Crichton Castle, Midlothian']], people:'Presented by David Weinczok'},
+    'Armadale Castle, Gardens & Museum of the Isles': {roles:'Producer', desc:'A documentary about the Armadale Estate on the Isle of Skye, made for Clan Donald Lands Trust and shown in the visitor areas of the Museum of the Isles.', stills:[['film-armadale','Armadale Castle']]},
+    'Stewart Dawber on the River Creedy': {roles:'Cinematographer · Sound · Editor', desc:'A short documentary following wildlife photographer Stewart Dawber on the River Creedy as he waits for a kingfisher.',
+      stills:[['film-creedy-2','Stewart wading the River Creedy'],['bts-creedy-hide','In the hide, waiting for the kingfisher'],['photo-creedy-striders','Pond skaters in a shaft of light'],['creedy-kingfisher','Kingfisher, photographed by Stewart Dawber']],
+      links:[['Stewart Dawber · Skye High Wildlife','https://skyehighwildlife.com']], credit:'Kingfisher photograph by Stewart Dawber, Skye High Wildlife.'},
+    'Southeast Asia 2018': {roles:'Editor', desc:'A holiday travel film through Southeast Asia, filmed in 2018 and edited in 2023.', stills:[['film-sea2018','Southeast Asia 2018']]}
+  };
+  const fm = document.getElementById('fm'), fmBody = document.getElementById('fm-body');
+  let fmFrom = null;
+  function openFilm(f, from){
+    const d = INFO[f.title] || {};
+    const href = f.href || (f.id ? 'https://youtu.be/'+f.id : '');
+    const hero = f.img ? 'img/'+f.img+'.jpg' : (f.id ? thumb(f.id) : '');
+    const title = f.title + (f.sub ? ': <em>'+f.sub+'</em>' : '');
+    const stills = (d.stills||[]).map(([k,c])=>'<figure data-src="img/'+k+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+k+'.jpg" alt="'+esc(c)+'" loading="lazy"></figure>').join('');
+    fmBody.innerHTML =
+      (href ? '<a class="fm-hero" href="'+href+'" target="_blank" rel="noopener">' : '<div class="fm-hero">')+
+        (hero ? '<img src="'+hero+'" alt="'+esc(f.title)+'" onerror="this.remove()">' : '')+
+        (href ? '<span class="play">&#9654; Watch the film</span></a>' : '<span class="play off">Not online yet</span></div>')+
+      '<div class="fm-text">'+
+        '<div class="meta mono"><span>'+(f.kind||'')+'</span><span>'+(f.year||'')+'</span></div>'+
+        '<h3 id="fm-title">'+title+'</h3>'+
+        (d.roles ? '<p class="fm-roles mono">Max Haddow&#8209;Mendes · '+d.roles+'</p>' : '')+
+        '<p class="fm-desc">'+(d.desc || f.desc || '')+'</p>'+
+        (d.notes ? '<p class="fm-desc">'+d.notes+'</p>' : '')+
+        (d.people || f.tag ? '<p class="fm-people mono">'+[d.people, (f.tag && f.tag!==d.people ? f.tag : '')].filter(Boolean).join(' · ')+'</p>' : '')+
+        (stills ? '<span class="mono" style="color:var(--muted)">Stills · tap to enlarge</span><div class="fm-stills gal-fm">'+stills+'</div>' : '')+
+        (d.credit ? '<p class="fm-credit">'+d.credit+'</p>' : '')+
+        '<div class="fm-actions">'+
+          (href ? '<a class="btn primary" href="'+href+'" target="_blank" rel="noopener">&#9654; Watch</a>' : '')+
+          (d.links||[]).map(([t,u])=>'<a class="btn" href="'+u+'" target="_blank" rel="noopener">'+t+' &#8599;</a>').join('')+
+        '</div>'+
+      '</div>';
+    fmBody.querySelectorAll('.fm-stills figure').forEach(fg=>{
+      fg.addEventListener('click',()=>openLb(fg));
+      fg.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(fg); } });
+    });
+    fmFrom = from; fm.hidden = false; document.documentElement.classList.add('fm-open');
+    fm.querySelector('.fm-card').scrollTop = 0; document.getElementById('fm-x').focus();
+  }
+  function closeFilm(){ fm.hidden = true; document.documentElement.classList.remove('fm-open'); if(fmFrom) fmFrom.focus(); }
+  document.getElementById('fm-x').addEventListener('click', closeFilm);
+  fm.addEventListener('click', e=>{ if(e.target===fm) closeFilm(); });
+  addEventListener('keydown', e=>{ if(e.key==='Escape' && !fm.hidden && document.getElementById('lb').hidden) closeFilm(); });
+
   document.getElementById('reels').innerHTML = films.map((f,i)=>{
     const t = f.red ? '<span style="color:#E0353C">'+f.title+'</span>' : f.title;
-    return '<article class="reel reveal bw">'+
-      '<a class="frame" href="https://youtu.be/'+f.id+'" target="_blank" rel="noopener" aria-label="Watch '+f.title+' on YouTube">'+
+    return '<article class="reel reveal bw" data-i="'+i+'">'+
+      '<a class="frame" href="https://youtu.be/'+f.id+'" target="_blank" rel="noopener" aria-label="'+f.title+': film details">'+
         '<div class="card"><span class="t">'+t+'</span>'+(f.sub?'<span class="s">'+f.sub+'</span>':'')+'</div>'+img(f.id, f.title, f.img)+
-        '<span class="no">'+pad(i+1)+'</span><span class="play">&#9654; Watch</span></a>'+
+        '<span class="no">'+pad(i+1)+'</span><span class="play">+ Details</span></a>'+
       '<div class="meta mono"><span>'+f.kind+'</span><span>'+f.year+'</span></div>'+
       '<h3>'+f.title+(f.sub?': <em>'+f.sub+'</em>':'')+'</h3>'+
       '<p class="desc">'+f.desc+'</p>'+(f.tag?'<span class="tag">'+f.tag+'</span>':'')+
@@ -763,6 +845,17 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     (m.href?'<a class="mini bw" href="'+m.href+'" target="_blank" rel="noopener">':'<div class="mini bw">')+
       '<div class="frame"><div class="card"><span class="t">'+esc(m.short)+'</span></div>'+img(m.id, m.title, m.img)+'</div>'+
       '<b>'+esc(m.title)+'</b><span class="mono k">'+m.kind+'</span>'+(m.href?'</a>':'</div>')).join('');
+  document.querySelectorAll('#reels .reel').forEach(r=>{
+    const f = films[+r.dataset.i];
+    r.style.cursor = 'pointer';
+    r.addEventListener('click', e=>{ e.preventDefault(); openFilm(f, r.querySelector('.frame')); });
+  });
+  document.querySelectorAll('#minis .mini').forEach((el,i)=>{
+    const m = minis[i]; if(el.tagName!=='A'){ el.setAttribute('tabindex','0'); el.setAttribute('role','button'); }
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', e=>{ e.preventDefault(); openFilm(m, el); });
+    el.addEventListener('keydown', e=>{ if(el.tagName!=='A' && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); openFilm(m, el); } });
+  });
 
 
   /* galleries + lightbox */

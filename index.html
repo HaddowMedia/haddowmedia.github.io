@@ -182,7 +182,7 @@ section.act-body{padding-block:clamp(24px,5vw,40px) clamp(32px,6vw,56px)}
 .rail-nav{display:flex; gap:6px}
 .rail-nav button{width:40px; height:40px; border:1px solid var(--line); background:transparent; color:var(--ink); font-size:16px; cursor:pointer}
 .rail-nav button:hover{border-color:var(--ink)}
-.rail{display:grid; grid-auto-flow:column; grid-auto-columns:86%; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; overscroll-behavior-x:contain;
+.rail{display:grid; align-items:start; overflow-y:hidden; transition:height .3s ease; grid-auto-flow:column; grid-auto-columns:86%; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; overscroll-behavior-x:contain;
   margin-left:calc(-1 * var(--gut-l)); margin-right:calc(-1 * var(--gut-r)); padding-left:var(--gut-l); padding-right:var(--gut-r); scroll-padding-left:var(--gut-l)}
 .rail::-webkit-scrollbar{display:none}
 .rail > *{scroll-snap-align:start; min-width:0}
@@ -825,8 +825,16 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       let idx = 0; items().forEach((c,i)=>{ if(c.offsetLeft - el.offsetLeft - parseFloat(getComputedStyle(el).paddingLeft) <= x) idx = i; });
       if(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4) idx = total-1;
       count.innerHTML = '<b>'+pad(idx+1)+'</b> / '+pad(total)+' · swipe';
+      fit(idx);
       return idx;
     }
+    /* on phones, the row is only as tall as the card in view, so short cards leave no gap */
+    function fit(idx){
+      const swipe = getComputedStyle(el).gridAutoFlow.indexOf('column') === 0;
+      if(!swipe){ el.style.height = ''; return; }
+      const c = items()[idx]; if(c) el.style.height = c.offsetHeight + 'px';
+    }
+    addEventListener('resize', ()=>update());
     el.addEventListener('scroll', update, {passive:true});
     document.querySelectorAll('[data-rail="'+id+'"]').forEach(b=>b.addEventListener('click',()=>{
       const next = Math.max(0, Math.min(total-1, update() + (+b.dataset.dir)));

@@ -372,6 +372,9 @@ html.fm-open, html.fm-open body{overflow:hidden}
 .fm-people{color:var(--muted)}
 .fm-stills{display:grid; grid-auto-flow:column; grid-auto-columns:42%; gap:8px; overflow-x:auto; scrollbar-width:none; margin-inline:-20px; padding-inline:20px}
 .fm-stills::-webkit-scrollbar{display:none}
+.fm-lab{display:block; color:var(--muted); margin-top:18px}
+.fm-lab + .fm-stills{margin-top:8px}
+.fm-card:focus{outline:none}
 @media (min-width:641px){ .fm-stills{grid-auto-columns:30%} }
 .fm-stills figure{margin:0; cursor:zoom-in}
 .fm-stills img{display:block; width:100%; aspect-ratio:16/10; object-fit:cover; background:var(--line)}
@@ -794,6 +797,10 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       links:[['Stewart Dawber · Skye High Wildlife','https://skyehighwildlife.com']], credit:'Kingfisher photograph by Stewart Dawber, Skye High Wildlife.'},
     'Southeast Asia 2018': {roles:'Editor', desc:'A holiday travel film through Southeast Asia, filmed in 2018 and edited in 2023.', stills:[['film-sea2018','Southeast Asia 2018']]}
   };
+  const BTS_KEYS = ['skye-interview','skye-d600','photo-creedy-striders'];
+  let kbNav = false;
+  addEventListener('keydown', e=>{ if(e.key==='Tab'||e.key==='Enter'||e.key===' ') kbNav = true; }, true);
+  addEventListener('pointerdown', ()=>{ kbNav = false; }, true);
   const fm = document.getElementById('fm'), fmBody = document.getElementById('fm-body');
   let fmFrom = null;
   function openFilm(f, from){
@@ -801,7 +808,11 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     const href = f.href || (f.id ? 'https://youtu.be/'+f.id : '');
     const hero = f.img ? 'img/'+f.img+'.jpg' : (f.id ? thumb(f.id) : '');
     const title = f.title + (f.sub ? ': <em>'+f.sub+'</em>' : '');
-    const stills = (d.stills||[]).map(([k,c])=>'<figure data-src="img/'+k+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+k+'.jpg" alt="'+esc(c)+'" loading="lazy"></figure>').join('');
+    const fig = ([k,c]) => '<figure data-src="img/'+k+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+k+'.jpg" alt="'+esc(c)+'" loading="lazy"></figure>';
+    const isBts = ([k]) => /^bts-/.test(k) || BTS_KEYS.includes(k);
+    const all = (d.stills||[]).map(([k,c])=>[k, c.replace(/^Behind the scenes:\s*/,'').replace(/^./,m=>m.toUpperCase())]);
+    const stills = all.filter(x=>!isBts(x)).map(fig).join('');
+    const bts = all.filter(isBts).map(fig).join('');
     fmBody.innerHTML =
       (href ? '<a class="fm-hero" href="'+href+'" target="_blank" rel="noopener">' : '<div class="fm-hero">')+
         (hero ? '<img src="'+hero+'" alt="'+esc(f.title)+'" onerror="this.remove()">' : '')+
@@ -813,7 +824,8 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         '<p class="fm-desc">'+(d.desc || f.desc || '')+'</p>'+
         (d.notes ? '<p class="fm-desc">'+d.notes+'</p>' : '')+
         (d.people || f.tag ? '<p class="fm-people mono">'+[d.people, (f.tag && f.tag!==d.people ? f.tag : '')].filter(Boolean).join(' · ')+'</p>' : '')+
-        (stills ? '<span class="mono" style="color:var(--muted)">Stills · tap to enlarge</span><div class="fm-stills gal-fm">'+stills+'</div>' : '')+
+        (stills ? '<span class="mono fm-lab">Film stills · tap to enlarge</span><div class="fm-stills gal-fm">'+stills+'</div>' : '')+
+        (bts ? '<span class="mono fm-lab">Behind the scenes</span><div class="fm-stills gal-fm">'+bts+'</div>' : '')+
         (d.credit ? '<p class="fm-credit">'+d.credit+'</p>' : '')+
         '<div class="fm-actions">'+
           (href ? '<a class="btn primary" href="'+href+'" target="_blank" rel="noopener">&#9654; Watch</a>' : '')+
@@ -826,7 +838,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     });
     fmFrom = from; fm.hidden = false; document.documentElement.classList.add('fm-open');
     if(!fmPushed){ history.pushState({fm:1},''); fmPushed = true; }
-    fm.querySelector('.fm-card').scrollTop = 0; document.getElementById('fm-x').focus();
+    fm.querySelector('.fm-card').scrollTop = 0; if(kbNav) document.getElementById('fm-x').focus(); else { const c=fm.querySelector('.fm-card'); c.setAttribute('tabindex','-1'); c.focus({preventScroll:true}); }
   }
   /* back gesture / back button closes the pop-up */
   let fmPushed = false;
@@ -834,7 +846,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     if(fm.hidden) return;
     fm.hidden = true; document.documentElement.classList.remove('fm-open');
     const card = fm.querySelector('.fm-card'); card.style.transform=''; card.style.opacity=''; card.classList.remove('settle','dragging');
-    if(fmFrom) fmFrom.focus({preventScroll:true});
+    if(fmFrom){ if(kbNav) fmFrom.focus({preventScroll:true}); else if(document.activeElement && document.activeElement!==document.body) document.activeElement.blur(); }
     if(fmPushed){ fmPushed = false; if(fromPop!==true) history.back(); }
   }
   addEventListener('popstate', ()=>{
@@ -935,7 +947,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     const n = lbSet[lbI+1]; if(n){ const pre = new Image(); pre.src = n.dataset.src; }
   }
   function openLb(el){ lbFrom = el; lbSet = [...el.parentElement.querySelectorAll('figure')]; lb.hidden = false; showLb(lbSet.indexOf(el)); document.getElementById('lb-x').focus(); }
-  function closeLb(){ lb.hidden = true; lbImg.removeAttribute('src'); if(lbFrom) lbFrom.focus(); }
+  function closeLb(){ lb.hidden = true; lbImg.removeAttribute('src'); if(lbFrom && typeof kbNav!=='undefined' && kbNav) lbFrom.focus(); else if(document.activeElement) document.activeElement.blur(); }
   document.querySelectorAll('.gal figure').forEach(f=>{
     f.addEventListener('click',()=>openLb(f));
     f.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(f); } });

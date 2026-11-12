@@ -794,11 +794,11 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     'Crichton Castle': {roles:'Writer · Director · Editor · Casting', stills:[['film-crichton','Crichton Castle, Midlothian']], people:'Presented by David Weinczok'},
     'Armadale Castle, Gardens & Museum of the Isles': {roles:'Producer', desc:'A documentary about the Armadale Estate on the Isle of Skye, made for Clan Donald Lands Trust and shown in the visitor areas of the Museum of the Isles.', stills:[['film-armadale','Armadale Castle']]},
     'Stewart Dawber on the River Creedy': {roles:'Cinematographer · Sound · Editor', desc:'A short documentary following wildlife photographer Stewart Dawber on the River Creedy as he waits for a kingfisher.',
-      stills:[['film-creedy-2','Stewart wading the River Creedy'],['bts-creedy-hide','In the hide, waiting for the kingfisher'],['photo-creedy-striders','Pond skaters in a shaft of light'],['creedy-kingfisher','Kingfisher, photographed by Stewart Dawber']],
+      stills:[['film-creedy-2','Stewart wading the River Creedy'],['bts-creedy-hide','Stewart in the hide, waiting for the kingfisher'],['photo-creedy-striders','Pond skaters in a shaft of light'],['creedy-kingfisher','Kingfisher, photographed by Stewart Dawber']],
       links:[['Stewart Dawber · Skye High Wildlife','https://skyehighwildlife.com']], credit:'Kingfisher photograph by Stewart Dawber, Skye High Wildlife.'},
     'Southeast Asia 2018': {roles:'Editor', desc:'A holiday travel film through Southeast Asia, filmed in 2018 and edited in 2023.', stills:[['film-sea2018','Southeast Asia 2018']]}
   };
-  const BTS_KEYS = ['skye-interview','skye-d600','photo-creedy-striders'];
+  const BTS_KEYS = ['skye-interview','skye-d600'], NOT_BTS = ['bts-creedy-hide'];
   let kbNav = false;
   addEventListener('keydown', e=>{ if(e.key==='Tab'||e.key==='Enter'||e.key===' ') kbNav = true; }, true);
   addEventListener('pointerdown', ()=>{ kbNav = false; }, true);
@@ -810,7 +810,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     const hero = f.img ? 'img/'+f.img+'.jpg' : (f.id ? thumb(f.id) : '');
     const title = f.title + (f.sub ? ': <em>'+f.sub+'</em>' : '');
     const fig = ([k,c]) => '<figure data-src="img/'+k+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+k+'.jpg" alt="'+esc(c)+'" loading="lazy"></figure>';
-    const isBts = ([k]) => /^bts-/.test(k) || BTS_KEYS.includes(k);
+    const isBts = ([k]) => !NOT_BTS.includes(k) && (/^bts-/.test(k) || BTS_KEYS.includes(k));
     const all = (d.stills||[]).map(([k,c])=>[k, c.replace(/^Behind the scenes:\s*/,'').replace(/^./,m=>m.toUpperCase())]);
     const stills = all.filter(x=>!isBts(x)).map(fig).join('');
     const bts = all.filter(isBts).map(fig).join('');
@@ -920,7 +920,6 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
   /* galleries + lightbox */
   const bts = [
-    ['bts-creedy-hide','River Creedy: in the hide, waiting for the kingfisher'],
     ['bts-direct','The Third Web: blocking a scene outside the Lancaster University students\u2019 union shop'],
     ['bts-floor','The Third Web: rolling on the spilled-yoghurt scene'],
     ['bts-counter','The Third Web: shooting at the till'],

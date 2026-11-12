@@ -362,6 +362,8 @@ html.fm-open, html.fm-open body{overflow:hidden}
 .fm-card.settle{transition:transform .22s ease, opacity .22s ease}
 .fm-x{position:absolute; top:10px; right:10px; z-index:2; width:40px; height:40px; border:0; background:rgba(10,9,8,.75); color:#fff; font-size:24px; line-height:1; cursor:pointer}
 .fm-hero{position:relative; display:block; aspect-ratio:16/9; max-width:100%; background:var(--frame); overflow:hidden; text-decoration:none}
+.fm-player{background:#000}
+.fm-player iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
 .fm-hero img{display:block; width:100%; height:100%; object-fit:cover}
 .fm-hero .play{position:absolute; left:16px; bottom:16px; background:var(--red); color:var(--red-ink); font:600 13px var(--mono); letter-spacing:.1em; text-transform:uppercase; padding:8px 12px}
 .fm-hero .play.off{background:rgba(10,9,8,.8); color:var(--muted)}
@@ -777,7 +779,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   ];
   const minis = [
     {href:'https://drive.google.com/file/d/1xvB9yPLp9BqG_gPS5XYQYAuxzD6hxi9U/view?usp=sharing', img:'film-armadale', title:'Armadale Castle, Gardens & Museum of the Isles', short:'Armadale', kind:'Commission · 2023–24'},
-    {href:'https://drive.google.com/file/d/1pQIz4xmOn127S6B1ZcPIbgfhkEZ09ckU/view?usp=sharing', img:'film-creedy-2', title:'Stewart Dawber on the River Creedy', short:'River Creedy', kind:'Short documentary · 2025'},
+    {href:'https://youtu.be/LrEy2fg6mMI', id:'LrEy2fg6mMI', img:'film-creedy-2', title:'Stewart Dawber on the River Creedy', short:'River Creedy', kind:'Short documentary · 2025'},
     {img:'film-sea2018', title:'Southeast Asia 2018', short:'Southeast Asia', kind:'Travel film · 2018'}
   ];
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
@@ -829,10 +831,22 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         (bts ? '<span class="mono fm-lab">Behind the scenes</span><div class="fm-stills gal-fm">'+bts+'</div>' : '')+
         (d.credit ? '<p class="fm-credit">'+d.credit+'</p>' : '')+
         '<div class="fm-actions">'+
-          (href ? '<a class="btn primary" href="'+href+'" target="_blank" rel="noopener">&#9654; Watch</a>' : '')+
+          (href ? '<a class="btn primary fm-watch" href="'+href+'" target="_blank" rel="noopener">&#9654; Watch</a>' : '')+
           (d.links||[]).map(([t,u])=>'<a class="btn" href="'+u+'" target="_blank" rel="noopener">'+t+' &#8599;</a>').join('')+
         '</div>'+
       '</div>';
+    /* YouTube films play right here in the pop-up */
+    if(f.id){
+      const play = e=>{
+        e.preventDefault();
+        const h = fmBody.querySelector('.fm-hero'); if(!h || h.tagName==='DIV' && h.querySelector('iframe')) return;
+        const box = document.createElement('div'); box.className = 'fm-hero fm-player';
+        box.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/'+f.id+'?autoplay=1&rel=0&playsinline=1&modestbranding=1" title="'+esc(f.title)+'" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+        h.replaceWith(box);
+        fm.querySelector('.fm-card').scrollTo({top:0, behavior:'smooth'});
+      };
+      fmBody.querySelectorAll('a.fm-hero, a.fm-watch').forEach(a=>a.addEventListener('click', play));
+    }
     fmBody.querySelectorAll('.fm-stills figure').forEach(fg=>{
       fg.addEventListener('click',()=>openLb(fg));
       fg.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(fg); } });
@@ -846,6 +860,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   function closeFilm(fromPop){
     if(fm.hidden) return;
     fm.hidden = true; document.documentElement.classList.remove('fm-open');
+    fmBody.querySelectorAll('iframe').forEach(i=>i.remove());
     const card = fm.querySelector('.fm-card'); card.style.transform=''; card.style.opacity=''; card.classList.remove('settle','dragging');
     if(fmFrom){ if(kbNav) fmFrom.focus({preventScroll:true}); else if(document.activeElement && document.activeElement!==document.body) document.activeElement.blur(); }
     if(fmPushed){ fmPushed = false; if(fromPop!==true) history.back(); }

@@ -6,6 +6,7 @@
 <link rel="canonical" href="https://haddowmedia.co.uk/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#121110">
+<script>try{if(localStorage.getItem("theme")==="light"){document.documentElement.dataset.theme="light";document.querySelector('meta[name="theme-color"]').content="#F3EEE4"}}catch(e){}</script>
 <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="website">
@@ -79,6 +80,20 @@
   --gut-r:max(16px, env(safe-area-inset-right, 0px));
   color-scheme:dark;
 }
+/* light mode: warm paper, ink-dark type, deeper amber for contrast; film frames stay dark like a screen on a page */
+html[data-theme="light"]{
+  --paper:#F3EEE4; --card:#FBF8F2; --ink:#1A1714; --muted:#5C564D; --line:#D8CFBF;
+  --red:#A1600C; --red-ink:#FFFFFF;
+  color-scheme:light;
+}
+html[data-theme="light"] .logo{filter:none}
+html[data-theme="light"] :is(.fm-hero, .fm-pk-head, .frame, .inter, .pkg .head, .portrait, .strip, footer){--ink:var(--frame-ink); --muted:var(--frame-muted); --line:var(--frame-line); --red:var(--frame-red); --red-ink:#121110; --paper:var(--frame); --card:#1A1816; color:var(--ink)}
+html[data-theme="light"] body::after{opacity:.05; mix-blend-mode:multiply}
+.theme{flex:none; width:40px; height:40px; display:grid; place-items:center; border:1px solid var(--line); background:transparent; color:var(--ink); cursor:pointer; padding:0; border-radius:50%; transition:border-color .2s, transform .3s}
+.theme svg{width:20px; height:20px}
+.theme .sun{display:none} html[data-theme="light"] .theme .sun{display:block} html[data-theme="light"] .theme .moon{display:none}
+@media (hover:hover) and (pointer:fine){ .theme:hover{border-color:var(--red)} }
+.theme:active{transform:rotate(-25deg)}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -520,6 +535,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       <a href="#hire" class="hire"><i>III</i><span>Commission</span></a>
       <a href="/maxhm/" class="founder-link" title="Max Haddow&#8209;Mendes: CV, credits and experience"><i>&#8599;</i><span>Meet Max</span></a>
     </nav>
+    <button type="button" class="theme" id="theme" aria-label="Switch to light mode" title="Light / dark"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
   </div>
   <div class="playhead" id="playhead"></div>
 </header>
@@ -1187,6 +1203,15 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   document.getElementById('copy-enq').addEventListener('click', ()=>copy(document.getElementById('composed-text').textContent, document.getElementById('copy-msg')));
   document.getElementById('copy-mail').addEventListener('click', e=>copy(EMAIL, null, e.currentTarget));
 
+  /* light / dark toggle */
+  (function(){
+    const b = document.getElementById('theme'), root = document.documentElement, meta = document.querySelector('meta[name="theme-color"]');
+    const apply = t=>{ if(t==='light') root.dataset.theme='light'; else delete root.dataset.theme;
+      b.setAttribute('aria-label', t==='light' ? 'Switch to dark mode' : 'Switch to light mode');
+      if(meta) meta.content = t==='light' ? '#F3EEE4' : '#121110'; };
+    apply(root.dataset.theme==='light' ? 'light' : 'dark');
+    b.addEventListener('click', ()=>{ const t = root.dataset.theme==='light' ? 'dark' : 'light'; apply(t); try{ localStorage.setItem('theme', t); }catch(_){} });
+  })();
   /* grain toggle */
   const g = document.getElementById('grain');
   let grainOn = true;

@@ -464,6 +464,11 @@ html.fm-open, html.fm-open body{overflow:hidden}
 .fm-pk .ex{display:flex; gap:10px; flex-wrap:wrap}
 .fm-pk .ex button{display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid var(--ink); color:var(--ink); padding:6px 12px 6px 6px; cursor:pointer; font:500 14px var(--body); text-align:left; max-width:100%}
 .fm-pk .ex img{width:64px; height:40px; object-fit:cover; flex:none}
+.keepsake{margin-top:22px; border:1px solid var(--line); border-left:3px solid var(--red); padding:14px 16px; display:flex; flex-direction:column; gap:6px}
+.keepsake .mono{color:var(--red); font-size:12px; letter-spacing:.1em; text-transform:uppercase}
+.keepsake p{margin:0; color:var(--muted); font-size:15px} .keepsake b{color:var(--ink)}
+.fm-pk .keep{border:1px solid var(--line); border-left:3px solid var(--red); padding:12px 14px; font-size:15px; line-height:1.5; color:var(--muted)} .fm-pk .keep b{color:var(--ink)}
+.chk{display:flex!important; flex-direction:row!important; align-items:flex-start; gap:10px; cursor:pointer} .chk input{width:20px; height:20px; margin:2px 0 0; accent-color:var(--red); flex:none}
 .pkg-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; padding-top:6px}
 .pkg-actions .btn{flex:1 1 auto}
 
@@ -627,7 +632,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
           <div class="head"><span class="mono">Portrait</span><h3>A film about someone</h3><div class="amt">£600</div><span class="dep">£300 to book · £300 on delivery</span></div>
           <div class="body">
             <p>A short documentary about a person who matters to you: a grandparent, a founder, a local legend.</p>
-            <ul><li>One filming day, interview and observational</li><li>Archive photos woven in</li><li>Finished film up to 5 minutes</li><li>One round of revisions</li></ul>
+            <ul><li>One filming day, interview and observational</li><li>Archive photos woven in</li><li>Finished film up to 5 minutes</li><li>Film poster, stills and behind-the-scenes photos</li><li>One round of revisions</li></ul>
             <button type="button" class="pkg-more mono">Full details &amp; how it works &rarr;</button>
             <div class="pkg-actions"><a class="btn primary" data-pay="portrait" data-pkg="Portrait — a film about someone" href="#enquiry">Pay £300 deposit</a><button class="btn" type="button" data-pkg="Portrait — a film about someone">Ask first</button></div>
           </div>
@@ -636,11 +641,16 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
           <div class="head"><span class="mono">Place</span><h3>A film about somewhere</h3><div class="amt">£850</div><span class="dep">£425 to book · £425 on delivery</span></div>
           <div class="body">
             <p>For museums, heritage sites, venues and businesses that want their space and history told well.</p>
-            <ul><li>One filming day across your site</li><li>Voiceover or presented format</li><li>3–5 minute film plus a 60-second cut</li><li>One round of revisions</li></ul>
+            <ul><li>One filming day across your site</li><li>Voiceover or presented format</li><li>3–5 minute film plus a 60-second cut</li><li>Film poster, stills and behind-the-scenes photos</li><li>One round of revisions</li></ul>
             <button type="button" class="pkg-more mono">Full details &amp; how it works &rarr;</button>
             <div class="pkg-actions"><a class="btn primary" data-pay="place" data-pkg="Place — a film about somewhere" href="#enquiry">Pay £425 deposit</a><button class="btn" type="button" data-pkg="Place — a film about somewhere">Ask first</button></div>
           </div>
         </article>
+      </div>
+
+      <div class="keepsake">
+        <span class="mono">Add-on · £95</span>
+        <p><b>The Keepsake Edition.</b> Your film on an engraved USB in a wooden presentation box, with an A3 printed poster and a set of printed stills. Something to hand down. Add it to either package.</p>
       </div>
 
       <ol class="steps">
@@ -679,6 +689,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
             <option>Not sure yet</option><option>Under £500</option><option>£500 – £1,500</option><option>£1,500 – £3,000</option><option>£3,000+</option>
           </select>
         </label>
+        <label class="full chk"><input type="checkbox" id="f-keep" name="keepsake"><span>I&#8217;m interested in the Keepsake Edition (+&pound;95): engraved USB in a wooden box, A3 poster and printed stills</span></label>
         <input type="text" name="_honey" id="f-honey" tabindex="-1" autocomplete="off" aria-hidden="true" class="honey">
         <div class="full row"><button class="btn primary" type="submit" id="f-send">Send enquiry</button><span class="err" id="f-err" hidden></span></div>
       </form>
@@ -1081,16 +1092,16 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     portrait:{kind:'Portrait', title:'A film about someone', amt:'£600', dep:'£300 to book · £300 on delivery', img:'film-vic-mug', pkg:'Portrait — a film about someone',
       intro:'A short documentary portrait of one person, in their own words. The stories that usually only come out at the kitchen table, recorded properly with the photos and places that go with them, so the family can watch it for years.',
       forw:['A grandparent or parent, while the stories can still be told first-hand','A milestone birthday, retirement or anniversary','A founder, a community figure or a local legend','A film celebrating a life, built from existing photos and footage'],
-      get:['A planning call to find the story and agree the day','One filming day: a sit-down interview, plus footage of them at home, at work or somewhere that matters','Up to 30 family photos or documents scanned and woven in','A finished film of up to 5 minutes, with licensed music, colour grade and sound mix','One round of revisions','An HD file to keep, plus a private link to share with family'],
+      get:['A planning call to find the story and agree the day','One filming day: a sit-down interview, plus footage of them at home, at work or somewhere that matters','Up to 30 family photos or documents scanned and woven in','A finished film of up to 5 minutes, with licensed music, colour grade and sound mix','One round of revisions','A designed film poster, around 20 graded stills and photos from behind the scenes','Everything by private download link, plus an online link to watch and share with family'],
       how:[['Book','Pay the deposit to hold your place.'],['Plan','A call about the person, the stories worth telling and the photos to gather.'],['Film','One relaxed day, built around their routine. Nerves are normal; we film conversations, not performances.'],['Edit','You get a first cut to watch, usually within three weeks of filming.'],['Deliver','After your revisions, pay the balance and the film is yours.']],
-      know:['Travel within London is included. Elsewhere in the UK, travel is agreed up front.','Need a longer film or a second filming day? Ask and we will quote.','Nothing is shared publicly without your say-so.'],
+      know:['Travel within London is included. Elsewhere in the UK, travel is agreed up front.','Need a longer film or a second filming day? Ask and we will quote.','Nothing is shared publicly without your say-so.','We keep a backup of your finished film for two years.'],
       ex:['Vic']},
     place:{kind:'Place', title:'A film about somewhere', amt:'£850', dep:'£425 to book · £425 on delivery', img:'film-armadale', pkg:'Place — a film about somewhere',
       intro:'A film about a building, a site or a business, and the history that makes it what it is. Made to play in a visitor centre, on your website or at an event, with a 60-second cut to share.',
       forw:['Museums, heritage sites and historic houses','Venues, hotels, shops and family businesses with a story behind them','Anniversaries, reopenings and new exhibitions','Community spaces and charities'],
-      get:['A planning call and a recce of the site, in person or by video','One filming day across your site: the spaces, the details and the people who keep it going','Voiceover or presented format, with interviews where they help','A 3–5 minute film plus a 60-second cut','Licensed music, colour grade and sound mix','One round of revisions','Files ready for your website, screens and social channels'],
+      get:['A planning call and a recce of the site, in person or by video','One filming day across your site: the spaces, the details and the people who keep it going','Voiceover or presented format, with interviews where they help','A 3–5 minute film plus a 60-second cut','Licensed music, colour grade and sound mix','One round of revisions','A designed film poster, around 20 graded stills and photos from behind the scenes','Everything by private download link, with files ready for your website, screens and social channels'],
       how:[['Book','Pay the deposit to hold your place.'],['Plan','We agree the story, the script approach and a shot list for the day.'],['Film','One day on site, timed around opening hours to keep crowds out of shot.'],['Edit','You get a first cut to review, usually within three weeks of filming.'],['Deliver','After your revisions, pay the balance and receive every version.']],
-      know:['Travel within London is included. Elsewhere in the UK, travel is agreed up front.','We help arrange permissions and release forms for staff or visitors on camera.','Archive images and documents you hold can be filmed or scanned into the edit.'],
+      know:['Travel within London is included. Elsewhere in the UK, travel is agreed up front.','We help arrange permissions and release forms for staff or visitors on camera.','Archive images and documents you hold can be filmed or scanned into the edit.','We keep a backup of your finished film for two years.'],
       ex:['Armadale Castle, Gardens & Museum of the Isles','Crichton Castle','The Portuguese Cannon']}
   };
   const findFilm = t => films.concat(minis).find(f=>f.title===t);
@@ -1107,6 +1118,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         '<h4>What you get</h4>'+li(p.get)+
         '<h4>How it works</h4><ol>'+p.how.map(([a,b])=>'<li><span><b>'+a+'.</b> '+b+'</span></li>').join('')+'</ol>'+
         '<h4>Good to know</h4>'+li(p.know)+
+        '<h4>Add-on · £95</h4><p class="keep"><b>The Keepsake Edition.</b> Your film on an engraved USB in a wooden presentation box, with an A3 printed poster and a set of printed stills. Paid with the balance on delivery.</p>'+
         (ex.length ? '<h4>From our work</h4><div class="ex">'+ex.map((f,i)=>'<button type="button" data-ex="'+i+'"><img src="img/'+f.img+'.jpg" alt="">'+esc(f.short||f.title)+'</button>').join('')+'</div>' : '')+
         '<div class="fm-actions">'+
           '<a class="btn primary" href="'+PAY[k]+'" target="_blank" rel="noopener">Pay '+p.dep.split(' ')[0]+' deposit</a>'+
@@ -1142,7 +1154,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     }
     err.hidden = true;
     if(document.getElementById('f-honey').value) return;
-    const text = 'Hi Haddow Media,\n\nI’d like to commission a film.\n\nType: '+v('f-pkg')+'\nNeeded: '+whenText(v)+'\nBudget: '+v('f-budget')+
+    const text = 'Hi Haddow Media,\n\nI’d like to commission a film.\n\nType: '+v('f-pkg')+'\nNeeded: '+whenText(v)+'\nBudget: '+v('f-budget')+'\nKeepsake Edition: '+(document.getElementById('f-keep').checked?'Yes':'No')+
       '\n\nThe story:\n'+v('f-story')+'\n\n'+v('f-name')+'\n'+v('f-email');
     document.getElementById('composed-text').textContent = text;
     document.getElementById('mail-enq').href = 'mailto:'+EMAIL+'?subject='+encodeURIComponent('Film commission: '+v('f-pkg'))+'&body='+encodeURIComponent(text);
@@ -1153,7 +1165,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       method:'POST', headers:{'Content-Type':'application/json', 'Accept':'application/json'},
       body: JSON.stringify({
         _subject:'New film enquiry: '+v('f-pkg')+' from '+v('f-name'), _template:'table', _replyto:v('f-email'), _captcha:'false',
-        Name:v('f-name'), Email:v('f-email'), 'Type of film':v('f-pkg'), 'Needed':whenText(v), Budget:v('f-budget'), Story:v('f-story')
+        Name:v('f-name'), Email:v('f-email'), 'Type of film':v('f-pkg'), 'Needed':whenText(v), Budget:v('f-budget'), 'Keepsake Edition':(document.getElementById('f-keep').checked?'Yes, interested':'No'), Story:v('f-story')
       })
     }).then(r=>r.json().then(j=>({ok:r.ok, j}))).then(({ok,j})=>{
       if(!ok || String(j.success)!=='true') throw new Error(j.message||'send failed');

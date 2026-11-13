@@ -650,7 +650,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
       <div class="keepsake">
         <span class="mono">Add-on · £95</span>
-        <p><b>The Keepsake Edition.</b> Your film on an engraved USB in a wooden presentation box, with an A3 printed poster and a set of printed stills. Something to hand down. Add it to either package.</p>
+        <p><b>The Keepsake Edition.</b> Your film on a USB, with an A3 printed poster and a set of printed stills. Something to hand down. Add it to either package.</p>
       </div>
 
       <ol class="steps">
@@ -689,7 +689,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
             <option>Not sure yet</option><option>Under £500</option><option>£500 – £1,500</option><option>£1,500 – £3,000</option><option>£3,000+</option>
           </select>
         </label>
-        <label class="full chk"><input type="checkbox" id="f-keep" name="keepsake"><span>I&#8217;m interested in the Keepsake Edition (+&pound;95): engraved USB in a wooden box, A3 poster and printed stills</span></label>
+        <label class="full chk"><input type="checkbox" id="f-keep" name="keepsake"><span>I&#8217;m interested in the Keepsake Edition (+&pound;95): film on USB, A3 poster and printed stills</span></label>
         <input type="text" name="_honey" id="f-honey" tabindex="-1" autocomplete="off" aria-hidden="true" class="honey">
         <div class="full row"><button class="btn primary" type="submit" id="f-send">Send enquiry</button><span class="err" id="f-err" hidden></span></div>
       </form>
@@ -1095,7 +1095,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       get:['A planning call to find the story and agree the day','One filming day: a sit-down interview, plus footage of them at home, at work or somewhere that matters','Up to 30 family photos or documents scanned and woven in','A finished film of up to 5 minutes, with licensed music, colour grade and sound mix','One round of revisions','A designed film poster, around 20 graded stills and photos from behind the scenes','Everything by private download link, plus an online link to watch and share with family'],
       how:[['Book','Pay the deposit to hold your place.'],['Plan','A call about the person, the stories worth telling and the photos to gather.'],['Film','One relaxed day, built around their routine. Nerves are normal; we film conversations, not performances.'],['Edit','You get a first cut to watch, usually within three weeks of filming.'],['Deliver','After your revisions, pay the balance and the film is yours.']],
       know:['Travel within London is included. Elsewhere in the UK, travel is agreed up front.','Need a longer film or a second filming day? Ask and we will quote.','Nothing is shared publicly without your say-so.','We keep a backup of your finished film for two years.'],
-      ex:['Vic']},
+      ex:[]},
     place:{kind:'Place', title:'A film about somewhere', amt:'£850', dep:'£425 to book · £425 on delivery', img:'film-armadale', pkg:'Place — a film about somewhere',
       intro:'A film about a building, a site or a business, and the history that makes it what it is. Made to play in a visitor centre, on your website or at an event, with a 60-second cut to share.',
       forw:['Museums, heritage sites and historic houses','Venues, hotels, shops and family businesses with a story behind them','Anniversaries, reopenings and new exhibitions','Community spaces and charities'],
@@ -1118,7 +1118,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         '<h4>What you get</h4>'+li(p.get)+
         '<h4>How it works</h4><ol>'+p.how.map(([a,b])=>'<li><span><b>'+a+'.</b> '+b+'</span></li>').join('')+'</ol>'+
         '<h4>Good to know</h4>'+li(p.know)+
-        '<h4>Add-on · £95</h4><p class="keep"><b>The Keepsake Edition.</b> Your film on an engraved USB in a wooden presentation box, with an A3 printed poster and a set of printed stills. Paid with the balance on delivery.</p>'+
+        '<h4>Add-on · £95</h4><p class="keep"><b>The Keepsake Edition.</b> Your film on a USB, with an A3 printed poster and a set of printed stills. Paid with the balance on delivery.</p>'+
         (ex.length ? '<h4>From our work</h4><div class="ex">'+ex.map((f,i)=>'<button type="button" data-ex="'+i+'"><img src="img/'+f.img+'.jpg" alt="">'+esc(f.short||f.title)+'</button>').join('')+'</div>' : '')+
         '<div class="fm-actions">'+
           '<a class="btn primary" href="'+PAY[k]+'" target="_blank" rel="noopener">Pay '+p.dep.split(' ')[0]+' deposit</a>'+
@@ -1137,8 +1137,8 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   }
   document.querySelectorAll('.pkg[data-pk]').forEach(el=>{
     const go = ()=>openPkg(el.dataset.pk, el.querySelector('.pkg-more'));
-    el.querySelector('.pkg-more').addEventListener('click', go);
-    el.querySelector('.head').addEventListener('click', go);
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', e=>{ if(e.target.closest('.pkg-actions a, .pkg-actions button')) return; go(); });
   });
   const whenSel = document.getElementById('f-when');
   whenSel.addEventListener('change', ()=>{ document.getElementById('when-extra').hidden = whenSel.value!=='event'; });

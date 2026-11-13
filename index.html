@@ -730,7 +730,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   (function(){
     const el = document.getElementById('scene'); if(!el) return;
     const n = document.getElementById('scene-n'), t = document.getElementById('scene-t');
-    const S = [['I','The Work','#work'],['II','Call the Shot','#shot'],['III','The Studio','#studio'],['IV','From &pound;400','#hire']];
+    const S = [['I','The Work','#work'],['II','Call the Shot','#shot'],['III','The Studio','#studio'],['IV','Commission','#hire']];
     const names = ['The Work','Call the Shot','The Studio','Commission'];
     let i = 0, vis = true;
     const show = j=>{ i = j; n.textContent = S[i][0]; t.innerHTML = S[i][1]+' <i aria-hidden="true">&rarr;</i>'; el.href = S[i][2]; el.setAttribute('aria-label','Jump to Act '+S[i][0]+', '+names[i]); };

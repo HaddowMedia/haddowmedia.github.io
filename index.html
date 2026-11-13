@@ -136,13 +136,22 @@ nav a.founder-link{padding-left:18px; border-left:1px solid var(--line)}
 
 /* hero */
 .hero{padding-block:32px 40px}
-.slate{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); max-width:520px; border:1px solid var(--ink); margin-bottom:28px}
-.slate div{padding:10px 12px; border-right:1px solid var(--ink); min-width:0}
-.slate div:last-child{border-right:0}
+.slate{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); max-width:640px; border:1px solid var(--ink); margin-bottom:28px}
+.slate > *{padding:10px 12px; border-right:1px solid var(--ink); min-width:0}
+.slate > *:last-child{border-right:0}
+.slate-go{color:inherit; text-decoration:none; background:rgba(233,162,59,.08); transition:background .2s}
+.slate-go b{color:var(--red)} .slate-go em{font-style:normal; color:inherit}
+.slate-go b, .slate-go span{transition:opacity .25s, transform .25s} .slate-go.swap b{opacity:0; transform:translateY(6px)} .slate-go.swap span em{opacity:0}
+@media (max-width:400px){ .slate-go i{display:none} } .slate-go i{font-style:normal; display:inline-block; transition:transform .2s}
+@media (hover:hover) and (pointer:fine){ .slate-go:hover{background:rgba(233,162,59,.16)} .slate-go:hover i{transform:translateX(3px)} }
+@media (max-width:480px){ .slate.mono{grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1.15fr)} .slate > *{padding:9px 8px} .slate b{font-size:13px; letter-spacing:0} .slate span{font-size:10px} }
+.uk{font-style:normal}
+@media (max-width:340px){ .uk{display:none} .slate.mono{grid-template-columns:minmax(0,.85fr) minmax(0,.95fr) minmax(0,1.3fr)} .slate > *{padding:8px 6px} .slate b{font-size:11.5px} .slate span{font-size:9px} }
 .slate b{display:block; font-family:var(--mono); font-weight:500; font-size:15px; letter-spacing:.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .slate span{color:var(--muted)}
 
-.hero h1{font-size:clamp(40px,10.5vw,112px); letter-spacing:0}
+.hero h1{font-size:clamp(38px,10vw,104px); letter-spacing:0}
+.hero .cta{margin-top:26px; justify-content:flex-start}
 .hero h1 em{font-style:normal; color:var(--red)}
 .hero .lede{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:24px; margin-top:24px; align-items:end}
 .hero .lede p{font-size:19px; max-width:34ch}
@@ -498,16 +507,14 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 <main id="top">
   <div class="wrap hero">
     <div class="slate mono" aria-label="Production slate">
-      <div><span>Location</span><b>London, UK</b></div>
+      <div><span>Location</span><b>London<i class="uk">, UK</i></b></div>
       <div><span>TC 25fps</span><b id="tc">00:00:00:00</b></div>
+      <a href="#work" class="slate-go" id="scene" aria-label="Jump to Act I, The Work"><span>Scene <em id="scene-n">I</em></span><b id="scene-t">The Work <i aria-hidden="true">&rarr;</i></b></a>
     </div>
-    <h1>Most stories only get told <em>once</em>. We make sure they&#8217;re kept, and <span class="red">worth sharing</span>.</h1>
-    <div class="lede">
-      <p>Grandad&#8217;s tales at the kitchen table. The history in the walls of your building. The reason your business exists. Haddow Media is a London documentary studio that finds the story, films it with care and gives you something to keep. <b>Whose story should we tell?</b></p>
-      <div class="cta">
-        <a class="btn" href="#work">Watch the work</a>
-        <a class="btn primary" href="#hire">Tell us your story</a>
-      </div>
+    <h1>Most stories only get told <em>once</em>. We make them <span class="red">last</span>.</h1>
+    <div class="cta">
+      <a class="btn" href="#work">Watch the work</a>
+      <a class="btn primary" href="#hire">Tell us your story</a>
     </div>
   </div>
 
@@ -601,6 +608,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   <div class="inter" id="hire"><div class="wrap"><div class="box reveal">
     <div class="act">Act IV</div>
     <h2>Commission a <em>film</em></h2>
+    <p>Grandad&#8217;s tales at the kitchen table. The history in the walls of your building. The reason your business exists. Haddow Media is a London documentary studio that finds the story, films it with care and gives you something to keep. <b>Whose story should we tell?</b></p>
     <p>Pick a package and book it here with a deposit, or ask a question first.</p>
   </div></div></div>
   <section class="act-body">
@@ -718,6 +726,18 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   const pad = n => String(n).padStart(2,'0');
 
   /* running timecode, 25fps */
+  /* slate scene: rolls through the four acts; tap to jump to the one showing */
+  (function(){
+    const el = document.getElementById('scene'); if(!el) return;
+    const n = document.getElementById('scene-n'), t = document.getElementById('scene-t');
+    const S = [['I','The Work','#work'],['II','Call the Shot','#shot'],['III','The Studio','#studio'],['IV','From &pound;400','#hire']];
+    const names = ['The Work','Call the Shot','The Studio','Commission'];
+    let i = 0, vis = true;
+    const show = j=>{ i = j; n.textContent = S[i][0]; t.innerHTML = S[i][1]+' <i aria-hidden="true">&rarr;</i>'; el.href = S[i][2]; el.setAttribute('aria-label','Jump to Act '+S[i][0]+', '+names[i]); };
+    new IntersectionObserver(es=>{ vis = es[0].isIntersecting; }).observe(el);
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    setInterval(()=>{ if(!vis || document.hidden) return; el.classList.add('swap'); setTimeout(()=>{ show((i+1)%S.length); el.classList.remove('swap'); }, 260); }, 2800);
+  })();
   const tc = document.getElementById('tc');
   const start = performance.now();
   (function tick(){

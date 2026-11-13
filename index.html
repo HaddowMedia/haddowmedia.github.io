@@ -123,7 +123,8 @@ nav a.hire span{color:var(--red)}
 nav a.founder-link{padding-left:18px; border-left:1px solid var(--line)}
 @media (max-width:980px){
   header .wrap{padding-block:10px 0; gap:6px}
-  nav{order:2; width:100%; display:grid; grid-template-columns:repeat(3,max-content); justify-content:space-between; gap:0 12px; padding-bottom:6px}
+  nav{order:2; width:100%; display:grid; grid-template-columns:repeat(4,max-content); justify-content:space-between; gap:0 10px; padding-bottom:6px}
+  @media (max-width:420px){ nav{grid-template-columns:repeat(3,max-content)} nav a.founder-link{grid-column:1/-1; justify-self:center; border-left:0; padding-left:0} }
   nav a{padding-block:6px}
   nav a span{font-size:clamp(13px,3.9vw,16px)}
   nav a i{font-size:clamp(11px,3.2vw,13px)}
@@ -509,9 +510,8 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     <a class="mark" href="#top" aria-label="Haddow Media, back to top"><img class="logo" src="img/logo.png" alt="Haddow Media" width="122" height="40"></a>
     <nav id="nav" aria-label="Chapters">
       <a href="#work"><i>I</i><span>The Work</span></a>
-      <a href="#shot"><i>II</i><span>Call the Shot</span></a>
-      <a href="#studio"><i>III</i><span>The Studio</span></a>
-      <a href="#hire" class="hire"><i>IV</i><span>Commission</span></a>
+      <a href="#studio"><i>II</i><span>The Studio</span></a>
+      <a href="#hire" class="hire"><i>III</i><span>Commission</span></a>
       <a href="/maxhm/" class="founder-link" title="Max Haddow&#8209;Mendes: CV, credits and experience"><i>&#8599;</i><span>Meet Max</span></a>
     </nav>
   </div>
@@ -554,18 +554,8 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   </section>
 
   <!-- ACT II -->
-  <div class="inter" id="shot"><div class="wrap"><div class="box reveal">
-    <div class="act">Act II · Interactive</div>
-    <h2>Call the <em>shot</em></h2>
-    <p>Five real scenes from our films. Pick a shot and watch it get storyboarded, then call <b>Action!</b> to print your take.</p>
-  </div></div></div>
-  <section class="act-body">
-    <div class="wrap"><div class="game" id="game" aria-live="polite"></div></div>
-  </section>
-
-  <!-- ACT III -->
   <div class="inter" id="studio"><div class="wrap"><div class="box reveal">
-    <div class="act">Act III</div>
+    <div class="act">Act II</div>
     <h2>The <em>studio</em></h2>
   </div></div></div>
   <section class="act-body">
@@ -618,9 +608,9 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     <p class="mono" id="lb-cap"></p>
   </div>
 
-  <!-- ACT IV -->
+  <!-- ACT III -->
   <div class="inter" id="hire"><div class="wrap"><div class="box reveal">
-    <div class="act">Act IV</div>
+    <div class="act">Act III</div>
     <h2>Commission a <em>film</em></h2>
     <p>Grandad&#8217;s tales at the kitchen table. The history in the walls of your building. The reason your business exists. Haddow Media is a London documentary studio that finds the story, films it with care and gives you something to keep. <b>Whose story should we tell?</b></p>
     <p>Pick a package and book it here with a deposit, or ask a question first.</p>
@@ -737,8 +727,8 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   (function(){
     const el = document.getElementById('scene'); if(!el) return;
     const n = document.getElementById('scene-n'), t = document.getElementById('scene-t');
-    const S = [['I','The Work','#work'],['II','Call the Shot','#shot'],['III','The Studio','#studio'],['IV','Commission','#hire']];
-    const names = ['The Work','Call the Shot','The Studio','Commission'];
+    const S = [['I','The Work','#work'],['II','The Studio','#studio'],['III','Commission','#hire']];
+    const names = ['The Work','The Studio','Commission'];
     let i = 0, vis = true;
     const show = j=>{ i = j; n.textContent = S[i][0]; t.innerHTML = S[i][1]+' <i aria-hidden="true">&rarr;</i>'; el.href = S[i][2]; el.setAttribute('aria-label','Jump to Act '+S[i][0]+', '+names[i]); };
     new IntersectionObserver(es=>{ vis = es[0].isIntersecting; }).observe(el);
@@ -1063,297 +1053,6 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   tabs.forEach(t=>t.addEventListener('click',()=>{
     tabs.forEach(o=>{ const on = o===t; o.setAttribute('aria-selected', on); document.getElementById(o.getAttribute('aria-controls')).hidden = !on; });
   }));
-
-  /* Call the Shot */
-  const shots = {
-    ecu:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><ellipse cx="28" cy="19" rx="16" ry="7" fill="none" stroke="currentColor"/><circle cx="28" cy="19" r="4" fill="#E9A23B"/></svg>',
-    ots:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><circle cx="12" cy="20" r="9" fill="currentColor" opacity=".5"/><rect x="26" y="12" width="20" height="14" fill="none" stroke="#E9A23B"/></svg>',
-    wide:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><line x1="1" y1="28" x2="55" y2="28" stroke="currentColor"/><rect x="26" y="21" width="3" height="7" fill="#E9A23B"/></svg>',
-    two:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><circle cx="19" cy="16" r="5" fill="currentColor"/><circle cx="37" cy="16" r="5" fill="#E9A23B"/><rect x="14" y="22" width="10" height="15" fill="currentColor"/><rect x="32" y="22" width="10" height="15" fill="#E9A23B"/></svg>',
-    dutch:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><g transform="rotate(-14 28 19)"><circle cx="28" cy="15" r="6" fill="#E9A23B"/><rect x="22" y="22" width="12" height="16" fill="#E9A23B"/></g></svg>',
-    tele:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><path d="M1 30 Q28 22 55 30" fill="none" stroke="currentColor"/><circle cx="24" cy="24" r="1.6" fill="currentColor"/><circle cx="31" cy="24" r="1.6" fill="#E9A23B"/></svg>',
-    push:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><rect x="12" y="8" width="32" height="22" fill="none" stroke="currentColor" stroke-dasharray="2 2"/><rect x="20" y="13" width="16" height="12" fill="none" stroke="#E9A23B"/></svg>',
-    hold:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><rect x="18" y="12" width="7" height="16" fill="#E9A23B"/><rect x="31" y="12" width="7" height="16" fill="#E9A23B"/></svg>',
-    hand:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><path d="M6 24 L14 18 L22 23 L30 15 L38 21 L46 14 L52 19" fill="none" stroke="#E9A23B" stroke-width="1.5"/></svg>',
-    cut:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><line x1="28" y1="1" x2="28" y2="37" stroke="#E9A23B" stroke-width="2"/></svg>',
-    broll:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><rect x="7" y="9" width="12" height="9" fill="currentColor" opacity=".5"/><rect x="22" y="9" width="12" height="9" fill="currentColor" opacity=".5"/><rect x="37" y="9" width="12" height="9" fill="#E9A23B"/><rect x="7" y="21" width="42" height="8" fill="currentColor" opacity=".25"/></svg>',
-    insert:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><circle cx="34" cy="19" r="5" fill="none" stroke="#E9A23B" stroke-width="2"/><rect x="10" y="16" width="20" height="6" fill="currentColor"/></svg>',
-    pov:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="currentColor" opacity=".9"/><circle cx="28" cy="15" r="5" fill="#E9A23B"/><path d="M25 18 L31 18 L33 30 L23 30 Z" fill="#E9A23B"/></svg>',
-    low:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><path d="M18 37 L22 14 L34 14 L38 37 Z" fill="#E9A23B"/><circle cx="28" cy="10" r="5" fill="#E9A23B"/><line x1="1" y1="34" x2="55" y2="30" stroke="currentColor"/></svg>',
-    srs:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="25" height="36" fill="none" stroke="currentColor"/><rect x="30" y="1" width="25" height="36" fill="none" stroke="currentColor"/><circle cx="15" cy="17" r="6" fill="currentColor"/><circle cx="41" cy="17" r="6" fill="#E9A23B"/></svg>',
-    isolate:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><rect x="6" y="14" width="10" height="23" fill="currentColor" opacity=".35"/><rect x="19" y="8" width="12" height="29" fill="currentColor" opacity=".55"/><rect x="34" y="12" width="9" height="25" fill="currentColor" opacity=".35"/><rect x="23" y="20" width="4" height="6" fill="#E0353C"/></svg>',
-    title:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="#000" stroke="currentColor"/><rect x="7" y="7" width="42" height="24" fill="none" stroke="currentColor" opacity=".6"/><line x1="14" y1="16" x2="42" y2="16" stroke="#E9A23B" stroke-width="2"/><line x1="18" y1="22" x2="38" y2="22" stroke="currentColor"/></svg>',
-    top:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><path d="M1 10 H55 M1 19 H55 M1 28 H55 M10 1 V37 M19 1 V37 M28 1 V37 M37 1 V37 M46 1 V37" stroke="currentColor" opacity=".3"/><path d="M28 27 C18 20 20 12 25 13 C27 13 28 15 28 16 C28 15 29 13 31 13 C36 12 38 20 28 27 Z" fill="#E9A23B"/></svg>',
-    present:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="none" stroke="currentColor"/><circle cx="20" cy="13" r="5" fill="#E9A23B"/><path d="M13 37 Q14 20 20 20 Q26 20 27 37 Z" fill="#E9A23B"/><path d="M38 30 C33 26 34 21 37 22 C38 22 38 23 38 24 C38 23 39 22 40 22 C43 21 43 26 38 30 Z" fill="currentColor"/></svg>',
-    black:'<svg viewBox="0 0 56 38"><rect x="1" y="1" width="54" height="36" fill="#000" stroke="currentColor"/><text x="28" y="23" font-size="8" fill="#E9A23B" text-anchor="middle" font-family="monospace">?</text></svg>'
-  };
-  const scenes = [
-    {film:'The Third Web', id:'sQ3KlFUEUUA', still:'img/film-thirdweb-manager.jpg', slug:'Int. Shop floor — Day', text:'Oliver comes face to face with his manager. <em>What shot do you follow?</em>', opts:[
-      {s:'low', n:'Low angle on the manager', h:'Show who holds the power', k:'P', note:'Shooting up at the manager makes him loom over the scene, so the audience feels the pressure our hero is under.'},
-      {s:'srs', n:'Shot, reverse shot, tight singles', h:'Make it a duel', k:'I', note:'Classical Hollywood grammar. Cutting between two close faces turns a conversation into a stand-off.'},
-      {s:'black', n:'Stop the film and hand over the choice', h:'Let the viewer decide', k:'O', note:'This is how The Third Web was made: at key moments the film stops and the audience picks what the hero does next. Every outcome was filmed.'}]},
-    {film:'Vic', id:'8en_0AMpEnM', still:'img/film-vic-close.jpg', slug:'Int. Vic’s kitchen — Day', text:'Vic sits at his kitchen table and starts talking about his late wife, <em>the love of his life</em>.', opts:[
-      {s:'ecu', n:'Extreme close-up on his eyes', h:'Feel the memory land', k:'I', note:'Nothing but his face. The audience reads the photo through his reaction and never needs to see it.'},
-      {s:'ots', n:'Over the shoulder, onto the photo', h:'Share what he sees', k:'O', note:'We look with him. The image does the talking, and the viewer gets a moment to connect the dots.'},
-      {s:'wide', n:'Wide, from the doorway', h:'Give him space', k:'P', note:'Distance makes the silence heavier. It also makes us intruders, which can be uncomfortable in a good way.'}]},
-    {film:'Lancaster: A City With a Living History', id:'UzqtdUVBWYs', still:'https://i.ytimg.com/vi/UzqtdUVBWYs/hqdefault.jpg', slug:'Ext. Lancaster streets — Day', text:'A musical film with no dialogue. How can the audience understand the city\u2019s <em>roots in the slave trade</em> without a single spoken word?', opts:[
-      {s:'isolate', n:'Black and white, with isolated red', h:'Let red lead the eye', k:'I', note:'This is what the film does: everything is shot in black and white except red, which picks out the traces of the city’s past.'},
-      {s:'title', n:'A single title card', h:'Say it in one card', k:'O', note:'No dialogue, but one line of text on black can frame everything that follows.'},
-      {s:'broll', n:'Dissolve archive images over today’s streets', h:'Layer then and now', k:'P', note:'Past and present share the frame, so the audience can’t look at the street without seeing its history.'}]},
-    {film:'The Heart of Midlothian', id:'OaNAgC1RfS0', still:'img/film-heart-feet.jpg', slug:'Ext. Royal Mile, Edinburgh — Day', text:'A heart is set into the cobbles. People walk around it, and some <em>stop to spit on it</em>.', opts:[
-      {s:'top', n:'Overhead, the heart filling the frame', h:'Wait for someone to step in', k:'O', note:'Lock off from above and let passers-by enter the frame. The ritual plays out by itself.'},
-      {s:'present', n:'Presenter to camera beside it', h:'Tell its story directly', k:'I', note:'A presented documentary puts a guide on screen, so the audience hears why a symbol people once respected is now spat on.'},
-      {s:'ecu', n:'Close-up on a passer-by’s face', h:'Catch the moment', k:'P', note:'Candid and human, but you need to ask permission afterwards.'}]},
-    {film:'Crichton Castle', id:'NPfmA9y58Cs', still:'img/film-crichton.jpg', slug:'Ext. Crichton Castle — Morning', text:'Crichton Castle stands roofless on the valley. Wind moves through the empty courtyard where <em>royals once lived</em>.', opts:[
-      {s:'push', n:'Slow push-in', h:'Draw us towards the past', k:'I', note:'A gentle dolly forward invites the viewer to lean in, as if listening for voices.'},
-      {s:'hold', n:'Static wide, held for ten seconds', h:'Trust the stillness', k:'O', note:'A city-symphony move. Hold long enough and the audience starts filling the space themselves.'},
-      {s:'hand', n:'Handheld walk-through', h:'Put us there now', k:'P', note:'Footsteps and breath make the history physical and present, rather than polished and distant.'}]}
-  ];
-  const profiles = {
-    I:{name:'The Intimist', text:'You go close. Faces, details and silences are where you find the story, and you trust the audience to feel it rather than be told.'},
-    O:{name:'The Observer', text:'You step back and let the world speak. Balanced frames and patient holds give viewers room to reach their own conclusions.'},
-    P:{name:'The Provocateur', text:'You like to unsettle. Tilted frames, handheld energy and hard cuts keep the audience on edge and paying attention.'}
-  };
-/* Storyboard frames for Call the Shot. viewBox 0 0 320 180. Classes: k=line, t=thin line, f=light tone, d=dark tone, w=paper, r=red */
-const B = {};
-const persp = (vx,vy,pts) => pts.map(([x,y])=>`<line class="t" x1="${x}" y1="${y}" x2="${vx}" y2="${vy}"/>`).join('');
-/* 1. THE THIRD WEB */
-B.low = `
-<rect class="f" x="0" y="0" width="320" height="180" opacity=".35"/>
-${[[20,0],[90,0],[230,0],[300,0]].map(([x])=>`<line class="t" x1="${x}" y1="0" x2="${160+(x-160)*0.25}" y2="60"/>`).join('')}
-<polygon class="w k" points="118,10 150,6 152,16 120,20"/><polygon class="w k" points="172,6 204,10 202,20 170,16"/>
-<polygon class="d k" points="0,180 0,40 58,70 74,180"/>${[60,90,120,150].map(y=>`<line class="t" x1="0" y1="${y-20}" x2="${62+ (y-60)*0.1}" y2="${y+6}"/>`).join('')}
-<polygon class="d k" points="320,180 320,40 262,70 246,180"/>${[60,90,120,150].map(y=>`<line class="t" x1="320" y1="${y-20}" x2="${258-(y-60)*0.1}" y2="${y+6}"/>`).join('')}
-<path class="f k" d="M96,180 L118,92 Q160,70 202,92 L224,180 Z"/>
-<path class="k" d="M118,92 Q140,112 160,98 Q180,112 202,92"/>
-<path class="w k" d="M146,86 L160,100 L174,86"/>
-<ellipse class="w k" cx="160" cy="62" rx="15" ry="17"/><path class="k" d="M146,56 Q160,44 174,56"/><path class="t" d="M152,72 Q160,76 168,72"/>
-<path class="k" d="M120,122 Q160,140 200,122"/><path class="k" d="M118,128 Q160,148 202,128"/>
-<circle class="w k" cx="28" cy="146" r="9"/><path class="d k" d="M12,180 Q14,158 28,156 Q42,158 44,180 Z"/>
-<text class="hand" x="236" y="168">↑ looking up</text>`;
-B.srs = `
-<rect class="f" x="0" y="0" width="158" height="180" opacity=".3"/><rect class="f" x="162" y="0" width="158" height="180" opacity=".18"/>
-${[20,48,76,104].map(y=>`<line class="t" x1="0" y1="${y}" x2="40" y2="${y+4}"/><line class="t" x1="320" y1="${y}" x2="290" y2="${y+4}"/>`).join('')}
-<line class="k" x1="160" y1="0" x2="160" y2="180" stroke-width="3"/>
-<ellipse class="w k" cx="86" cy="82" rx="27" ry="33"/>
-<path class="d k" d="M58,72 Q56,40 84,42 Q92,30 104,40 Q118,40 114,62 Q106,52 96,56 Q84,48 72,58 Q66,62 62,76 Z"/>
-<path class="k" d="M100,80 L104,82"/><circle cx="101" cy="79" r="2.4" class="kk"/><path class="t" d="M112,86 L116,96 L110,98"/><path class="t" d="M98,106 Q106,108 112,104"/>
-<path class="d k" d="M40,180 Q44,128 70,116 L102,116 Q132,128 136,180 Z"/><path class="w k" d="M76,118 L90,140 L100,118"/>
-<ellipse class="w k" cx="236" cy="80" rx="26" ry="32"/>
-<path class="d k" d="M210,74 Q208,46 236,46 Q264,46 262,70 Q252,58 236,60 Q220,60 210,74 Z"/>
-<circle cx="222" cy="79" r="2.4" class="kk"/><path class="k" d="M216,72 L228,74"/><path class="t" d="M212,86 L208,96 L214,98"/><path class="t" d="M218,106 Q226,104 232,107"/>
-<path class="f k" d="M184,180 Q188,126 214,114 L258,114 Q284,126 288,180 Z"/><path class="w k" d="M222,114 L236,132 L250,114"/>
-<text class="hand" x="10" y="170">A</text><text class="hand" x="296" y="170">B</text>`;
-B.black = `
-<rect class="dk" x="0" y="0" width="320" height="180"/>
-<rect class="wk" x="146" y="22" width="9" height="28"/><rect class="wk" x="165" y="22" width="9" height="28"/>
-<text class="wt" x="160" y="72">THE FILM STOPS</text>
-<path class="ws" d="M160,82 L160,98 M160,98 L92,118 M160,98 L228,118"/>
-<path class="ws" d="M86,112 L92,118 L84,122 M234,112 L228,118 L236,122"/>
-<rect class="ws" x="34" y="124" width="112" height="34"/><rect class="ws" x="174" y="124" width="112" height="34"/>
-<text class="wt sm" x="90" y="146">A · STAND UP TO HIM</text><text class="wt sm" x="230" y="146">B · WALK OUT</text>`;
-/* 2. VIC */
-B.ecu = `
-<rect class="f" x="0" y="0" width="320" height="180" opacity=".45"/>
-<path class="d k" d="M44,52 Q96,26 140,50 Q120,44 96,44 Q66,46 44,52 Z"/><path class="d k" d="M180,50 Q224,26 278,52 Q256,46 226,44 Q200,44 180,50 Z"/>
-<path class="w k" d="M52,96 Q96,62 138,94 Q96,118 52,96 Z"/><path class="w k" d="M182,94 Q224,62 268,96 Q224,118 182,94 Z"/>
-<circle class="d k" cx="96" cy="92" r="16"/><circle class="kk" cx="96" cy="92" r="6"/><circle class="w" cx="102" cy="86" r="3.5"/>
-<circle class="d k" cx="226" cy="92" r="16"/><circle class="kk" cx="226" cy="92" r="6"/><circle class="w" cx="232" cy="86" r="3.5"/>
-<path class="k" d="M52,96 Q96,124 138,94"/><path class="k" d="M182,94 Q224,124 268,96"/>
-<path class="t" d="M40,92 L28,88 M40,100 L26,102 M42,108 L30,116 M282,92 L294,88 M280,100 L296,102 M278,108 L290,116"/>
-<path class="t" d="M60,118 Q96,134 132,116 M188,116 Q224,134 262,118"/>
-<path class="k" d="M150,60 Q156,100 152,140 M170,60 Q164,100 168,140"/>
-<path class="t" d="M200,108 Q206,116 204,126" stroke-dasharray="2 3"/>
-<text class="hand" x="10" y="172">ECU · just the eyes</text>`;
-B.ots = `
-<rect class="f" x="0" y="0" width="320" height="180" opacity=".22"/>
-<rect class="t w" x="196" y="16" width="70" height="56"/><line class="t" x1="231" y1="16" x2="231" y2="72"/><line class="t" x1="196" y1="44" x2="266" y2="44"/>
-<path class="k" d="M0,150 L320,140"/>
-<g transform="rotate(-6 210 108)"><rect class="w k" x="166" y="70" width="96" height="74"/><rect class="f k" x="174" y="78" width="80" height="58"/>
-<circle class="w k" cx="214" cy="100" r="11"/><path class="w k" d="M196,136 Q198,116 214,114 Q230,116 232,136 Z"/><path class="t" d="M203,96 Q214,82 225,96"/></g>
-<path class="w k" d="M156,150 Q160,128 172,132 Q178,140 174,152 Z"/><path class="w k" d="M262,146 Q270,124 280,130 Q284,140 276,150 Z"/>
-<path class="d k" d="M0,180 L0,70 Q8,30 58,26 Q108,30 116,72 Q118,104 104,124 Q130,140 140,180 Z"/>
-<path class="t" d="M20,52 Q40,40 60,44 M14,72 Q36,60 70,62" stroke="#F2EDE1"/>
-<text class="hand" x="212" y="172">her photo →</text>`;
-B.wide = `
-<rect class="f" x="0" y="0" width="320" height="180" opacity=".18"/>
-<line class="t" x1="48" y1="132" x2="0" y2="180"/><line class="t" x1="272" y1="132" x2="320" y2="180"/>
-<rect class="k" x="48" y="14" width="224" height="118" fill="none"/>
-<rect class="w k" x="190" y="34" width="56" height="48"/><line class="t" x1="218" y1="34" x2="218" y2="82"/><line class="t" x1="190" y1="58" x2="246" y2="58"/>
-<rect class="t f" x="62" y="50" width="54" height="16"/><rect class="t f" x="62" y="72" width="54" height="40"/>
-<line class="t" x1="160" y1="14" x2="160" y2="44"/><path class="f k" d="M148,52 L172,52 L166,44 L154,44 Z"/>
-<path class="w k" d="M120,112 L218,112 L228,128 L110,128 Z"/><line class="k" x1="118" y1="128" x2="118" y2="150"/><line class="k" x1="220" y1="128" x2="220" y2="150"/>
-<path class="k" d="M152,82 L152,112 M168,92 L168,112" /><circle class="w k" cx="160" cy="88" r="8"/>
-<path class="d k" d="M148,112 Q150,96 160,96 Q170,96 172,112 Z"/><circle class="w k" cx="178" cy="108" r="4"/>
-<path class="d k" d="M0,0 L36,0 L36,180 L0,180 Z"/><path class="d k" d="M284,0 L320,0 L320,180 L284,180 Z"/><path class="d k" d="M36,0 L284,0 L284,10 L36,10 Z"/>
-<line class="t" x1="36" y1="0" x2="48" y2="14" stroke="#F2EDE1"/><line class="t" x1="284" y1="0" x2="272" y2="14" stroke="#F2EDE1"/>
-<text class="hand" x="56" y="170">from the doorway</text>`;
-/* 3. LANCASTER */
-const street = (cls) => `
-<path class="${cls}" d="M0,40 L118,84 L118,140 L0,180"/><path class="${cls}" d="M320,30 L204,82 L204,140 L320,180"/>
-<path class="${cls}" d="M118,140 L204,140"/>${[0,1,2,3].map(i=>`<rect class="t" x="${14+i*24}" y="${70+i*8}" width="12" height="${26-i*3}"/>`).join('')}
-${[0,1,2,3].map(i=>`<rect class="t" x="${290-i*24}" y="${64+i*8}" width="12" height="${26-i*3}"/>`).join('')}
-<path class="t" d="M60,180 L140,140 M260,180 L182,140 M20,170 L300,170 M60,160 L262,160 M96,150 L228,150"/>`;
-B.isolate = `
-<rect class="f" x="0" y="0" width="320" height="180" opacity=".3"/>${street('k')}
-<path class="r" d="M236,104 L254,98 L254,148 L236,146 Z"/><path class="rs" d="M178,40 L178,82 M178,42 L196,48 L178,56"/>
-<circle class="w k" cx="150" cy="118" r="5"/><path class="d k" d="M144,140 L146,124 L154,124 L156,140 Z"/>
-<text class="hand r-t" x="240" y="94">red door</text><text class="hand" x="10" y="172">B&amp;W · only red stays</text>`;
-B.title = `
-<rect class="dk" x="0" y="0" width="320" height="180"/>
-<rect class="ws" x="22" y="18" width="276" height="144"/><rect class="ws" x="28" y="24" width="264" height="132"/>
-<path class="ws" d="M40,36 Q48,30 56,36 M264,36 Q272,30 280,36 M40,144 Q48,150 56,144 M264,144 Q272,150 280,144"/>
-<text class="wt big" x="160" y="92">LANCASTER</text><line class="ws" x1="110" y1="104" x2="210" y2="104"/>
-<text class="wt sm" x="160" y="124">A CITY WITH A LIVING HISTORY</text>`;
-B.broll = `
-<rect class="f" x="0" y="0" width="320" height="180" opacity=".2"/>${street('t')}
-<g class="ghost-g"><path class="k" d="M60,128 Q160,150 262,126 L248,112 L76,114 Z"/>
-<line class="k" x1="112" y1="114" x2="112" y2="22"/><line class="k" x1="160" y1="114" x2="160" y2="12"/><line class="k" x1="208" y1="114" x2="208" y2="26"/>
-<path class="w k" d="M92,34 Q112,42 132,34 L130,62 Q112,68 94,62 Z M138,24 Q160,32 182,24 L180,56 Q160,64 140,56 Z M188,36 Q208,44 228,36 L226,64 Q208,70 190,64 Z M96,70 Q112,76 128,70 L126,98 Q112,104 98,98 Z M142,64 Q160,70 178,64 L176,98 Q160,104 144,98 Z M192,72 Q208,78 224,72 L222,100 Q208,106 194,100 Z"/>
-<path class="t" d="M40,138 Q80,132 120,140 Q160,148 200,138 Q240,130 290,140"/></g>
-<text class="hand" x="10" y="172">dissolve: 1790s ship over today</text>`;
-/* 4. HEART OF MIDLOTHIAN */
-B.top = `
-<rect class="f" x="0" y="0" width="320" height="180" opacity=".28"/>
-${Array.from({length:10},(_,r)=>Array.from({length:18},(_,c)=>`<rect class="t" x="${c*18+(r%2?9:0)-6}" y="${r*18}" width="16" height="16" rx="3"/>`).join('')).join('')}
-<path class="w k" d="M160,140 C110,108 98,84 114,64 C128,48 152,54 160,72 C168,54 192,48 206,64 C222,84 210,108 160,140 Z" stroke-width="2.6"/>
-<path class="t" d="M160,128 C124,104 116,86 126,72 C136,62 152,66 160,82 C168,66 184,62 194,72 C204,86 196,104 160,128 Z"/>
-<path class="d k" d="M248,14 Q270,10 278,22 Q282,40 262,44 Q246,40 248,14 Z"/><path class="d k" d="M282,26 Q302,24 306,36 Q306,52 288,52 Q276,46 282,26 Z"/>
-${[[176,58],[184,52],[170,50],[190,62]].map(([x,y])=>`<circle class="kk" cx="${x}" cy="${y}" r="1.6"/>`).join('')}
-<text class="hand" x="10" y="172">overhead · locked off</text>`;
-B.present = `
-<rect class="f" x="0" y="0" width="320" height="180" opacity=".22"/>
-<path class="t f" d="M150,104 L150,52 L170,52 L170,30 L176,14 L182,30 L182,52 L204,52 L204,104"/><path class="t f" d="M210,104 L210,60 L250,60 L250,104 M256,104 L256,46 L300,46 L300,104"/>
-<path class="t" d="M0,104 L320,104"/><path class="t" d="M0,150 L320,140 M0,126 L320,120"/>
-<path class="w k" d="M222,150 C200,138 196,128 204,121 C210,116 218,118 222,124 C226,118 234,116 240,121 C248,128 244,138 222,150 Z"/>
-<circle class="w k" cx="78" cy="46" r="15"/><path class="d k" d="M64,40 Q66,26 80,28 Q94,28 94,42 Q86,34 78,36 Q70,34 64,40 Z"/>
-<path class="d k" d="M48,180 L54,90 Q58,68 78,66 Q100,68 104,90 L110,180 Z"/>
-<path class="k" d="M100,92 Q130,96 168,116"/><path class="k" d="M164,112 L172,118 L162,120"/>
-<rect class="lower" x="16" y="150" width="128" height="18"/><text class="lt" x="22" y="163">JAKE MIDDLETON · PRESENTER</text>`;
-B.ecu2 = `
-<rect class="f" x="0" y="0" width="320" height="180" opacity=".32"/>
-<path class="w k" d="M60,0 Q40,40 58,70 Q66,82 60,92 Q90,98 96,110 Q86,116 92,124 Q104,126 100,136 Q110,150 104,180 L240,180 Q262,120 248,60 Q236,10 200,0 Z"/>
-<path class="d k" d="M200,0 Q238,10 250,60 Q264,40 246,0 Z"/>
-<path class="k" d="M110,52 Q126,44 140,52"/><path class="w k" d="M112,64 Q126,56 140,64 Q126,70 112,64 Z"/><circle class="kk" cx="124" cy="64" r="3.2"/>
-<path class="k" d="M92,124 Q100,121 104,124"/><path class="t" d="M160,90 Q176,110 168,130"/>
-${[[84,118],[74,114],[66,122],[78,128],[60,112],[70,104]].map(([x,y],i)=>`<circle class="kk" cx="${x}" cy="${y}" r="${2.4-i*0.25}"/>`).join('')}
-<path class="t" d="M80,110 L56,98 M80,120 L50,124" stroke-dasharray="3 3"/>
-<text class="hand" x="200" y="172">caught in the act</text>`;
-/* 5. CRICHTON */
-const castle = (x,y,s) => `<g transform="translate(${x} ${y}) scale(${s})">
-<path class="f k" d="M-60,40 L-60,-20 L-52,-20 L-52,-28 L-44,-28 L-44,-20 L-30,-20 L-30,-28 L-22,-28 L-22,-20 L-8,-20 L-8,-28 L0,-28 L0,-20 L10,-20 L10,-44 L18,-44 L18,-50 L26,-50 L26,-44 L34,-44 L34,-50 L42,-50 L42,-44 L50,-44 L50,40 Z"/>
-<rect class="d k" x="-44" y="-6" width="8" height="14"/><rect class="d k" x="-22" y="-6" width="8" height="14"/><rect class="d k" x="22" y="-26" width="8" height="14"/><rect class="d k" x="22" y="4" width="8" height="14"/>
-<path class="d k" d="M-6,40 L-6,20 Q2,10 10,20 L10,40 Z"/></g>`;
-B.push = `
-<rect class="f" x="0" y="0" width="320" height="180" opacity=".15"/>
-<path class="k" d="M0,120 Q80,96 160,108 Q240,96 320,116"/>${castle(160,86,0.9)}
-<rect class="t" x="40" y="22" width="240" height="135" stroke-dasharray="6 5"/><rect class="t" x="90" y="48" width="140" height="80" stroke-dasharray="6 5"/>
-<path class="k" d="M40,22 L82,42 M280,22 L238,42 M40,157 L82,134 M280,157 L238,134"/><path class="k" d="M74,34 L82,42 L72,44 M246,34 L238,42 L248,44 M74,142 L82,134 L72,132 M246,142 L238,134 L248,132"/>
-<path class="k" d="M120,180 L140,156 M200,180 L180,156"/><path class="t" d="M124,172 L196,172 M130,164 L190,164"/>
-<text class="hand" x="10" y="172">slow dolly in</text>`;
-B.hold = `
-<path class="t" d="M30,24 Q50,16 70,24 Q90,18 104,28 M200,34 Q222,24 244,32 Q262,26 280,36"/>
-<path class="f k" d="M0,124 Q60,92 130,104 Q200,84 260,100 Q296,104 320,96 L320,180 L0,180 Z"/>
-<path class="t" d="M0,146 Q100,124 200,140 Q260,148 320,132"/>${castle(232,82,0.42)}
-${[[30,166],[52,170],[78,162],[110,168],[140,172],[176,166],[214,170],[252,164],[288,170]].map(([x,y])=>`<path class="t" d="M${x},${y} L${x-3},${y-8} M${x},${y} L${x+3},${y-9} M${x},${y} L${x},${y-10}"/>`).join('')}
-<circle class="w k" cx="292" cy="26" r="13"/><path class="k" d="M292,18 L292,26 L298,30"/>
-<text class="hand" x="10" y="172">locked off · hold 10s</text>`;
-B.hand = `
-<g transform="rotate(-5 160 90)">
-<path class="f k" d="M-10,190 L-10,-10 L70,-10 L84,40 L84,170 Z"/><path class="f k" d="M330,190 L330,-10 L250,-10 L236,40 L236,170 Z"/>
-<path class="k" d="M84,170 L236,170"/><path class="w k" d="M120,170 L120,96 Q160,48 200,96 L200,170 Z"/><path class="t" d="M84,40 L236,40"/>
-${[[18,40],[18,100],[290,46],[290,110]].map(([x,y])=>`<rect class="d k" x="${x}" y="${y}" width="16" height="28"/>`).join('')}
-<path class="t" d="M136,140 L184,140 M128,156 L192,156"/></g>
-<path class="k" d="M6,60 Q2,90 6,120 M14,52 Q8,90 14,128 M314,60 Q318,90 314,120 M306,52 Q312,90 306,128"/>
-<path class="d k" d="M136,172 Q140,160 150,164 Q152,174 144,178 Z M174,170 Q180,158 188,164 Q188,174 180,178 Z"/>
-<text class="hand" x="10" y="172">handheld · walking in</text>`;
-
-  const boardKey = [['low','srs','black'],['ecu','ots','wide'],['isolate','title','broll'],['top','present','ecu2'],['push','hold','hand']];
-  const label = {low:'Low angle',srs:'Shot / reverse shot',black:'Stop the film',ecu:'Extreme close-up',ots:'Over the shoulder',wide:'Wide from the doorway',isolate:'B&W, isolated red',title:'Title card',broll:'Archive dissolve',top:'Overhead',present:'Presenter to camera',ecu2:'Close-up, passer-by',push:'Slow push-in',hold:'Static hold',hand:'Handheld'};
-  let boardSeq = 0;
-  function boardSVG(k, draw){
-    const txt=[]; const body = B[k].replace(/<text[\s\S]*?<\/text>/g, m=>{ txt.push(m); return ''; });
-    const fid = 'rough'+(++boardSeq);
-    return '<svg class="sb'+(draw?' draw':'')+'" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Storyboard: '+label[k]+'">'+
-      '<defs><filter id="'+fid+'" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter></defs>'+
-      '<g filter="url(#'+fid+')">'+body+'</g>'+txt.join('')+'</svg>';
-  }
-  function primeDraw(root){ root.querySelectorAll('.draw path').forEach(el=>{ try{ const L = el.getTotalLength(); el.style.strokeDasharray = L; el.style.strokeDashoffset = L; el.style.setProperty('--len', L); }catch(_){ } }); }
-  function mon(i, k, small){
-    const sc = scenes[i];
-    return '<div'+(small?'':' id="gmon"')+' class="mon'+(small?' small':'')+(k?' has-board':'')+(small&&k?' printed':'')+'">'+
-      '<div class="photo"><img src="'+sc.still+'" alt="Still from '+sc.film+'" onerror="this.style.opacity=0"></div>'+
-      (k?'<div class="board">'+boardSVG(k,false)+'</div>':'')+
-      (small?'':'<div class="hud"><span class="rec"><i></i><span class="rec-t">'+(k?'Storyboard':'Scene')+'</span></span><span class="tc" id="gtc">00:00:00:00</span><span class="lbl" id="glbl">'+(k?'<b>'+label[k]+'</b>':'Pick a shot to storyboard it')+'</span></div><div class="flash"></div><div class="slate"><small>Scene '+(i+1)+' · Take 1</small><b>Action!</b></div><span class="stamp">Print it</span>')+
-    '</div>';
-  }
-  const game = document.getElementById('game');
-  let step = 0, picks = [], sel = -1, t0 = performance.now();
-  (function gtick(){ const el = document.getElementById('gtc'); if(el){ const f=Math.floor((performance.now()-t0)/40); el.textContent='00:'+pad(Math.floor(f/1500)%60)+':'+pad(Math.floor(f/25)%60)+':'+pad(f%25); } if(!reduce) requestAnimationFrame(gtick); })();
-  function strip(){
-    return '<div class="strip5" aria-label="Your takes">'+scenes.map((_,i)=>'<div class="cell'+(i===step?' now':'')+'">'+(picks[i]?mon(i,picks[i].b,true):'')+'<span>'+pad(i+1)+'</span></div>').join('')+'</div>';
-  }
-  function setFrame(k){
-    const m = document.getElementById('gmon'); if(!m) return;
-    let bd = m.querySelector('.board'); if(bd) bd.remove();
-    m.classList.toggle('has-board', !!k);
-    if(k){ m.querySelector('.photo').insertAdjacentHTML('afterend','<div class="board">'+boardSVG(k,true)+'</div>'); primeDraw(m);
-      const svg = m.querySelector('.board svg'); clearTimeout(setFrame.t); setFrame.t = setTimeout(()=>{ if(svg){ svg.classList.remove('draw'); svg.querySelectorAll('path').forEach(el=>{ el.style.strokeDasharray=''; el.style.strokeDashoffset=''; }); } }, 1900); }
-    document.getElementById('glbl').innerHTML = k?'<b>'+label[k]+'</b>':'Pick a shot to storyboard it';
-    const rt = m.querySelector('.rec-t'); if(rt) rt.textContent = k?'Storyboard':'Scene';
-  }
-  function render(){
-    if(step >= scenes.length) return renderEnd();
-    const sc = scenes[step]; sel = -1;
-    game.innerHTML = strip()+
-      '<div>'+mon(step,'')+'</div>'+
-      '<div class="panel-g">'+
-        '<div class="from mono">Scene '+(step+1)+' of '+scenes.length+' · <i>'+sc.film+'</i></div>'+
-        '<p class="scene">'+sc.text+'</p>'+
-        '<div class="gchips" role="group" aria-label="Choose a shot">'+sc.opts.map((o,i)=>'<button class="chip" type="button" aria-pressed="false" data-i="'+i+'">'+shots[o.s]+'<span><b>'+o.n+'</b><small>'+o.h+'</small></span></button>').join('')+'</div>'+
-        '<button class="action" type="button" id="action" disabled><i></i>Action!</button>'+
-        '<div id="note"></div>'+
-      '</div>';
-    game.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
-      sel = +b.dataset.i;
-      game.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c===b));
-      setFrame(boardKey[step][sel]);
-      document.getElementById('action').disabled = false;
-    }));
-    document.getElementById('action').addEventListener('click', take);
-  }
-  function take(){
-    if(sel<0) return;
-    const sc = scenes[step], o = sc.opts[sel];
-    picks[step] = {k:o.k, s:o.s, n:o.n, b:boardKey[step][sel]};
-    game.querySelectorAll('.chip').forEach(c=>c.disabled = true);
-    const a = document.getElementById('action'); a.disabled = true; a.hidden = true;
-    const m = document.getElementById('gmon');
-    if(!reduce){ m.querySelector('.flash').classList.add('go'); m.querySelector('.slate').classList.add('go'); }
-    m.classList.add('printed');
-    const cell = game.querySelectorAll('.strip5 .cell')[step]; cell.insertAdjacentHTML('afterbegin', mon(step,boardKey[step][sel],true));
-    const note = document.getElementById('note');
-    note.innerHTML = '<div class="note"><span class="mono">Director’s note</span>'+o.note+'</div>'+
-      '<div class="row" style="margin-top:12px"><button class="gbtn" type="button" id="next">'+(step===scenes.length-1?'See your director’s cut':'Next scene →')+'</button>'+
-      '<a class="watch mono" href="https://youtu.be/'+sc.id+'" target="_blank" rel="noopener">Watch <i>'+sc.film+'</i> &#8599;</a></div>';
-    document.getElementById('next').addEventListener('click',()=>{ step++; render(); game.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'}); });
-    if(matchMedia('(max-width:860px)').matches) note.scrollIntoView({behavior: reduce?'auto':'smooth', block:'nearest'});
-  }
-  function renderEnd(){
-    const c = {I:0,O:0,P:0}; picks.forEach(p=>c[p.k]++);
-    const top = Object.keys(c).sort((a,b)=>c[b]-c[a])[0];
-    const p = profiles[top];
-    game.innerHTML =
-      '<div class="result"><div class="mono" style="color:var(--frame-muted)">That’s a wrap · your director’s cut</div>'+
-      '<h3>'+p.name+'</h3><p>'+p.text+'</p></div>'+
-      '<div class="cut5">'+picks.map((pk,i)=>'<figure>'+mon(i,pk.b,true)+'<figcaption><b>'+label[pk.b]+'</b>'+scenes[i].film+'</figcaption></figure>').join('')+'</div>'+
-      '<div class="result"><p>Every one of these choices is a real decision we make on set and in the edit.</p>'+
-      '<div class="row" style="margin-top:16px"><button class="gbtn" type="button" id="again">Shoot it again</button>'+
-      '<a class="btn gbtn-alt" href="#work">Watch the work</a>'+
-      '<a class="btn gbtn-alt" href="#hire">Tell us your story</a></div></div>';
-    game.querySelector('#again').addEventListener('click',()=>{ step=0; picks=[]; render(); });
-  }
-  render();
 
   /* hire: payment links + enquiry */
   const EMAIL = 'haddowmedia96@gmail.com';

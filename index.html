@@ -151,6 +151,7 @@ nav a.founder-link{padding-left:18px; border-left:1px solid var(--line)}
 
 .hero h1{font-size:clamp(38px,10vw,104px); letter-spacing:0}
 .hero .cta{margin-top:26px; justify-content:flex-start}
+@media (max-width:760px){ .hero .cta{justify-content:center} }
 .hero h1 em{font-style:normal; color:var(--red)}
 .hero .lede{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:24px; margin-top:24px; align-items:end}
 .hero .lede p{font-size:19px; max-width:34ch}
@@ -528,7 +529,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     <h1>Most stories only get told <em>once</em>. We keep them for <span class="red">generations</span>.</h1>
     <div class="cta">
       <a class="btn" href="#work">Watch the work</a>
-      <a class="btn primary" href="#hire">Tell us your story</a>
+      <a class="btn primary" href="#enquiry">Tell us your story</a>
     </div>
   </div>
 
@@ -754,6 +755,9 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     [3,4].forEach((k,j)=>{ const c = r[k].left + r[k].width/2; links[k].style.transform = 'translateX('+(gaps[j]-c).toFixed(1)+'px)'; });
   }
   brickNav(); addEventListener('resize', brickNav);
+  /* jump links land just below the sticky header, not underneath it */
+  const padTop = ()=>{ const h = document.querySelector('header.bar'); if(h) document.documentElement.style.scrollPaddingTop = (h.offsetHeight + 12)+'px'; };
+  padTop(); addEventListener('resize', padTop); if(document.fonts && document.fonts.ready) document.fonts.ready.then(padTop);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(brickNav);
 
   /* scroll playhead + active nav */

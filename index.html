@@ -448,6 +448,22 @@ html.fm-open, html.fm-open body{overflow:hidden}
 .pkg ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px}
 .pkg li{display:grid; grid-template-columns:18px minmax(0,1fr); gap:8px; font-size:15px}
 .pkg li::before{content:""; width:8px; height:8px; margin-top:8px; background:var(--red)}
+.pkg .head{cursor:pointer}
+.pkg-more{align-self:flex-start; background:none; border:0; padding:4px 0; color:var(--red); font-size:12px; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px}
+.fm-pk-head{background:var(--frame); padding:22px 20px 18px; display:flex; flex-direction:column; gap:6px}
+.fm-pk-head .amt{font-family:var(--display); font-weight:700; color:var(--red); font-size:56px; line-height:.9; margin-top:6px}
+.fm-pk-head .dep{font-family:var(--mono); font-size:12px; color:var(--frame-muted)}
+.fm-pk h4{font:600 12px var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:22px 0 10px}
+.fm-pk ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px}
+.fm-pk ul li{display:grid; grid-template-columns:18px minmax(0,1fr); gap:8px; font-size:15px; line-height:1.5}
+.fm-pk ul li::before{content:""; width:8px; height:8px; margin-top:8px; background:var(--red)}
+.fm-pk ol{margin:0; padding:0; list-style:none; counter-reset:st; display:flex; flex-direction:column; gap:10px}
+.fm-pk ol li{counter-increment:st; display:grid; grid-template-columns:30px minmax(0,1fr); gap:10px; font-size:15px; line-height:1.5}
+.fm-pk ol li::before{content:counter(st); font:700 18px var(--display); color:var(--red); border:1px solid var(--ink); text-align:center; height:28px; line-height:27px}
+.fm-pk ol b{color:var(--ink)}
+.fm-pk .ex{display:flex; gap:10px; flex-wrap:wrap}
+.fm-pk .ex button{display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid var(--ink); color:var(--ink); padding:6px 12px 6px 6px; cursor:pointer; font:500 14px var(--body); text-align:left; max-width:100%}
+.fm-pk .ex img{width:64px; height:40px; object-fit:cover; flex:none}
 .pkg-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; padding-top:6px}
 .pkg-actions .btn{flex:1 1 auto}
 
@@ -618,27 +634,30 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         <div class="rail-nav"><button type="button" data-rail="pkgs" data-dir="-1" aria-label="Previous package">&larr;</button><button type="button" data-rail="pkgs" data-dir="1" aria-label="Next package">&rarr;</button></div>
       </div>
       <div class="rail pkgs" id="pkgs">
-        <article class="pkg">
+        <article class="pkg" data-pk="portrait">
           <div class="head"><span class="mono">Portrait</span><h3>A film about someone</h3><div class="amt">£600</div><span class="dep">£300 to book · £300 on delivery</span></div>
           <div class="body">
             <p>A short documentary about a person who matters to you: a grandparent, a founder, a local legend.</p>
             <ul><li>One filming day, interview and observational</li><li>Archive photos woven in</li><li>Finished film up to 5 minutes</li><li>One round of revisions</li></ul>
+            <button type="button" class="pkg-more mono">Full details &amp; how it works &rarr;</button>
             <div class="pkg-actions"><a class="btn primary" data-pay="portrait" data-pkg="Portrait — a film about someone" href="#enquiry">Pay £300 deposit</a><button class="btn" type="button" data-pkg="Portrait — a film about someone">Ask first</button></div>
           </div>
         </article>
-        <article class="pkg">
+        <article class="pkg" data-pk="place">
           <div class="head"><span class="mono">Place</span><h3>A film about somewhere</h3><div class="amt">£850</div><span class="dep">£425 to book · £425 on delivery</span></div>
           <div class="body">
             <p>For museums, heritage sites, venues and businesses that want their space and history told well.</p>
             <ul><li>One filming day across your site</li><li>Voiceover or presented format</li><li>3–5 minute film plus a 60-second cut</li><li>One round of revisions</li></ul>
+            <button type="button" class="pkg-more mono">Full details &amp; how it works &rarr;</button>
             <div class="pkg-actions"><a class="btn primary" data-pay="place" data-pkg="Place — a film about somewhere" href="#enquiry">Pay £425 deposit</a><button class="btn" type="button" data-pkg="Place — a film about somewhere">Ask first</button></div>
           </div>
         </article>
-        <article class="pkg">
+        <article class="pkg" data-pk="social">
           <div class="head"><span class="mono">Social</span><h3>Short-form pack</h3><div class="amt">£400</div><span class="dep">£200 to book · £200 on delivery</span></div>
           <div class="body">
-            <p>Scroll-stopping vertical edits for Instagram, TikTok and YouTube Shorts, shot and cut for 9:16.</p>
-            <ul><li>Half-day shoot</li><li>3 vertical edits, up to 60 seconds each</li><li>Captions and motion graphics</li><li>One round of revisions</li></ul>
+            <p>Short vertical films for Instagram, TikTok and YouTube Shorts, made with the same documentary eye and cut for 9:16.</p>
+            <ul><li>Half-day shoot</li><li>3 vertical edits, up to 60 seconds each</li><li>Captions and simple titles</li><li>One round of revisions</li></ul>
+            <button type="button" class="pkg-more mono">Full details &amp; how it works &rarr;</button>
             <div class="pkg-actions"><a class="btn primary" data-pay="social" data-pkg="Social — short-form pack" href="#enquiry">Pay £200 deposit</a><button class="btn" type="button" data-pkg="Social — short-form pack">Ask first</button></div>
           </div>
         </article>
@@ -1366,6 +1385,66 @@ ${[[18,40],[18,100],[290,46],[290,110]].map(([x,y])=>`<rect class="d k" x="${x}"
     form.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'});
     document.getElementById('f-name').focus({preventScroll:true});
   }));
+
+  /* package pop-ups: same card as the films, with the full detail */
+  const PK = {
+    portrait:{kind:'Portrait', title:'A film about someone', amt:'£600', dep:'£300 to book · £300 on delivery', img:'film-vic-mug', pkg:'Portrait — a film about someone',
+      intro:'A short documentary portrait of one person, in their own words. The stories that usually only come out at the kitchen table, recorded properly with the photos and places that go with them, so the family can watch it for years.',
+      forw:['A grandparent or parent, while the stories can still be told first-hand','A milestone birthday, retirement or anniversary','A founder, a community figure or a local legend','A film celebrating a life, built from existing photos and footage'],
+      get:['A planning call to find the story and agree the day','One filming day: a sit-down interview, plus footage of them at home, at work or somewhere that matters','Up to 30 family photos or documents scanned and woven in','A finished film of up to 5 minutes, with licensed music, colour grade and sound mix','One round of revisions','An HD file to keep, plus a private link to share with family'],
+      how:[['Book','Pay the deposit to hold your place.'],['Plan','A call about the person, the stories worth telling and the photos to gather.'],['Film','One relaxed day, built around their routine. Nerves are normal; we film conversations, not performances.'],['Edit','You get a first cut to watch, usually within three weeks of filming.'],['Deliver','After your revisions, pay the balance and the film is yours.']],
+      know:['Travel within London is included. Elsewhere in the UK, travel is agreed up front.','Need a longer film or a second filming day? Ask and we will quote.','Nothing is shared publicly without your say-so.'],
+      ex:['Vic']},
+    place:{kind:'Place', title:'A film about somewhere', amt:'£850', dep:'£425 to book · £425 on delivery', img:'film-armadale', pkg:'Place — a film about somewhere',
+      intro:'A film about a building, a site or a business, and the history that makes it what it is. Made to play in a visitor centre, on your website or at an event, with a 60-second cut to share.',
+      forw:['Museums, heritage sites and historic houses','Venues, hotels, shops and family businesses with a story behind them','Anniversaries, reopenings and new exhibitions','Community spaces and charities'],
+      get:['A planning call and a recce of the site, in person or by video','One filming day across your site: the spaces, the details and the people who keep it going','Voiceover or presented format, with interviews where they help','A 3–5 minute film plus a 60-second cut','Licensed music, colour grade and sound mix','One round of revisions','Files ready for your website, screens and social channels'],
+      how:[['Book','Pay the deposit to hold your place.'],['Plan','We agree the story, the script approach and a shot list for the day.'],['Film','One day on site, timed around opening hours to keep crowds out of shot.'],['Edit','You get a first cut to review, usually within three weeks of filming.'],['Deliver','After your revisions, pay the balance and receive every version.']],
+      know:['Travel within London is included. Elsewhere in the UK, travel is agreed up front.','We help arrange permissions and release forms for staff or visitors on camera.','Archive images and documents you hold can be filmed or scanned into the edit.'],
+      ex:['Armadale Castle, Gardens & Museum of the Isles','Crichton Castle','The Portuguese Cannon']},
+    social:{kind:'Social', title:'Short-form pack', amt:'£400', dep:'£200 to book · £200 on delivery', img:'skye-d600', pkg:'Social — short-form pack',
+      intro:'Short vertical films for Instagram, TikTok and YouTube Shorts. The same documentary approach as our longer work, a real person, a real place, a real story, cut down to under a minute and framed for 9:16.',
+      forw:['Small businesses, makers and cafés that want to show the people behind them','Venues and heritage sites with an event or opening to promote','Anyone with a longer story who needs short pieces to share'],
+      get:['A planning call to choose three stories or angles','A half-day shoot, filmed vertical from the start','3 edits of up to 60 seconds each','Captions burned in, with simple titles','Licensed music','One round of revisions'],
+      how:[['Book','Pay the deposit to hold your place.'],['Plan','We pick the three pieces and what each needs to show.'],['Film','A half day with you, your space and your people.'],['Edit','Drafts of all three to review, usually within two weeks.'],['Deliver','After your revisions, pay the balance and post them whenever you like.']],
+      know:['Pairs well with a Place film: add it to the same filming day and we will quote a combined price.','You get the files to post yourself, in the right format for each platform.','Travel within London is included. Elsewhere in the UK, travel is agreed up front.'],
+      ex:[]}
+  };
+  const findFilm = t => films.concat(minis).find(f=>f.title===t);
+  function openPkg(k, from){
+    const p = PK[k]; if(!p) return;
+    const li = a => '<ul>'+a.map(x=>'<li><span>'+x+'</span></li>').join('')+'</ul>';
+    const ex = p.ex.map(findFilm).filter(Boolean);
+    fmBody.innerHTML =
+      '<div class="fm-hero"><img src="img/'+p.img+'.jpg" alt=""></div>'+
+      '<div class="fm-pk-head"><span class="mono" style="color:var(--frame-red)">'+p.kind+'</span><h3 id="fm-title">'+p.title+'</h3><div class="amt">'+p.amt+'</div><span class="dep">'+p.dep+'</span></div>'+
+      '<div class="fm-text fm-pk">'+
+        '<p class="fm-desc">'+p.intro+'</p>'+
+        '<h4>Perfect for</h4>'+li(p.forw)+
+        '<h4>What you get</h4>'+li(p.get)+
+        '<h4>How it works</h4><ol>'+p.how.map(([a,b])=>'<li><span><b>'+a+'.</b> '+b+'</span></li>').join('')+'</ol>'+
+        '<h4>Good to know</h4>'+li(p.know)+
+        (ex.length ? '<h4>From our work</h4><div class="ex">'+ex.map((f,i)=>'<button type="button" data-ex="'+i+'"><img src="img/'+f.img+'.jpg" alt="">'+esc(f.short||f.title)+'</button>').join('')+'</div>' : '')+
+        '<div class="fm-actions">'+
+          '<a class="btn primary" href="'+PAY[k]+'" target="_blank" rel="noopener">Pay '+p.dep.split(' ')[0]+' deposit</a>'+
+          '<button type="button" class="btn" data-ask>Ask first</button>'+
+        '</div>'+
+      '</div>';
+    fmBody.querySelectorAll('[data-ex]').forEach(b=>b.addEventListener('click',()=>{ openFilm(ex[+b.dataset.ex], from); }));
+    fmBody.querySelector('[data-ask]').addEventListener('click',()=>{
+      closeFilm(); document.getElementById('f-pkg').value = p.pkg;
+      setTimeout(()=>{ form.scrollIntoView({behavior: reduce?'auto':'smooth', block:'start'}); }, 60);
+    });
+    fmFrom = from; fm.hidden = false; document.documentElement.classList.add('fm-open');
+    if(!fmPushed){ history.pushState({fm:1},''); fmPushed = true; }
+    const card = fm.querySelector('.fm-card'); card.scrollTop = 0;
+    if(kbNav) document.getElementById('fm-x').focus(); else { card.setAttribute('tabindex','-1'); card.focus({preventScroll:true}); }
+  }
+  document.querySelectorAll('.pkg[data-pk]').forEach(el=>{
+    const go = ()=>openPkg(el.dataset.pk, el.querySelector('.pkg-more'));
+    el.querySelector('.pkg-more').addEventListener('click', go);
+    el.querySelector('.head').addEventListener('click', go);
+  });
   const whenSel = document.getElementById('f-when');
   whenSel.addEventListener('change', ()=>{ document.getElementById('when-extra').hidden = whenSel.value!=='event'; });
   const whenText = v => whenSel.value==='event'

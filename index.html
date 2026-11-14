@@ -566,15 +566,10 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   <section class="act-body">
     <div class="wrap">
       <div class="rail-head reels-nav">
-        <span class="count" id="reel-count"><b>01</b> / 07 · swipe</span>
+        <span class="count" id="reel-count"><b>01</b> / 10 · swipe</span>
         <div class="rail-nav"><button type="button" data-rail="reels" data-dir="-1" aria-label="Previous film">&larr;</button><button type="button" data-rail="reels" data-dir="1" aria-label="Next film">&rarr;</button></div>
       </div>
       <div class="rail reels" id="reels"></div>
-
-      <div class="also">
-        <div class="rail-head"><span class="mono">Also shot &amp; cut</span></div>
-        <div class="rail minis" id="minis"></div>
-      </div>
     </div>
   </section>
 
@@ -815,10 +810,14 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   const films = [
     {id:'8en_0AMpEnM', img:'film-vic-reel', title:'Vic', kind:'Feature documentary · Trailer', year:'In progress', tag:'In development',
      desc:'An observational documentary about a man who has lived, won, lost and contemplated. Vic meets life with stoicism, strength, humility and humour, a voice from a time before social media and the weight of modern life. Now in production; the trailer gives a first look.'},
+    {href:'https://drive.google.com/file/d/1xvB9yPLp9BqG_gPS5XYQYAuxzD6hxi9U/view?usp=sharing', img:'film-armadale', title:'Armadale Castle, Gardens & Museum of the Isles', short:'Armadale', kind:'Commission', year:'2023–24', tag:'Clan Donald Lands Trust',
+     desc:'A documentary about the Armadale Estate on the Isle of Skye, made for Clan Donald Lands Trust and shown in the visitor areas of the Museum of the Isles.'},
     {id:'UzqtdUVBWYs', title:'Lancaster', sub:'A City With a Living History', kind:'City Symphony', year:'2023', tag:'Arts Beats Festival', red:true,
      desc:'A wordless, musical portrait of Lancaster in black and white, where a single isolated red traces the city’s roots in the transatlantic slave trade.'},
     {id:'OaNAgC1RfS0', img:'film-heart', title:'The Heart of Midlothian', kind:'Presented short documentary', year:'2019', tag:'Presented by Jake Middleton',
      desc:'A short, presented documentary about a historical cultural symbol and how its meaning has been turned on its head.'},
+    {id:'LrEy2fg6mMI', img:'film-creedy-2', title:'Stewart Dawber on the River Creedy', short:'River Creedy', kind:'Short documentary', year:'2025', tag:'Wildlife portrait',
+     desc:'A short documentary following wildlife photographer Stewart Dawber on the River Creedy as he waits for a kingfisher.'},
     {id:'sQ3KlFUEUUA', img:'film-thirdweb-reel', title:'The Third Web', kind:'Interactive fiction', year:'2023', tag:'Dissertation · Lancaster University',
      desc:'A classical Hollywood narrative the audience steers. Every outcome was filmed so viewers could choose the story live; this screening cut plays the illusion of choice on its own.'},
     {id:'BOCdvzqjq4Q', img:'film-skye', title:'Isle of Skye', sub:'Impact of Tourism', kind:'Documentary', year:'2019', tag:'Isle of Skye',
@@ -826,13 +825,11 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     {id:'4xDeb9Mbi2c', img:'film-cannon', title:'The Portuguese Cannon', kind:'Presented short documentary', year:'2019', tag:'Presented by Jake Middleton',
      desc:'A presented short documentary about the Portuguese Cannon on Calton Hill, Edinburgh, and a long history that stretches from Mozambique to Macao.'},
     {id:'NPfmA9y58Cs', img:'film-crichton', title:'Crichton Castle', kind:'Presented short documentary', year:'2020', tag:'Presented by David Weinczok',
-     desc:'A presented history of Crichton Castle in Midlothian, the roofless castle where royals once lived.'}
+     desc:'A presented history of Crichton Castle in Midlothian, the roofless castle where royals once lived.'},
+    {img:'film-sea2018', title:'Southeast Asia 2018', short:'Southeast Asia', kind:'Travel film', year:'2018', tag:'Edited in 2023',
+     desc:'A holiday travel film through Southeast Asia, filmed in 2018 and edited in 2023.'}
   ];
-  const minis = [
-    {href:'https://drive.google.com/file/d/1xvB9yPLp9BqG_gPS5XYQYAuxzD6hxi9U/view?usp=sharing', img:'film-armadale', title:'Armadale Castle, Gardens & Museum of the Isles', short:'Armadale', kind:'Commission · 2023–24'},
-    {href:'https://youtu.be/LrEy2fg6mMI', id:'LrEy2fg6mMI', img:'film-creedy-2', title:'Stewart Dawber on the River Creedy', short:'River Creedy', kind:'Short documentary · 2025'},
-    {img:'film-sea2018', title:'Southeast Asia 2018', short:'Southeast Asia', kind:'Travel film · 2018'}
-  ];
+  const minis = [];
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
   const img = (id, alt, local) => (local||id) ? '<img alt="'+(alt?esc(alt)+' – still from the film':'')+'" loading="lazy" src="'+(local?'img/'+local+'.jpg':thumb(id))+'" onerror="this.remove()">' : '';
 
@@ -845,7 +842,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     'Isle of Skye': {roles:'Director · Cinematographer · Editor · Narrator · Sound', stills:[['skye-storr','The Old Man of Storr'],['skye-interview','Interviews at the Storr'],['skye-portree','Portree harbour'],['skye-talisker','Talisker Distillery'],['skye-d600','Setting up by the Skye Bridge']]},
     'The Portuguese Cannon': {roles:'Director · Editor', stills:[['film-cannon','The Portuguese Cannon'],['film-cannon-calton','Calton Hill, Edinburgh']], people:'Presented by Jake Middleton'},
     'Crichton Castle': {roles:'Writer · Director · Editor · Casting', stills:[['film-crichton','Crichton Castle, Midlothian']], people:'Presented by David Weinczok'},
-    'Armadale Castle, Gardens & Museum of the Isles': {roles:'Producer', desc:'A documentary about the Armadale Estate on the Isle of Skye, made for Clan Donald Lands Trust and shown in the visitor areas of the Museum of the Isles.', stills:[['film-armadale','Armadale Castle']]},
+    'Armadale Castle, Gardens & Museum of the Isles': {roles:'Producer', desc:'A documentary about the Armadale Estate on the Isle of Skye, made for Clan Donald Lands Trust and shown in the visitor areas of the Museum of the Isles.', stills:[['film-armadale-title','Opening title: the spiritual home of Clan Donald'],['film-armadale-sound','Light breaking over the sea'],['film-armadale-shore','The castle from across the water'],['film-armadale','Armadale Castle'],['film-armadale-garden','The castle gardens'],['film-armadale-pokers','Red hot pokers in the gardens']]},
     'Stewart Dawber on the River Creedy': {roles:'Cinematographer · Sound · Editor', desc:'A short documentary following wildlife photographer Stewart Dawber on the River Creedy as he waits for a kingfisher.',
       stills:[['film-creedy-2','Stewart wading the River Creedy'],['bts-creedy-hide','Stewart in the hide, waiting for the kingfisher'],['photo-creedy-striders','Pond skaters in a shaft of light'],['creedy-kingfisher','Kingfisher, photographed by Stewart Dawber']],
       links:[['Stewart Dawber · Skye High Wildlife','https://skyehighwildlife.com']], credit:'Kingfisher photograph by Stewart Dawber, Skye High Wildlife.'},
@@ -958,8 +955,8 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   document.getElementById('reels').innerHTML = films.map((f,i)=>{
     const t = f.red ? '<span style="color:#E0353C">'+f.title+'</span>' : f.title;
     return '<article class="reel reveal bw" data-i="'+i+'">'+
-      '<a class="frame" href="https://youtu.be/'+f.id+'" target="_blank" rel="noopener" aria-label="'+f.title+': film details">'+
-        '<div class="card"><span class="t">'+t+'</span>'+(f.sub?'<span class="s">'+f.sub+'</span>':'')+'</div>'+img(f.id, f.title, f.img)+
+      '<a class="frame" href="'+(f.id?'https://youtu.be/'+f.id:(f.href||'#work'))+'" target="_blank" rel="noopener" aria-label="'+f.title+': film details">'+
+        '<div class="card"><span class="t">'+(f.short?esc(f.short):t)+'</span>'+(f.sub?'<span class="s">'+f.sub+'</span>':'')+'</div>'+img(f.id, f.title, f.img)+
         '<span class="no">'+pad(i+1)+'</span><span class="play">+ Details</span></a>'+
       '<div class="meta mono"><span>'+f.kind+'</span><span>'+f.year+'</span></div>'+
       '<h3>'+f.title+(f.sub?': <em>'+f.sub+'</em>':'')+'</h3>'+
@@ -967,7 +964,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     '</article>';
   }).join('');
 
-  document.getElementById('minis').innerHTML = minis.map(m=>
+  if(document.getElementById('minis')) document.getElementById('minis').innerHTML = minis.map(m=>
     (m.href?'<a class="mini bw" href="'+m.href+'" target="_blank" rel="noopener">':'<div class="mini bw">')+
       '<div class="frame"><div class="card"><span class="t">'+esc(m.short)+'</span></div>'+img(m.id, m.title, m.img)+'</div>'+
       '<b>'+esc(m.title)+'</b><span class="mono k">'+m.kind+'</span>'+(m.href?'</a>':'</div>')).join('');

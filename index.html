@@ -835,7 +835,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
   /* film details shown in the pop-up card */
   const INFO = {
-    'Vic': {roles:'Director · Self-produced', stills:[['film-vic','Vic at his kitchen table'],['film-vic-close','Vic, close'],['film-vic-mug','Vic with a mug of tea'],['film-vic-poster','The Vic poster']], status:'In production'},
+    'Vic': {roles:'Director · Self-produced', hero:'film-vic', stills:[['film-vic','Vic at his kitchen table'],['film-vic-close','Vic, close'],['film-vic-mug','Vic with a mug of tea'],['film-vic-poster','The Vic poster']], status:'In production'},
     'Lancaster': {roles:'Director · Cinematographer · Editor', notes:'Selected for the Arts Beats Festival, Lancaster, 2023. Shot in black and white, with only red left in the frame.'},
     'The Heart of Midlothian': {roles:'Director · Editor', stills:[['film-heart','The Heart of Midlothian on the Royal Mile'],['film-heart-feet','Passers-by at the heart']], people:'Presented by Jake Middleton'},
     'The Third Web': {roles:'Writer · Director · Camera · Producer', stills:[['film-thirdweb-manager','Oliver faces his manager'],['film-thirdweb-dog','Oliver and the dog'],['bts-direct','Behind the scenes: blocking a scene'],['bts-crew','Behind the scenes: cast and crew'],['bts-monitor','Behind the scenes: checking the frame']], notes:'Made as an interactive film: at key moments the story stops and the audience chooses what Oliver does next. Every outcome was filmed. Lancaster University dissertation, 2023.'},
@@ -857,7 +857,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   function openFilm(f, from){
     const d = INFO[f.title] || {};
     const href = f.href || (f.id ? 'https://youtu.be/'+f.id : '');
-    const hero = f.img ? 'img/'+f.img+'.jpg' : (f.id ? thumb(f.id) : '');
+    const hero = d.hero ? 'img/'+d.hero+'.jpg' : (f.img ? 'img/'+f.img+'.jpg' : (f.id ? thumb(f.id) : ''));
     const title = f.title + (f.sub ? ': <em>'+f.sub+'</em>' : '');
     const fig = ([k,c]) => '<figure data-src="img/'+k+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+k+'.jpg" alt="'+esc(c)+'" loading="lazy"></figure>';
     const isBts = ([k]) => !NOT_BTS.includes(k) && (/^bts-/.test(k) || BTS_KEYS.includes(k));

@@ -71,8 +71,8 @@
 /* Layout: the site plays like a reel — slate opener, intertitles between acts, swipeable frames on phones, an amber playhead tracking the scroll. Dark cinema ground, tungsten-amber accent, condensed sans to match the logo. */
 :root{
   --paper:#121110; --card:#1A1816; --ink:#F2EEE6; --muted:#A39E94; --line:#2F2C28;
-  --red:#E9A23B; --red-ink:#121110;
-  --frame:#0A0908; --frame-ink:#F2EEE6; --frame-muted:#8E8A82; --frame-line:#2F2C28; --frame-red:#E9A23B;
+  --red:#74B08A; --red-ink:#0E1A13;
+  --frame:#0A0908; --frame-ink:#F2EEE6; --frame-muted:#8E8A82; --frame-line:#2F2C28; --frame-red:#74B08A;
   --display:"Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   --body:"Barlow", "Helvetica Neue", Arial, sans-serif;
   --mono:"Barlow Condensed", "Arial Narrow", Arial, sans-serif;
@@ -83,11 +83,11 @@
 /* light mode: warm paper, ink-dark type, deeper amber for contrast; film frames stay dark like a screen on a page */
 html[data-theme="light"]{
   --paper:#F3EEE4; --card:#FBF8F2; --ink:#1A1714; --muted:#5C564D; --line:#D8CFBF;
-  --red:#A1600C; --red-ink:#FFFFFF;
+  --red:#2D6A48; --red-ink:#FFFFFF;
   color-scheme:light;
 }
 html[data-theme="light"] .logo{filter:none}
-html[data-theme="light"] :is(.fm-hero, .fm-pk-head, .frame, .inter, .pkg .head, .portrait, .strip, footer){--ink:var(--frame-ink); --muted:var(--frame-muted); --line:var(--frame-line); --red:var(--frame-red); --red-ink:#121110; --paper:var(--frame); --card:#1A1816; color:var(--ink)}
+html[data-theme="light"] :is(.fm-hero, .fm-pk-head, .frame, .inter, .pkg .head, .portrait, .strip, footer){--ink:var(--frame-ink); --muted:var(--frame-muted); --line:var(--frame-line); --red:var(--frame-red); --red-ink:#0E1A13; --paper:var(--frame); --card:#1A1816; color:var(--ink)}
 html[data-theme="light"] body::after{opacity:.05; mix-blend-mode:multiply}
 .theme{flex:none; width:40px; height:40px; display:grid; place-items:center; border:1px solid var(--line); background:transparent; color:var(--ink); cursor:pointer; padding:0; border-radius:50%; transition:border-color .2s, transform .3s}
 .theme svg{width:20px; height:20px}
@@ -153,11 +153,11 @@ nav a.founder-link{padding-left:18px; border-left:1px solid var(--line)}
 .slate{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); max-width:640px; border:1px solid var(--ink); margin-bottom:28px}
 .slate > *{padding:10px 12px; border-right:1px solid var(--ink); min-width:0}
 .slate > *:last-child{border-right:0}
-.slate-go{color:inherit; text-decoration:none; background:rgba(233,162,59,.08); transition:background .2s}
+.slate-go{color:inherit; text-decoration:none; background:rgba(116,176,138,.09); transition:background .2s}
 .slate-go b{color:var(--red)} .slate-go em{font-style:normal; color:inherit}
 .slate-go b, .slate-go span{transition:opacity .25s, transform .25s} .slate-go.swap b{opacity:0; transform:translateY(6px)} .slate-go.swap span em{opacity:0}
 @media (max-width:400px){ .slate-go i{display:none} } .slate-go i{font-style:normal; display:inline-block; transition:transform .2s}
-@media (hover:hover) and (pointer:fine){ .slate-go:hover{background:rgba(233,162,59,.16)} .slate-go:hover i{transform:translateX(3px)} }
+@media (hover:hover) and (pointer:fine){ .slate-go:hover{background:rgba(116,176,138,.18)} .slate-go:hover i{transform:translateX(3px)} }
 @media (max-width:480px){ .slate.mono{grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1.15fr)} .slate > *{padding:9px 8px} .slate b{font-size:13px; letter-spacing:0} .slate span{font-size:10px} }
 .uk{font-style:normal}
 @media (max-width:340px){ .uk{display:none} .slate.mono{grid-template-columns:minmax(0,.85fr) minmax(0,.95fr) minmax(0,1.3fr)} .slate > *{padding:8px 6px} .slate b{font-size:11.5px} .slate span{font-size:9px} }

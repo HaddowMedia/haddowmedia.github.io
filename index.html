@@ -845,7 +845,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
   /* film details shown in the pop-up card */
   const INFO = {
-    'Vic': {roles:'Director · Self-produced', stills:[['film-vic','Vic at his kitchen table'],['film-vic-close','Vic, close'],['film-vic-mug','Vic with a mug of tea'],['film-vic-art','Vic: key artwork'],['film-vic-years','Vic through the years, from the family archive'],['film-vic-poster','The Vic poster']], status:'In production'},
+    'Vic': {roles:'Director · Self-produced', stills:[['film-vic','Vic at his kitchen table'],['film-vic-close','Vic, close'],['film-vic-mug','Vic with a mug of tea'],['film-vic-art','Key artwork'],['film-vic-years','Vic through the years, from the family archive'],['film-vic-poster','First poster']], status:'In production'},
     'Lancaster': {roles:'Director · Cinematographer · Editor', notes:'Selected for the Arts Beats Festival, Lancaster, 2023. Shot in black and white, with only red left in the frame.'},
     'The Heart of Midlothian': {roles:'Director · Editor', stills:[['film-heart','The Heart of Midlothian on the Royal Mile'],['film-heart-feet','Passers-by at the heart']], people:'Presented by Jake Middleton'},
     'The Third Web': {roles:'Writer · Director · Camera · Producer', stills:[['film-thirdweb-manager','Oliver faces his manager'],['film-thirdweb-dog','Oliver and the dog'],['bts-direct','Behind the scenes: blocking a scene'],['bts-crew','Behind the scenes: cast and crew'],['bts-monitor','Behind the scenes: checking the frame']], notes:'Made as an interactive film: at key moments the story stops and the audience chooses what Oliver does next. Every outcome was filmed. Lancaster University dissertation, 2023.'},
@@ -858,6 +858,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       links:[['Stewart Dawber · Skye High Wildlife','https://skyehighwildlife.com']], credit:'Kingfisher photograph by Stewart Dawber, Skye High Wildlife.'},
     'Southeast Asia 2018': {roles:'Editor', desc:'A holiday travel film through Southeast Asia, filmed in 2018 and edited in 2023.', stills:[['film-sea2018','Southeast Asia 2018']]}
   };
+  const POSTER_KEYS = ['film-vic-years'];
   const BTS_KEYS = ['skye-interview','skye-d600'], NOT_BTS = ['bts-creedy-hide'];
   let kbNav = false;
   addEventListener('keydown', e=>{ if(e.key==='Tab'||e.key==='Enter'||e.key===' ') kbNav = true; }, true);
@@ -872,7 +873,9 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     const fig = ([k,c]) => '<figure data-src="img/'+k+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+k+'.jpg" alt="'+esc(c)+'" loading="lazy"></figure>';
     const isBts = ([k]) => !NOT_BTS.includes(k) && (/^bts-/.test(k) || BTS_KEYS.includes(k));
     const all = (d.stills||[]).map(([k,c])=>[k, c.replace(/^Behind the scenes:\s*/,'').replace(/^./,m=>m.toUpperCase())]);
-    const stills = all.filter(x=>!isBts(x)).map(fig).join('');
+    const isPoster = ([k]) => /poster|-art$/.test(k) || POSTER_KEYS.includes(k);
+    const stills = all.filter(x=>!isBts(x) && !isPoster(x)).map(fig).join('');
+    const posters = all.filter(isPoster).map(fig).join('');
     const bts = all.filter(isBts).map(fig).join('');
     fmBody.innerHTML =
       (href ? '<a class="fm-hero" href="'+href+'" target="_blank" rel="noopener">' : '<div class="fm-hero">')+
@@ -887,6 +890,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         (d.people || f.tag ? '<p class="fm-people mono">'+[d.people, (f.tag && f.tag!==d.people ? f.tag : '')].filter(Boolean).join(' · ')+'</p>' : '')+
         (stills ? '<span class="mono fm-lab">Film stills · tap to enlarge</span><div class="fm-stills gal-fm">'+stills+'</div>' : '')+
         (bts ? '<span class="mono fm-lab">Behind the scenes</span><div class="fm-stills gal-fm">'+bts+'</div>' : '')+
+        (posters ? '<span class="mono fm-lab">Posters &amp; artwork</span><div class="fm-stills gal-fm">'+posters+'</div>' : '')+
         (d.credit ? '<p class="fm-credit">'+d.credit+'</p>' : '')+
         '<div class="fm-actions">'+
           (href ? '<a class="btn primary fm-watch" href="'+href+'" target="_blank" rel="noopener">&#9654; Watch</a>' : '')+

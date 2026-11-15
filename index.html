@@ -149,7 +149,32 @@ nav a.founder-link{padding-left:18px; border-left:1px solid var(--line)}
 .playhead{position:absolute; left:0; bottom:-1px; height:2px; width:100%; background:var(--red); transform-origin:left; transform:scaleX(0)}
 
 /* hero */
-.hero{padding-block:32px 40px}
+.hero{padding-block:32px 40px; position:relative; isolation:isolate}
+/* opening reel: frames from the films flicker past behind the headline, then settle */
+.reelbg{position:absolute; top:0; bottom:0; left:calc(50% - 50vw); width:100vw; z-index:-1; overflow:hidden; pointer-events:none; background:var(--paper)}
+.reelbg img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0}
+.reelbg img.on{opacity:1}
+.reelbg.run img.on{filter:contrast(1.15) saturate(.85)}
+.reelbg img.rest{opacity:.55; transform:scale(1.08); transition:opacity 1.4s ease, transform 14s ease-out; filter:saturate(.8)}
+.reelbg img.rest.go{transform:scale(1)}
+.reelbg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, color-mix(in srgb, var(--paper) 25%, transparent) 0%, color-mix(in srgb, var(--paper) 45%, transparent) 60%, var(--paper) 100%)}
+.reelbg.run::after{background:color-mix(in srgb, var(--paper) 35%, transparent)}
+.reelbg .gate{position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0; background:repeating-linear-gradient(90deg, transparent 0 18%, rgba(255,255,255,.03) 18.2% 18.6%, transparent 18.8% 100%), radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%)}
+.reelbg.run .gate{opacity:1; animation:flick .09s steps(2) infinite}
+@keyframes flick{50%{filter:brightness(1.25)}}
+html[data-theme="light"] .reelbg img.rest{opacity:.3}
+.hero.intro h1, .hero.intro .sub, .hero.intro .cta{opacity:0; transform:translateY(14px)}
+.hero h1, .hero .sub, .hero .cta{transition:opacity .6s ease, transform .6s ease}
+.hero .sub{transition-delay:.12s} .hero .cta{transition-delay:.24s}
+/* clapper on the slate */
+.slate{position:relative; margin-top:18px}
+.clap{position:absolute; left:-1px; right:-1px; top:-17px; height:16px; border:1px solid var(--ink); background:repeating-linear-gradient(-55deg, var(--ink) 0 14px, var(--paper) 14px 28px); transform-origin:0 100%; transform:rotate(0)}
+.hero.intro .clap{transform:rotate(-24deg)}
+.clap.snap{animation:snap .22s cubic-bezier(.6,0,.9,.6) forwards}
+@keyframes snap{from{transform:rotate(-24deg)} to{transform:rotate(0)}}
+.slate.flash{animation:sflash .35s ease-out}
+@keyframes sflash{0%{background:color-mix(in srgb, var(--ink) 18%, transparent)} 100%{background:transparent}}
+@media (prefers-reduced-motion: reduce){ .reelbg img.rest{transition:none; transform:none} }
 .slate{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); max-width:640px; border:1px solid var(--ink); margin-bottom:28px}
 .slate > *{padding:10px 12px; border-right:1px solid var(--ink); min-width:0}
 .slate > *:last-child{border-right:0}
@@ -553,7 +578,9 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
 <main id="top">
   <div class="wrap hero">
+    <div class="reelbg" id="reelbg" aria-hidden="true"><div class="gate"></div></div>
     <div class="slate mono" aria-label="Production slate">
+      <span class="clap" aria-hidden="true"></span>
       <div><span>Location</span><b>London<i class="uk">, UK</i></b></div>
       <div><span>TC 25fps</span><b id="tc">00:00:00:00</b></div>
       <a href="#work" class="slate-go" id="scene" aria-label="Jump to Act I, The Work"><span>Scene <em id="scene-n">I</em></span><b id="scene-t">The Work <i aria-hidden="true">&rarr;</i></b></a>
@@ -771,10 +798,32 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     setInterval(()=>{ if(!vis || document.hidden) return; el.classList.add('swap'); setTimeout(()=>{ show((i+1)%S.length); el.classList.remove('swap'); }, 260); }, 2800);
   })();
+  /* opening reel + clapper */
+  let start = performance.now();
+  (function(){
+    const hero = document.querySelector('.hero'), bg = document.getElementById('reelbg'), clap = hero.querySelector('.clap'), slate = hero.querySelector('.slate');
+    const N = 11, imgs = [];
+    for(let i=0;i<N;i++){ const im = new Image(); im.alt=''; im.decoding='async'; im.src='img/reel/r'+String(i).padStart(2,'0')+'.jpg'; bg.insertBefore(im, bg.firstChild); imgs.push(im); }
+    const last = imgs[N-1];
+    const settle = ()=>{ bg.classList.remove('run'); imgs.forEach(im=>im.classList.remove('on')); last.classList.add('rest'); requestAnimationFrame(()=>requestAnimationFrame(()=>last.classList.add('go'))); };
+    if(reduce){ settle(); return; }
+    hero.classList.add('intro');
+    const snap = ()=>{ clap.classList.add('snap'); setTimeout(()=>{ slate.classList.add('flash'); start = performance.now(); }, 210); };
+    const reveal = ()=>{ hero.classList.remove('intro'); };
+    // wait briefly for the first frames; never hold the page back for long
+    const ready = Promise.race([Promise.all(imgs.slice(0,5).map(im=>im.decode ? im.decode().catch(()=>{}) : null)), new Promise(r=>setTimeout(r,900))]);
+    ready.then(()=>{
+      bg.classList.add('run');
+      const times = [0,110,210,300,385,465,545,630,725,840,980];  // speeds up, then slows into the last frame
+      times.forEach((t,i)=>setTimeout(()=>{ imgs.forEach(im=>im.classList.remove('on')); if(i<N-1) imgs[i].classList.add('on'); else { settle(); } }, t));
+      setTimeout(snap, 520);
+      setTimeout(reveal, 900);
+    });
+    setTimeout(()=>{ if(hero.classList.contains('intro')){ settle(); reveal(); snap(); } }, 2600);
+  })();
   const tc = document.getElementById('tc');
-  const start = performance.now();
   (function tick(){
-    const f = Math.floor((performance.now()-start)/40);
+    const f = Math.max(0, Math.floor((performance.now()-start)/40));
     tc.textContent = pad(Math.floor(f/90000)%24)+':'+pad(Math.floor(f/1500)%60)+':'+pad(Math.floor(f/25)%60)+':'+pad(f%25);
     if(!reduce) requestAnimationFrame(tick);
   })();

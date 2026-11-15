@@ -267,6 +267,10 @@ section.act-body{padding-block:clamp(24px,5vw,40px) clamp(32px,6vw,56px)}
 .frame img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s ease}
 .frame:hover img{transform:scale(1.03)}
 .frame .play{position:absolute; left:12px; bottom:12px; display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; background:var(--frame-red); color:#fff; padding:7px 10px; z-index:2}
+.reel .frame .no, .reel .frame .play{display:none}
+.reel-bar{display:flex; justify-content:space-between; align-items:center; width:100%; margin:0; padding:8px 12px; border:0; background:var(--frame-red); color:#0E1A13; font-size:11px; letter-spacing:.14em; text-transform:uppercase; cursor:pointer; text-align:left}
+.reel-bar .no2{font-family:var(--display); font-weight:700; font-size:20px; letter-spacing:0; line-height:1}
+html[data-theme="light"] .reel-bar{color:#fff}
 .frame .no{position:absolute; right:12px; top:12px; font-family:var(--display); font-weight:700; font-size:40px; line-height:1; color:#fff; mix-blend-mode:difference; z-index:2}
 .reel .meta{display:flex; justify-content:space-between; gap:12px; margin-top:14px; color:var(--muted)}
 .reel h3{margin-top:4px; font-size:clamp(28px,6vw,34px)}
@@ -893,17 +897,17 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
      desc:'A wordless, musical portrait of Lancaster in black and white, where a single isolated red traces the city’s roots in the transatlantic slave trade.'},
     {href:'https://drive.google.com/file/d/1xvB9yPLp9BqG_gPS5XYQYAuxzD6hxi9U/view?usp=sharing', img:'film-armadale', title:'Armadale Castle, Gardens & Museum of the Isles', short:'Armadale', kind:'Commission', year:'2023–24', tag:'Clan Donald Lands Trust',
      desc:'A documentary about the Armadale Estate on the Isle of Skye, made for Clan Donald Lands Trust and shown in the visitor areas of the Museum of the Isles.'},
-    {id:'OaNAgC1RfS0', img:'film-heart', title:'The Heart of Midlothian', kind:'Presented short documentary', year:'2019', tag:'Presented by Jake Middleton',
+    {id:'OaNAgC1RfS0', img:'film-heart-art', title:'The Heart of Midlothian', kind:'Presented short documentary', year:'2019', tag:'Presented by Jake Middleton',
      desc:'A short, presented documentary about a historical cultural symbol and how its meaning has been turned on its head.'},
     {id:'sQ3KlFUEUUA', img:'film-thirdweb-reel', title:'The Third Web', kind:'Interactive fiction', year:'2023', tag:'Dissertation · Lancaster University',
      desc:'A classical Hollywood narrative the audience steers. Every outcome was filmed so viewers could choose the story live; this screening cut plays the illusion of choice on its own.'},
     {id:'BOCdvzqjq4Q', img:'film-skye', title:'Isle of Skye', sub:'Impact of Tourism', kind:'Documentary', year:'2019', tag:'Isle of Skye',
      desc:'From the Old Man of Storr to Neist Point and Portree harbour: what happens to an island when the whole world wants to see it.'},
-    {id:'4xDeb9Mbi2c', img:'film-cannon', title:'The Portuguese Cannon', kind:'Presented short documentary', year:'2019', tag:'Presented by Jake Middleton',
+    {id:'4xDeb9Mbi2c', img:'film-cannon-art', title:'The Portuguese Cannon', kind:'Presented short documentary', year:'2019', tag:'Presented by Jake Middleton',
      desc:'A presented short documentary about the Portuguese Cannon on Calton Hill, Edinburgh, and a long history that stretches from Mozambique to Macao.'},
-    {id:'NPfmA9y58Cs', img:'film-crichton', title:'Crichton Castle', kind:'Presented short documentary', year:'2020', tag:'Presented by David Weinczok',
+    {id:'NPfmA9y58Cs', img:'film-crichton-art', title:'Crichton Castle', kind:'Presented short documentary', year:'2020', tag:'Presented by David Weinczok',
      desc:'A presented history of Crichton Castle in Midlothian, the roofless castle where royals once lived.'},
-    {img:'film-sea2018', title:'Southeast Asia 2018', short:'Southeast Asia', kind:'Travel film', year:'2018', tag:'Edited in 2023',
+    {img:'film-sea2018-art', title:'Southeast Asia 2018', short:'Southeast Asia', kind:'Travel film', year:'2018', tag:'Edited in 2023',
      desc:'A holiday travel film through Southeast Asia, filmed in 2018 and edited in 2023.'}
   ];
   const minis = [];
@@ -1039,7 +1043,8 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     return '<article class="reel reveal bw" data-i="'+i+'">'+
       '<a class="frame" href="'+(f.id?'https://youtu.be/'+f.id:(f.href||'#work'))+'" target="_blank" rel="noopener" aria-label="'+f.title+': film details">'+
         '<div class="card"><span class="t">'+(f.short?esc(f.short):t)+'</span>'+(f.sub?'<span class="s">'+f.sub+'</span>':'')+'</div>'+img(f.id, f.title, f.img)+
-        '<span class="no">'+pad(i+1)+'</span><span class="play">+ Details</span></a>'+
+        '</a>'+
+      '<button type="button" class="reel-bar mono" data-open="'+i+'"><span class="no2">'+pad(i+1)+'</span><span>+ Details</span></button>'+
       '<div class="meta mono"><span>'+f.kind+'</span><span>'+f.year+'</span></div>'+
       '<h3>'+f.title+(f.sub?': <em>'+f.sub+'</em>':'')+'</h3>'+
       '<p class="desc">'+f.desc+'</p>'+(f.tag?'<span class="tag">'+f.tag+'</span>':'')+

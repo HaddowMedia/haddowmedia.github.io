@@ -1118,7 +1118,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       get:['A planning call and a recce of the site, in person or by video','One filming day across your site: the spaces, the details and the people who keep it going','Voiceover or presented format, with interviews where they help','A 3–5 minute film plus a 60-second cut','Licensed music, colour grade and sound mix','One round of revisions','A designed film poster, around 20 graded stills and photos from behind the scenes','Everything by private download link, with files ready for your website, screens and social channels'],
       how:[['Book','Pay the deposit to hold your place.'],['Plan','We agree the story, the script approach and a shot list for the day.'],['Film','One day on site, timed around opening hours to keep crowds out of shot.'],['Edit','You get a first cut to review, usually within three weeks of filming.'],['Deliver','After your revisions, pay the balance and receive every version.']],
       know:['Travel within London is included. Elsewhere in the UK, travel is agreed up front.','We help arrange permissions and release forms for staff or visitors on camera.','Archive images and documents you hold can be filmed or scanned into the edit.','We keep a backup of your finished film for two years.'],
-      ex:['Armadale Castle, Gardens & Museum of the Isles','Crichton Castle','The Portuguese Cannon']}
+      ex:['Armadale Castle, Gardens & Museum of the Isles','Lancaster','Crichton Castle','The Portuguese Cannon']}
   };
   const findFilm = t => films.concat(minis).find(f=>f.title===t);
   function openPkg(k, from){
@@ -1135,7 +1135,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         '<h4>How it works</h4><ol>'+p.how.map(([a,b])=>'<li><span><b>'+a+'.</b> '+b+'</span></li>').join('')+'</ol>'+
         '<h4>Good to know</h4>'+li(p.know)+
         '<h4>Add-on · £95</h4><p class="keep"><b>The Keepsake Edition.</b> Your film on a USB, with an A3 printed poster and a set of printed stills. Paid with the balance on delivery.</p>'+
-        (ex.length ? '<h4>From our work</h4><div class="ex">'+ex.map((f,i)=>'<button type="button" data-ex="'+i+'"><img src="img/'+f.img+'.jpg" alt="">'+esc(f.short||f.title)+'</button>').join('')+'</div>' : '')+
+        (ex.length ? '<h4>From our work</h4><div class="ex">'+ex.map((f,i)=>'<button type="button" data-ex="'+i+'"><img src="'+(f.img?'img/'+f.img+'.jpg':thumb(f.id))+'" alt="">'+esc(f.short||f.title)+'</button>').join('')+'</div>' : '')+
         '<div class="fm-actions">'+
           '<a class="btn primary" href="'+PAY[k]+'" target="_blank" rel="noopener">Pay '+p.dep.split(' ')[0]+' deposit</a>'+
           '<button type="button" class="btn" data-ask>Ask first</button>'+

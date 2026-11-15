@@ -220,11 +220,27 @@ html[data-theme="light"] .reelbg img.rest{opacity:.3}
 
 /* intertitles */
 .inter{background:var(--frame); color:var(--frame-ink); padding-block:clamp(24px,5vw,40px); text-align:center}
-.inter .box{max-width:560px; margin:0 auto; border:1px solid var(--frame-line); outline:1px solid var(--frame-line); outline-offset:6px; padding:20px 18px}
+.inter .box{max-width:720px; margin:0 auto; border:1px solid var(--frame-line); outline:1px solid var(--frame-line); outline-offset:6px; padding:20px 18px}
 .inter .act{font-family:var(--mono); font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--frame-red)}
 .inter h2{margin-top:8px; font-size:clamp(34px,10vw,84px)}
 .inter h2 em{color:var(--frame-red)}
 .inter p{margin:14px auto 0; color:var(--frame-muted); max-width:40ch; font-size:15px}
+.inter .box{display:flex; flex-direction:column; justify-content:center; align-items:center; box-sizing:border-box}
+.inter h2{font-size:clamp(34px,9vw,84px); white-space:nowrap}
+.hire-intro{max-width:62ch; font-size:17px; color:var(--muted); margin:0 0 26px}
+.hire-intro b{color:var(--ink)}
+/* desktop: arrows on every sideways strip of photos */
+.strip-wrap{position:relative}
+.strip-arr{display:none}
+@media (hover:hover) and (pointer:fine){
+  .strip-arr{display:grid; place-items:center; position:absolute; top:50%; transform:translateY(-50%); z-index:3; width:40px; height:40px; border:1px solid var(--line); background:color-mix(in srgb, var(--paper) 88%, transparent); color:var(--ink); font-size:18px; cursor:pointer; transition:opacity .2s, border-color .2s}
+  .strip-arr:hover{border-color:var(--red); color:var(--red)}
+  .strip-arr.l{left:6px} .strip-arr.r{right:6px}
+  .strip-arr[hidden]{display:none}
+  .lb .lb-nav{width:52px; height:52px; border:1px solid rgba(255,255,255,.35); background:rgba(0,0,0,.45); color:#fff; font-size:28px}
+  .lb .lb-nav:hover{border-color:#fff}
+  .lb .lb-prev{left:16px} .lb .lb-next{right:16px}
+}
 
 section.act-body{padding-block:clamp(24px,5vw,40px) clamp(32px,6vw,56px)}
 
@@ -613,6 +629,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   <div class="inter" id="studio"><div class="wrap"><div class="box reveal">
     <div class="act">Act II</div>
     <h2>The <em>studio</em></h2>
+    <p>Who makes the films, how each one is planned, and the view from behind the camera.</p>
   </div></div></div>
   <section class="act-body">
     <div class="wrap">
@@ -669,11 +686,12 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   <div class="inter" id="hire"><div class="wrap"><div class="box reveal">
     <div class="act">Act III</div>
     <h2>Commission a <em>film</em></h2>
-    <p>Grandad&#8217;s tales at the kitchen table. The history in the walls of your building. The reason your business exists. Haddow Media is a London documentary studio that finds the story, films it with care and gives you something to keep. <b>Whose story should we tell?</b></p>
+
     <p>Pick a package and book it here with a deposit, or ask a question first.</p>
   </div></div></div>
   <section class="act-body">
     <div class="wrap">
+      <p class="hire-intro reveal">Grandad&#8217;s tales at the kitchen table. The history in the walls of your building. The reason your business exists. Haddow Media is a London documentary studio that finds the story, films it with care and gives you something to keep. <b>Whose story should we tell?</b></p>
       <div class="rail-head pkgs-nav">
         <span class="count" id="pkg-count"><b>01</b> / 02 · swipe</span>
         <div class="rail-nav"><button type="button" data-rail="pkgs" data-dir="-1" aria-label="Previous package">&larr;</button><button type="button" data-rail="pkgs" data-dir="1" aria-label="Next package">&rarr;</button></div>
@@ -958,6 +976,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       };
       fmBody.querySelectorAll('a.fm-hero, a.fm-watch').forEach(a=>a.addEventListener('click', play));
     }
+    if(window.stripArrows) window.stripArrows(fmBody);
     fmBody.querySelectorAll('.fm-stills figure').forEach(fg=>{
       fg.addEventListener('click',()=>openLb(fg));
       fg.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(fg); } });
@@ -1181,6 +1200,23 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   } else document.querySelectorAll('.bw').forEach(c=>c.classList.add('live'));
 
   /* rails: counters + arrows */
+  /* arrows for sideways photo strips (desktop) */
+  function stripArrows(root){
+    (root||document).querySelectorAll('.fm-stills, .rail.gal').forEach(st=>{
+      if(st.parentElement.classList.contains('strip-wrap')) return;
+      const w = document.createElement('div'); w.className = 'strip-wrap'; st.parentNode.insertBefore(w, st); w.appendChild(st);
+      const mk = (cls, txt, dir)=>{ const b = document.createElement('button'); b.type='button'; b.className='strip-arr '+cls; b.innerHTML=txt; b.setAttribute('aria-label', dir<0?'Scroll back':'Scroll on');
+        b.addEventListener('click', e=>{ e.stopPropagation(); st.scrollBy({left: dir*st.clientWidth*.8, behavior:'smooth'}); }); w.appendChild(b); return b; };
+      const l = mk('l','&larr;',-1), r = mk('r','&rarr;',1);
+      const upd = ()=>{ l.hidden = st.scrollLeft < 4; r.hidden = st.scrollLeft + st.clientWidth >= st.scrollWidth - 4; };
+      st.addEventListener('scroll', upd, {passive:true}); addEventListener('resize', upd); setTimeout(upd, 60); setTimeout(upd, 800);
+    });
+  }
+  window.stripArrows = stripArrows;
+  setTimeout(()=>stripArrows(document), 0);
+  /* act banners: all the same height, sized to the tallest */
+  function evenActs(){ const bs = [...document.querySelectorAll('.inter .box')]; bs.forEach(b=>b.style.minHeight=''); const h = Math.max(...bs.map(b=>b.offsetHeight)); bs.forEach(b=>b.style.minHeight = h+'px'); }
+  evenActs(); addEventListener('resize', evenActs); if(document.fonts && document.fonts.ready) document.fonts.ready.then(evenActs);
   function rail(id, countId, total){
     const el = document.getElementById(id), count = document.getElementById(countId);
     const items = () => [...el.children];

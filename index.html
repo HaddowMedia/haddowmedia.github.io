@@ -831,7 +831,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   let start = performance.now();
   (function(){
     const hero = document.querySelector('.hero'), bg = document.getElementById('reelbg'), clap = hero.querySelector('.clap'), slate = hero.querySelector('.slate');
-    const N = 11, imgs = [];
+    const N = 23, imgs = [];
     for(let i=0;i<N;i++){ const im = new Image(); im.alt=''; im.decoding='async'; im.src='img/reel/r'+String(i).padStart(2,'0')+'.jpg'; bg.insertBefore(im, bg.firstChild); imgs.push(im); }
     const last = imgs[N-1];
     const settle = ()=>{ bg.classList.remove('run'); imgs.forEach(im=>im.classList.remove('on')); last.classList.add('rest'); requestAnimationFrame(()=>requestAnimationFrame(()=>last.classList.add('go'))); };
@@ -840,15 +840,15 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     const snap = ()=>{ clap.classList.add('snap'); setTimeout(()=>{ slate.classList.add('flash'); start = performance.now(); }, 210); };
     const reveal = ()=>{ hero.classList.remove('intro'); };
     // wait briefly for the first frames; never hold the page back for long
-    const ready = Promise.race([Promise.all(imgs.slice(0,5).map(im=>im.decode ? im.decode().catch(()=>{}) : null)), new Promise(r=>setTimeout(r,900))]);
+    const ready = Promise.race([Promise.all(imgs.slice(0,8).map(im=>im.decode ? im.decode().catch(()=>{}) : null)), new Promise(r=>setTimeout(r,900))]);
     ready.then(()=>{
       bg.classList.add('run');
-      const times = [0,110,210,300,385,465,545,630,725,840,980];  // speeds up, then slows into the last frame
+      const times = [0, 222, 413, 576, 714, 833, 937, 1032, 1120, 1204, 1286, 1368, 1450, 1532, 1616, 1704, 1798, 1902, 2022, 2160, 2322, 2607, 3098];  // ~3s: steady, quickens, then slows into the last frame
       times.forEach((t,i)=>setTimeout(()=>{ imgs.forEach(im=>im.classList.remove('on')); if(i<N-1) imgs[i].classList.add('on'); else { settle(); } }, t));
-      setTimeout(snap, 520);
-      setTimeout(reveal, 900);
+      setTimeout(snap, 1368);
+      setTimeout(reveal, 2848);
     });
-    setTimeout(()=>{ if(hero.classList.contains('intro')){ settle(); reveal(); snap(); } }, 2600);
+    setTimeout(()=>{ if(hero.classList.contains('intro')){ settle(); reveal(); snap(); } }, 5200);
   })();
   const tc = document.getElementById('tc');
   (function tick(){
@@ -1105,11 +1105,13 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     ['bts-monitor','The Third Web: checking the frame'],
     ['bts-door','The Third Web: the doorway shot'],
     ['skye-d600','Isle of Skye: setting up by the Skye Bridge'],
-    ['skye-interview','Isle of Skye: interviews at the Old Man of Storr']
+    ['skye-interview','Isle of Skye: interviews at the Old Man of Storr'],
+    ['bts-dog','The Third Web: on set with the dog'],['bts-dog2','The Third Web: a break between takes']
   ];
   const photos = [
     ['photo-glenfinnan','Glenfinnan Viaduct'],['photo-quiraing','The Quiraing, Isle of Skye'],['photo-cuillin','The Cuillin at dusk, Isle of Skye'],
-    ['photo-storr','The Old Man of Storr in fog'],['photo-boats','Low tide at sunset'],['photo-portree','Portree harbour']
+    ['photo-storr','The Old Man of Storr in fog'],['photo-boats','Low tide at sunset'],['photo-portree','Portree harbour'],
+    ['photo-dunvegan','Sunset over the loch, Isle of Skye'],['photo-road','Single-track road towards the Cuillin'],['photo-loch','Light over the loch'],['photo-coast','Coastline, Isle of Skye'],['photo-cows','Belted Galloways under an oak'],['photo-sky','Evening sky'],['photo-park','Dusk in the park']
   ];
   const fig = ([f,c]) => '<figure class="bw" data-src="img/'+f+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+f+'.jpg" alt="'+esc(c)+'" loading="lazy"><figcaption>'+esc(c)+'</figcaption></figure>';
   document.getElementById('bts').innerHTML = bts.map(fig).join('');

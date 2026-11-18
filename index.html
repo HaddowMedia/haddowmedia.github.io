@@ -418,6 +418,20 @@ html[data-theme="light"] .reel-bar{color:#fff}
 .lb-prev{left:max(4px, env(safe-area-inset-left,0px))} .lb-next{right:max(4px, env(safe-area-inset-right,0px))}
 .lb-nav:disabled{opacity:0; cursor:default}
 .lb-count{position:absolute; top:calc(env(safe-area-inset-top,0px) + 22px); left:max(16px, env(safe-area-inset-left,0px)); color:#A39E94; font:600 13px/1 system-ui,sans-serif; letter-spacing:.08em; font-variant-numeric:tabular-nums}
+.galbtn{background:none; border:0; padding:0; color:var(--red); cursor:pointer; font-size:inherit; letter-spacing:inherit; text-transform:inherit; text-decoration:underline; text-underline-offset:4px}
+.pg{position:fixed; inset:0; z-index:44; background:var(--paper); overflow-y:auto; overscroll-behavior:contain; padding:calc(env(safe-area-inset-top,0px) + 16px) 16px 40px}
+.pg[hidden]{display:none}
+.pg-top{display:flex; justify-content:space-between; align-items:flex-start; max-width:1200px; margin:0 auto; position:sticky; top:-16px; background:var(--paper); padding:8px 0; z-index:2}
+.pg-top .mono{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--red)}
+.pg-top h3{margin:4px 0 0; font:700 clamp(34px,8vw,64px)/1 var(--display); text-transform:uppercase}
+.pg .pg-x{position:static; border-color:var(--line); color:var(--ink)}
+.pg-sub{max-width:1200px; margin:8px auto 20px; color:var(--muted)}
+.pg-grid{max-width:1200px; margin:0 auto; columns:2; column-gap:8px}
+@media (min-width:900px){ .pg-grid{columns:3; column-gap:12px} }
+.pg-grid figure{margin:0 0 8px; break-inside:avoid; cursor:pointer}
+.pg-grid img{display:block; width:100%; height:auto}
+.pg.in{animation:pgIn .28s ease}
+@keyframes pgIn{from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:none}}
 .lb{touch-action:none}
 .lb-full{position:absolute; top:calc(env(safe-area-inset-top,0px) + 10px); right:calc(max(12px, env(safe-area-inset-right,0px)) + 54px); width:44px; height:44px; border:1px solid #3A3936; background:transparent; color:#fff; cursor:pointer; display:grid; place-items:center; padding:0; z-index:3}
 .lb-full svg{width:20px; height:20px} .lb-full .co{display:none} .lb.big .lb-full .ex{display:none} .lb.big .lb-full .co{display:block}
@@ -675,12 +689,17 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         <div class="rail-head"><span class="mono">Behind the scenes</span><span class="mono k">Tap to enlarge</span></div>
         <div class="rail gal bts" id="bts"></div>
       </div>
-      <div class="also">
-        <div class="rail-head"><span class="mono">Through the lens</span><a class="mono k" href="https://haddowmedia.co.uk/maxhm/#photos">Full gallery &#8599;</a></div>
+      <div class="also" id="lens">
+        <div class="rail-head"><span class="mono">Through the lens</span><button type="button" class="mono k galbtn" id="galbtn">Full gallery &#8594;</button></div>
         <div class="rail gal photos" id="photos"></div>
       </div>
     </div>
   </section>
+  <div class="pg" id="pg" hidden role="dialog" aria-modal="true" aria-label="Photography">
+    <div class="pg-top"><div><span class="mono">Through the lens</span><h3>Photography</h3></div><button type="button" class="lb-x pg-x" id="pg-x" aria-label="Close">&times;</button></div>
+    <p class="pg-sub">Landscapes and light, mostly from the Highlands and Islands. Tap any photo to see it larger.</p>
+    <div class="pg-grid" id="pg-grid"></div>
+  </div>
   <div class="fm" id="fm" hidden role="dialog" aria-modal="true" aria-labelledby="fm-title">
     <div class="fm-card"><span class="fm-grab" aria-hidden="true"></span><button type="button" class="fm-x" id="fm-x" aria-label="Close">&times;</button><div id="fm-body"></div></div>
   </div>
@@ -1118,6 +1137,20 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   const fig = ([f,c]) => '<figure class="bw" data-src="img/'+f+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+f+'.jpg" alt="'+esc(c)+'" loading="lazy"><figcaption>'+esc(c)+'</figcaption></figure>';
   document.getElementById('bts').innerHTML = bts.map(fig).join('');
   document.getElementById('photos').innerHTML = photos.map(fig).join('');
+  /* full photography gallery, inside the site */
+  const pg = document.getElementById('pg'), pgGrid = document.getElementById('pg-grid');
+  pgGrid.innerHTML = photos.map(([f,c])=>'<figure data-src="img/'+f+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+f+'.jpg" alt="'+esc(c)+'" loading="lazy"></figure>').join('');
+  let pgPushed = false;
+  const openPg = ()=>{ pg.hidden = false; pg.classList.add('in'); pg.scrollTop = 0; document.documentElement.classList.add('fm-open'); if(!pgPushed){ history.pushState({pg:1},''); pgPushed = true; } };
+  const closePg = fromPop=>{ if(pg.hidden) return; pg.hidden = true; pg.classList.remove('in'); document.documentElement.classList.remove('fm-open'); if(pgPushed){ pgPushed = false; if(fromPop!==true) history.back(); } };
+  document.getElementById('galbtn').addEventListener('click', openPg);
+  document.getElementById('pg-x').addEventListener('click', closePg);
+  addEventListener('popstate', ()=>{ if(pg.hidden || !pgPushed) return; if(!document.getElementById('lb').hidden){ closeLb(); history.pushState({pg:1},''); return; } pgPushed = false; closePg(true); });
+  addEventListener('keydown', e=>{ if(e.key==='Escape' && !pg.hidden && document.getElementById('lb').hidden) closePg(); });
+  (function(){ let sy=0, sx=0, top0=0, t0=0;
+    pg.addEventListener('touchstart', e=>{ sy=e.touches[0].clientY; sx=e.touches[0].clientX; top0=pg.scrollTop; t0=Date.now(); }, {passive:true});
+    pg.addEventListener('touchend', e=>{ const dy=e.changedTouches[0].clientY-sy, dx=e.changedTouches[0].clientX-sx; if(top0<=0 && pg.scrollTop<=0 && dy>110 && Math.abs(dy)>Math.abs(dx)*1.5) closePg(); }, {passive:true});
+  })();
   const lb = document.getElementById('lb'), lbImg = document.getElementById('lb-img'), lbCap = document.getElementById('lb-cap');
   let lbFrom = null, lbSet = [], lbI = 0;
   const lbPrev = document.getElementById('lb-prev'), lbNext = document.getElementById('lb-next'), lbCount = document.getElementById('lb-count');
@@ -1130,7 +1163,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   };
   function openLb(el){ lbFrom = el; const pop = el.closest('#fm-body'); lbSet = pop ? [...pop.querySelectorAll('.fm-stills figure')] : [...el.parentElement.querySelectorAll('figure')]; lb.hidden = false; showLb(lbSet.indexOf(el)); document.getElementById('lb-x').focus(); }
   let closeLb = function(){ lb.hidden = true; lbImg.removeAttribute('src'); if(lbFrom && typeof kbNav!=='undefined' && kbNav) lbFrom.focus(); else if(document.activeElement) document.activeElement.blur(); }
-  document.querySelectorAll('.gal figure').forEach(f=>{
+  document.querySelectorAll('.gal figure, .pg-grid figure').forEach(f=>{
     f.addEventListener('click',()=>openLb(f));
     f.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(f); } });
   });

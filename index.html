@@ -426,6 +426,9 @@ html[data-theme="light"] .reel-bar{color:#fff}
 .pg-top h3{margin:4px 0 0; font:700 clamp(34px,8vw,64px)/1 var(--display); text-transform:uppercase}
 .pg .pg-x{position:static; border-color:var(--line); color:var(--ink)}
 .pg-sub{max-width:1200px; margin:8px auto 20px; color:var(--muted)}
+.pg-group{max-width:1200px; margin:0 auto 28px}
+.pg-group h4{margin:18px 0 2px; font:700 clamp(22px,5vw,32px)/1.05 var(--display); text-transform:uppercase}
+.pg-group > p{margin:0 0 12px; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
 .pg-grid{max-width:1200px; margin:0 auto; columns:2; column-gap:8px}
 @media (min-width:900px){ .pg-grid{columns:3; column-gap:12px} }
 .pg-grid figure{margin:0 0 8px; break-inside:avoid; cursor:pointer}
@@ -686,7 +689,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
       </div>
 
       <div class="also">
-        <div class="rail-head"><span class="mono">Behind the scenes</span><span class="mono k">Tap to enlarge</span></div>
+        <div class="rail-head"><span class="mono">Behind the scenes</span><button type="button" class="mono k galbtn" id="btsbtn">Full gallery &#8594;</button></div>
         <div class="rail gal bts" id="bts"></div>
       </div>
       <div class="also" id="lens">
@@ -696,9 +699,9 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     </div>
   </section>
   <div class="pg" id="pg" hidden role="dialog" aria-modal="true" aria-label="Photography">
-    <div class="pg-top"><div><span class="mono">Through the lens</span><h3>Photography</h3></div><button type="button" class="lb-x pg-x" id="pg-x" aria-label="Close">&times;</button></div>
-    <p class="pg-sub">Landscapes and light, mostly from the Highlands and Islands. Tap any photo to see it larger.</p>
-    <div class="pg-grid" id="pg-grid"></div>
+    <div class="pg-top"><div><span class="mono" id="pg-kicker">Through the lens</span><h3 id="pg-title">Photography</h3></div><button type="button" class="lb-x pg-x" id="pg-x" aria-label="Close">&times;</button></div>
+    <p class="pg-sub" id="pg-sub">Landscapes and light, mostly from the Highlands and Islands. Tap any photo to see it larger.</p>
+    <div id="pg-grid" class="pg-body"></div>
   </div>
   <div class="fm" id="fm" hidden role="dialog" aria-modal="true" aria-labelledby="fm-title">
     <div class="fm-card"><span class="fm-grab" aria-hidden="true"></span><button type="button" class="fm-x" id="fm-x" aria-label="Close">&times;</button><div id="fm-body"></div></div>
@@ -1118,17 +1121,15 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
 
 
   /* galleries + lightbox */
-  const bts = [
-    ['bts-direct','The Third Web: blocking a scene outside the Lancaster University students\u2019 union shop'],
-    ['bts-floor','The Third Web: rolling on the spilled-yoghurt scene'],
-    ['bts-counter','The Third Web: shooting at the till'],
-    ['bts-boom','The Third Web: camera and boom set up'],
-    ['bts-monitor','The Third Web: checking the frame'],
-    ['bts-door','The Third Web: the doorway shot'],
-    ['skye-d600','Isle of Skye: setting up by the Skye Bridge'],
-    ['skye-interview','Isle of Skye: interviews at the Old Man of Storr'],
-    ['bts-dog','The Third Web: on set with the dog'],['bts-dog2','The Third Web: a break between takes']
+  const BTS_GROUPS = [
+    ['The Third Web', 'Lancaster University students\u2019 union shop', [
+      ['bts-direct','Blocking a scene outside the shop'],['bts-floor','Rolling on the spilled-yoghurt scene'],['bts-counter','Shooting at the till'],
+      ['bts-boom','Camera and boom set up'],['bts-monitor','Checking the frame'],['bts-door','The doorway shot'],
+      ['bts-crew','Cast and crew at the counter'],['bts-tripod','Lining up an exterior'],['bts-dog','On set with the dog'],['bts-dog2','A break between takes']]],
+    ['Isle of Skye: Impact of Tourism', 'On location across Skye', [
+      ['skye-d600','Setting up by the Skye Bridge'],['skye-interview','Interviews at the Old Man of Storr'],['skye-notes','On location at the Storr'],['skye-talisker','Talisker Distillery']]]
   ];
+  const bts = BTS_GROUPS.flatMap(([film,,list])=>list.map(([k,c])=>[k, film.split(':')[0]+': '+c.charAt(0).toLowerCase()+c.slice(1)]));
   const photos = [
     ['photo-glenfinnan','Glenfinnan Viaduct'],['photo-quiraing','The Quiraing, Isle of Skye'],['photo-cuillin','The Cuillin at dusk, Isle of Skye'],
     ['photo-storr','The Old Man of Storr in fog'],['photo-boats','Low tide at sunset'],['photo-portree','Portree harbour'],
@@ -1139,11 +1140,20 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   document.getElementById('photos').innerHTML = photos.map(fig).join('');
   /* full photography gallery, inside the site */
   const pg = document.getElementById('pg'), pgGrid = document.getElementById('pg-grid');
-  pgGrid.innerHTML = photos.map(([f,c])=>'<figure data-src="img/'+f+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+f+'.jpg" alt="'+esc(c)+'" loading="lazy"></figure>').join('');
+  const pgFig = ([f,c]) => '<figure data-src="img/'+f+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+f+'.jpg" alt="'+esc(c)+'" loading="lazy"></figure>';
+  const PG = {
+    photos:{k:'Through the lens', t:'Photography', s:'Landscapes and light, mostly from the Highlands and Islands. Tap any photo to see it larger.',
+      html:()=>'<div class="pg-grid">'+photos.map(pgFig).join('')+'</div>'},
+    bts:{k:'On set', t:'Behind the scenes', s:'How the films were made, film by film. Tap any photo to see it larger.',
+      html:()=>BTS_GROUPS.map(([film,where,list])=>'<section class="pg-group" data-film="'+esc(film.split(':')[0])+'"><h4>'+film+'</h4><p class="mono">'+where+' &middot; '+list.length+' photos</p><div class="pg-grid">'+list.map(pgFig).join('')+'</div></section>').join('')}
+  };
+  function fillPg(kind){ const d = PG[kind]; document.getElementById('pg-kicker').textContent=d.k; document.getElementById('pg-title').textContent=d.t; document.getElementById('pg-sub').textContent=d.s; pgGrid.innerHTML = d.html();
+    pgGrid.querySelectorAll('figure').forEach(f=>{ f.addEventListener('click',()=>openLb(f)); f.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(f); } }); }); }
   let pgPushed = false;
-  const openPg = ()=>{ pg.hidden = false; pg.classList.add('in'); pg.scrollTop = 0; document.documentElement.classList.add('fm-open'); if(!pgPushed){ history.pushState({pg:1},''); pgPushed = true; } };
+  const openPg = kind=>{ fillPg(typeof kind==='string'?kind:'photos'); pg.hidden = false; pg.classList.add('in'); pg.scrollTop = 0; document.documentElement.classList.add('fm-open'); if(!pgPushed){ history.pushState({pg:1},''); pgPushed = true; } };
   const closePg = fromPop=>{ if(pg.hidden) return; pg.hidden = true; pg.classList.remove('in'); document.documentElement.classList.remove('fm-open'); if(pgPushed){ pgPushed = false; if(fromPop!==true) history.back(); } };
-  document.getElementById('galbtn').addEventListener('click', openPg);
+  document.getElementById('galbtn').addEventListener('click', ()=>openPg('photos'));
+  document.getElementById('btsbtn').addEventListener('click', ()=>openPg('bts'));
   document.getElementById('pg-x').addEventListener('click', closePg);
   addEventListener('popstate', ()=>{ if(pg.hidden || !pgPushed) return; if(!document.getElementById('lb').hidden){ closeLb(); history.pushState({pg:1},''); return; } pgPushed = false; closePg(true); });
   addEventListener('keydown', e=>{ if(e.key==='Escape' && !pg.hidden && document.getElementById('lb').hidden) closePg(); });
@@ -1177,14 +1187,14 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   const lbPrev = document.getElementById('lb-prev'), lbNext = document.getElementById('lb-next'), lbCount = document.getElementById('lb-count');
   let showLb = function(i){
     lbI = Math.max(0, Math.min(lbSet.length-1, i)); const el = lbSet[lbI];
-    lbImg.src = el.dataset.src; lbImg.alt = el.dataset.cap; const sec = el.closest('.fm-stills') ? (el.closest('.strip-wrap')||el.closest('.fm-stills')).previousElementSibling : null; const secName = sec && sec.classList.contains('fm-lab') ? sec.textContent.split(' ·')[0] : ''; lbCap.textContent = (secName ? secName+' · ' : '')+el.dataset.cap;
+    lbImg.src = el.dataset.src; lbImg.alt = el.dataset.cap; const sec = el.closest('.fm-stills') ? (el.closest('.strip-wrap')||el.closest('.fm-stills')).previousElementSibling : null; const grp = el.closest('.pg-group'); const secName = grp ? grp.dataset.film : (sec && sec.classList.contains('fm-lab') ? sec.textContent.split(' ·')[0] : ''); lbCap.textContent = (secName ? secName+' · ' : '')+el.dataset.cap;
     lbCount.textContent = (lbI+1)+' / '+lbSet.length+(matchMedia('(pointer:coarse)').matches && lbSet.length>1 ? '  ·  swipe' : '');
     lbPrev.disabled = lbI===0; lbNext.disabled = lbI===lbSet.length-1;
     const n = lbSet[lbI+1]; if(n){ const pre = new Image(); pre.src = n.dataset.src; }
   };
-  function openLb(el){ lbFrom = el; const pop = el.closest('#fm-body'); lbSet = pop ? [...pop.querySelectorAll('.fm-stills figure')] : [...el.parentElement.querySelectorAll('figure')]; lb.hidden = false; showLb(lbSet.indexOf(el)); document.getElementById('lb-x').focus(); }
+  function openLb(el){ lbFrom = el; const pop = el.closest('#fm-body') || el.closest('#pg-grid'); lbSet = pop ? [...pop.querySelectorAll('figure')].filter(f=>f.closest('.fm-stills, .pg-grid')) : [...el.parentElement.querySelectorAll('figure')]; lb.hidden = false; showLb(lbSet.indexOf(el)); document.getElementById('lb-x').focus(); }
   let closeLb = function(){ lb.hidden = true; lbImg.removeAttribute('src'); if(lbFrom && typeof kbNav!=='undefined' && kbNav) lbFrom.focus(); else if(document.activeElement) document.activeElement.blur(); }
-  document.querySelectorAll('.gal figure, .pg-grid figure').forEach(f=>{
+  document.querySelectorAll('.gal figure').forEach(f=>{
     f.addEventListener('click',()=>openLb(f));
     f.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLb(f); } });
   });

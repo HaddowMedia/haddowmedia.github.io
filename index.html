@@ -437,6 +437,7 @@ html.fm-open, html.fm-open body{overflow:hidden}
 @keyframes fmIn{from{opacity:0; transform:translateY(16px)}to{opacity:1; transform:none}}
 @media (max-width:640px){ .fm{align-items:flex-end; padding:calc(env(safe-area-inset-top,0px) + 64px) 0 0} .fm-grab{display:block!important} .fm-card{max-height:100%; border-left:0; border-right:0; border-bottom:0; animation-name:fmUp} }
 @keyframes fmUp{from{transform:translateY(40px); opacity:0}to{transform:none; opacity:1}}
+.fm-card.shown{animation:none}
 .fm-grab{display:none; position:absolute; top:7px; left:50%; width:44px; height:5px; margin-left:-22px; border-radius:3px; background:rgba(255,255,255,.55); z-index:3; box-shadow:0 0 4px rgba(0,0,0,.4); pointer-events:none}
 .fm-card.dragging{animation:none; transition:none}
 .fm-card.settle{transition:transform .22s ease, opacity .22s ease}
@@ -1005,13 +1006,14 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     if(!fmPushed){ history.pushState({fm:1},''); fmPushed = true; }
     fm.querySelector('.fm-card').scrollTop = 0; if(kbNav) document.getElementById('fm-x').focus(); else { const c=fm.querySelector('.fm-card'); c.setAttribute('tabindex','-1'); c.focus({preventScroll:true}); }
   }
+  fm.querySelector('.fm-card').addEventListener('animationend', e=>{ if(e.target===e.currentTarget) e.currentTarget.classList.add('shown'); });
   /* back gesture / back button closes the pop-up */
   let fmPushed = false;
   function closeFilm(fromPop){
     if(fm.hidden) return;
     fm.hidden = true; document.documentElement.classList.remove('fm-open');
     fmBody.querySelectorAll('iframe').forEach(i=>i.remove());
-    const card = fm.querySelector('.fm-card'); card.style.transform=''; card.style.opacity=''; card.classList.remove('settle','dragging');
+    const card = fm.querySelector('.fm-card'); card.style.transform=''; card.style.opacity=''; card.classList.remove('settle','dragging','shown');
     if(fmFrom){ if(kbNav) fmFrom.focus({preventScroll:true}); else if(document.activeElement && document.activeElement!==document.body) document.activeElement.blur(); }
     if(fmPushed){ fmPushed = false; if(fromPop!==true) history.back(); }
   }

@@ -494,6 +494,13 @@ html.fm-open, html.fm-open body{overflow:hidden}
 .fm-stills figure{margin:0; cursor:zoom-in}
 .fm-stills img{display:block; width:100%; aspect-ratio:16/10; object-fit:cover; background:var(--line)}
 .fm-credit{font-size:13px; color:var(--muted)}
+.fm-stills.fm-cast{grid-auto-columns:34%}
+@media (min-width:641px){ .fm-stills.fm-cast{grid-auto-columns:22%} }
+.fm-cast img{aspect-ratio:4/5; border-radius:2px}
+.fm-cast figcaption{padding-top:8px; line-height:1.25}
+.fm-cast figcaption b{display:block; font-weight:500; font-size:14px}
+.fm-cast figcaption span{display:block; font-size:11px; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; margin-top:2px}
+.fm-castmore{margin-top:10px}
 .fm-actions{display:flex; gap:10px; flex-wrap:wrap; padding-top:4px}
 .gbtn-alt{border-color:var(--frame-line); color:var(--frame-ink); align-self:flex-start}
 
@@ -957,7 +964,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     'Vic': {roles:'Director · Self-produced', stills:[['film-vic','Vic at his kitchen table'],['film-vic-close','Vic, close'],['film-vic-mug','Vic with a mug of tea'],['film-vic-art','Key artwork'],['film-vic-years','Vic through the years, from the family archive'],['film-vic-poster','First poster']], status:'In production'},
     'Lancaster': {roles:'Director · Cinematographer · Editor', stills:[['film-lancaster-art','Title card']], notes:'Selected for the Arts Beats Festival, Lancaster, 2023. Shot in black and white, with only red left in the frame.'},
     'The Heart of Midlothian': {roles:'Director · Editor', stills:[['film-heart','The Heart of Midlothian on the Royal Mile'],['film-heart-feet','Passers-by at the heart'],['film-heart-art','Title card']], people:'Presented by Jake Middleton'},
-    'The Third Web': {roles:'Writer · Director · Camera · Producer', stills:[['film-thirdweb-manager','Oliver faces his manager'],['film-thirdweb-park','Oliver walks Lucy through the park'],['film-thirdweb-dog','Oliver and the dog'],['film-thirdweb-ar','An augmented-reality supercar on campus'],['film-thirdweb-poster','Key poster'],['film-thirdweb-poster2','Alternate poster'],['film-thirdweb-dukes','Screening at the LICA Film Degree Show, The Dukes, Lancaster'],['film-thirdweb-about','What is The Third Web about?'],['film-thirdweb-cast','The cast'],['film-thirdweb-crew','The crew'],['film-thirdweb-title','YouTube title card'],['bts-direct','Behind the scenes: blocking a scene'],['bts-crew','Behind the scenes: cast and crew'],['bts-monitor','Behind the scenes: checking the frame'],['bts-tw-yoghurt','Behind the scenes: the spilled yoghurt'],['bts-tw-lucy-set','Behind the scenes: Lucy on set']], notes:'Made as an interactive film: at key moments the story stops and the audience chooses what Oliver does next. Every outcome was filmed. Lancaster University dissertation, 2023, screened at the LICA Film Degree Show at The Dukes, Lancaster.'},
+    'The Third Web': {roles:'Writer · Director · Camera · Producer', stills:[['film-thirdweb-manager','Oliver faces his manager'],['film-thirdweb-park','Oliver walks Lucy through the park'],['film-thirdweb-dog','Oliver and the dog'],['film-thirdweb-ar','An augmented-reality supercar on campus'],['film-thirdweb-poster','Key poster'],['film-thirdweb-poster2','Alternate poster'],['film-thirdweb-dukes','Screening at the LICA Film Degree Show, The Dukes, Lancaster'],['film-thirdweb-about','What is The Third Web about?'],['film-thirdweb-cast','The cast'],['film-thirdweb-crew','The crew'],['film-thirdweb-title','YouTube title card'],['bts-direct','Behind the scenes: blocking a scene'],['bts-crew','Behind the scenes: cast and crew'],['bts-monitor','Behind the scenes: checking the frame'],['bts-tw-yoghurt','Behind the scenes: the spilled yoghurt'],['bts-tw-lucy-set','Behind the scenes: Lucy on set']], cast:[['cast-isaac','Isaac Backhouse','Oliver'],['cast-johnny','Johnny Lau','The manager'],['cast-andrew','Andrew Roberts','The customer'],['cast-lucy','Lucy','Herself']], castMore:'Also starring Maisie Wong as Dr Herriot, the vet, and Max Haddow&#8209;Mendes as the stranger.', notes:'Made as an interactive film: at key moments the story stops and the audience chooses what Oliver does next. Every outcome was filmed. Lancaster University dissertation, 2023, screened at the LICA Film Degree Show at The Dukes, Lancaster.'},
     'Isle of Skye': {roles:'Director · Cinematographer · Editor · Narrator · Sound', stills:[['film-skye-passing','Passing place, the Cuillin across the water'],['skye-storr','The Old Man of Storr'],['skye-interview','Interviews at the Storr'],['skye-portree','Portree harbour'],['skye-talisker','Talisker Distillery'],['skye-d600','Setting up by the Skye Bridge']]},
     'The Portuguese Cannon': {roles:'Director · Editor', stills:[['film-cannon-still','The cannon on Calton Hill'],['film-cannon','The Portuguese Cannon'],['film-cannon-calton','Calton Hill, Edinburgh'],['film-cannon-art','Title card']], people:'Presented by Jake Middleton'},
     'Crichton Castle': {roles:'Writer · Director · Editor · Casting', stills:[['film-crichton','Crichton Castle, Midlothian'],['film-crichton-art','Title card']], people:'Presented by David Weinczok'},
@@ -989,6 +996,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     const stills = all.filter(x=>!isBts(x) && !isPoster(x)).map(fig).join('');
     const posters = all.filter(isPoster).map(fig).join('');
     const bts = all.filter(isBts).map(fig).join('');
+    const cast = (d.cast||[]).map(([k,n,r])=>{ const c = n+(r==='Herself'?', as herself':' as '+r.replace(/^The /,'the ')); return '<figure data-src="img/'+k+'.jpg" data-cap="'+esc(c)+'" tabindex="0" role="button" aria-label="Enlarge: '+esc(c)+'"><img src="img/'+k+'.jpg" alt="'+esc(n)+'" loading="lazy"><figcaption><b>'+esc(n)+'</b><span class="mono">'+esc(r)+'</span></figcaption></figure>'; }).join('');
     fmBody.innerHTML =
       (href ? '<a class="fm-hero" href="'+href+'" target="_blank" rel="noopener">' : '<div class="fm-hero">')+
         (hero ? '<img src="'+hero+'" alt="'+esc(f.title)+'" onerror="this.remove()">' : '')+
@@ -1000,6 +1008,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
         '<p class="fm-desc">'+(d.desc || f.desc || '')+'</p>'+
         (d.notes ? '<p class="fm-desc">'+d.notes+'</p>' : '')+
         (d.people || f.tag ? '<p class="fm-people mono">'+[d.people, (f.tag && f.tag!==d.people ? f.tag : '')].filter(Boolean).join(' · ')+'</p>' : '')+
+        (cast ? '<span class="mono fm-lab">Meet the cast</span><div class="fm-stills fm-cast">'+cast+'</div>'+(d.castMore ? '<p class="fm-credit fm-castmore">'+d.castMore+'</p>' : '') : '')+
         (stills ? '<span class="mono fm-lab">Film stills · tap to enlarge</span><div class="fm-stills gal-fm">'+stills+'</div>' : '')+
         (bts ? '<span class="mono fm-lab">Behind the scenes</span><div class="fm-stills gal-fm">'+bts+'</div>' : '')+
         (posters ? '<span class="mono fm-lab">Posters &amp; artwork</span><div class="fm-stills gal-fm">'+posters+'</div>' : '')+

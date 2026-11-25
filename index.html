@@ -146,7 +146,15 @@ nav a.founder-link{padding-left:18px; border-left:1px solid var(--line)}
   nav a.founder-link{padding-left:0; border-left:0}
   nav a.founder-link span{color:var(--ink)}
 }
-.playhead{position:absolute; left:0; bottom:-1px; height:2px; width:100%; background:var(--red); transform-origin:left; transform:scaleX(0)}
+.playhead{position:absolute; left:0; bottom:-1px; height:2px; width:100%; background:linear-gradient(90deg, color-mix(in srgb, var(--red) 35%, transparent), var(--red)); transform-origin:left; transform:scaleX(0); will-change:transform; border-radius:0 2px 2px 0; box-shadow:0 0 10px color-mix(in srgb, var(--red) 55%, transparent)}
+/* scrollbars: slim, rounded, and quiet until you reach for them */
+html, .pg, .fm-card{scrollbar-width:thin; scrollbar-color:color-mix(in srgb, var(--ink) 22%, transparent) transparent}
+@media (hover:hover) and (pointer:fine){ html:hover, .pg:hover, .fm-card:hover{scrollbar-color:color-mix(in srgb, var(--ink) 32%, transparent) transparent} }
+::-webkit-scrollbar{width:10px; height:10px; background:transparent}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:color-mix(in srgb, var(--ink) 22%, transparent); border-radius:10px; border:3px solid transparent; background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background-color:var(--red)}
+::-webkit-scrollbar-corner{background:transparent}
 
 /* hero */
 .hero{padding-block:32px 40px; position:relative; isolation:isolate; min-height:calc(100vh - var(--hh,72px)); min-height:calc(100svh - var(--hh,72px)); display:flex; flex-direction:column; justify-content:center; box-sizing:border-box}
@@ -933,9 +941,16 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   const ph = document.getElementById('playhead');
   const navLinks = [...document.querySelectorAll('#nav a[href^="#"]')];
   const acts = navLinks.map(a => document.querySelector(a.getAttribute('href')));
+  let phNow = 0, phTarget = 0, phRaf = 0;
+  function phStep(){
+    phNow += (phTarget - phNow) * (reduce ? 1 : 0.18);
+    if(Math.abs(phTarget - phNow) < 0.0005) phNow = phTarget;
+    ph.style.transform = 'scaleX('+phNow.toFixed(4)+')';
+    phRaf = phNow === phTarget ? 0 : requestAnimationFrame(phStep);
+  }
   function onScroll(){
     const max = document.documentElement.scrollHeight - innerHeight;
-    ph.style.transform = 'scaleX('+(max>0 ? Math.min(1, scrollY/max) : 0)+')';
+    phTarget = max>0 ? Math.min(1, scrollY/max) : 0; if(!phRaf) phRaf = requestAnimationFrame(phStep);
     let cur = -1;
     acts.forEach((el,i)=>{ if(el && el.getBoundingClientRect().top < innerHeight*0.4) cur = i; });
     navLinks.forEach((a,i)=>a.classList.toggle('on', i===cur));

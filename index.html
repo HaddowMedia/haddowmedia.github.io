@@ -171,10 +171,21 @@ nav a.founder-link{padding-left:18px; border-left:1px solid var(--line)}
 html[data-theme="light"] .reelbg img.rest{opacity:.3}
 html:not([data-theme="light"]) .hero :is(.sub, h1){text-shadow:0 1px 14px rgba(0,0,0,.55)}
 /* light mode settles on green hills instead of the snow; the switch crossfades between them */
-.reelbg img.alt{opacity:0; transform:scale(1.04); transition:opacity 1.2s ease, transform 14s ease-out; filter:saturate(.95) brightness(.8) contrast(1.05)}
+.reelbg img.alt{opacity:0; transform:scale(1.08); transition:opacity 1.2s ease, transform 14s ease-out; filter:saturate(.95) brightness(.8) contrast(1.05)}
 .reelbg.settled img.rest{transition:opacity 1.2s ease, transform 14s ease-out}
 html[data-theme="light"] .reelbg.settled img.rest{opacity:0}
-html[data-theme="light"] .reelbg.settled img.alt{opacity:.72; transform:scale(1)}
+html[data-theme="light"] .reelbg.settled img.alt{opacity:.72}
+.reelbg img.alt.go{transform:scale(1)}
+/* both photos share one frame, so the peaks line up as they crossfade */
+.reelbg img.rest, .reelbg img.alt{object-position:30% 42%}
+/* the page colours glide between dark and light instead of snapping */
+@property --paper{syntax:'<color>'; inherits:true; initial-value:#121110}
+@property --card{syntax:'<color>'; inherits:true; initial-value:#1A1816}
+@property --ink{syntax:'<color>'; inherits:true; initial-value:#F2EEE6}
+@property --muted{syntax:'<color>'; inherits:true; initial-value:#A39E94}
+@property --line{syntax:'<color>'; inherits:true; initial-value:#2F2C28}
+@property --red{syntax:'<color>'; inherits:true; initial-value:#74B08A}
+html{transition:--paper .9s ease, --card .9s ease, --ink .9s ease, --muted .9s ease, --line .9s ease, --red .9s ease}
 .hero.intro h1, .hero.intro .sub, .hero.intro .cta{opacity:0; transform:translateY(14px)}
 .hero h1, .hero .sub, .hero .cta{transition:opacity .6s ease, transform .6s ease}
 .hero .sub{transition-delay:.12s} .hero .cta{transition-delay:.24s}
@@ -879,7 +890,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     for(let i=0;i<N;i++){ const im = new Image(); im.alt=''; im.decoding='async'; im.src='img/reel/r'+String(i).padStart(2,'0')+'.jpg'; bg.insertBefore(im, bg.firstChild); imgs.push(im); }
     const last = imgs[N-1];
     const alt = new Image(); alt.alt=''; alt.decoding='async'; alt.className='alt'; alt.src='img/reel/r-light.jpg'; bg.insertBefore(alt, bg.firstChild);
-    const settle = ()=>{ bg.classList.remove('run'); imgs.forEach(im=>im.classList.remove('on')); last.classList.add('rest'); bg.classList.add('settled'); requestAnimationFrame(()=>requestAnimationFrame(()=>last.classList.add('go'))); };
+    const settle = ()=>{ bg.classList.remove('run'); imgs.forEach(im=>im.classList.remove('on')); last.classList.add('rest'); bg.classList.add('settled'); requestAnimationFrame(()=>requestAnimationFrame(()=>{ last.classList.add('go'); alt.classList.add('go'); })); };
     if(reduce){ settle(); return; }
     hero.classList.add('intro');
     const snap = ()=>{ clap.classList.add('snap'); setTimeout(()=>{ slate.classList.add('flash'); start = performance.now(); }, 210); };

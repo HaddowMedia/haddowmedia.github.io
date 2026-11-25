@@ -169,6 +169,11 @@ nav a.founder-link{padding-left:18px; border-left:1px solid var(--line)}
 .reelbg.run .gate{opacity:1; animation:flick .09s steps(2) infinite}
 @keyframes flick{50%{filter:brightness(1.25)}}
 html[data-theme="light"] .reelbg img.rest{opacity:.3}
+/* light mode settles on green hills instead of the snow; the switch crossfades between them */
+.reelbg img.alt{opacity:0; transform:scale(1.04); transition:opacity 1.2s ease, transform 14s ease-out; filter:saturate(.9)}
+.reelbg.settled img.rest{transition:opacity 1.2s ease, transform 14s ease-out}
+html[data-theme="light"] .reelbg.settled img.rest{opacity:0}
+html[data-theme="light"] .reelbg.settled img.alt{opacity:.62; transform:scale(1)}
 .hero.intro h1, .hero.intro .sub, .hero.intro .cta{opacity:0; transform:translateY(14px)}
 .hero h1, .hero .sub, .hero .cta{transition:opacity .6s ease, transform .6s ease}
 .hero .sub{transition-delay:.12s} .hero .cta{transition-delay:.24s}
@@ -872,7 +877,8 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
     const N = 23, imgs = [];
     for(let i=0;i<N;i++){ const im = new Image(); im.alt=''; im.decoding='async'; im.src='img/reel/r'+String(i).padStart(2,'0')+'.jpg'; bg.insertBefore(im, bg.firstChild); imgs.push(im); }
     const last = imgs[N-1];
-    const settle = ()=>{ bg.classList.remove('run'); imgs.forEach(im=>im.classList.remove('on')); last.classList.add('rest'); requestAnimationFrame(()=>requestAnimationFrame(()=>last.classList.add('go'))); };
+    const alt = new Image(); alt.alt=''; alt.decoding='async'; alt.className='alt'; alt.src='img/reel/r-light.jpg'; bg.insertBefore(alt, bg.firstChild);
+    const settle = ()=>{ bg.classList.remove('run'); imgs.forEach(im=>im.classList.remove('on')); last.classList.add('rest'); bg.classList.add('settled'); requestAnimationFrame(()=>requestAnimationFrame(()=>last.classList.add('go'))); };
     if(reduce){ settle(); return; }
     hero.classList.add('intro');
     const snap = ()=>{ clap.classList.add('snap'); setTimeout(()=>{ slate.classList.add('flash'); start = performance.now(); }, 210); };

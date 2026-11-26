@@ -88,6 +88,9 @@ html[data-theme="light"]{
 }
 html[data-theme="light"] .logo{filter:none}
 html[data-theme="light"] :is(.fm-hero, .fm-pk-head, .frame, .inter, .pkg .head, .portrait, .strip, footer){--ink:var(--frame-ink); --muted:var(--frame-muted); --line:var(--frame-line); --red:var(--frame-red); --red-ink:#0E1A13; --paper:var(--frame); --card:#1A1816; color:var(--ink)}
+/* in light mode the act banners, price heads and footer become soft sage panels; only the film screens stay dark */
+html[data-theme="light"]{--panel:#E2E7DC; --panel-ink:#1A1714; --panel-muted:#59604F; --panel-line:#C2CBB9}
+html[data-theme="light"] :is(.inter, .pkg .head, .fm-pk-head, footer){--frame:var(--panel); --frame-ink:var(--panel-ink); --frame-muted:var(--panel-muted); --frame-line:var(--panel-line); --frame-red:#2D6A48; --ink:var(--panel-ink); --muted:var(--panel-muted); --line:var(--panel-line); --red:#2D6A48; --red-ink:#FFFFFF; --paper:var(--panel); --card:#EEF1EA; color:var(--ink)}
 html[data-theme="light"] body::after{opacity:.05; mix-blend-mode:multiply}
 .theme{flex:none; width:40px; height:40px; display:grid; place-items:center; border:1px solid var(--line); background:transparent; color:var(--ink); cursor:pointer; padding:0; border-radius:50%; transition:border-color .2s, transform .3s}
 .theme svg{width:20px; height:20px}
@@ -783,7 +786,7 @@ footer .btn:hover{background:var(--frame-ink); color:var(--frame)}
   </div></div></div>
   <section class="act-body">
     <div class="wrap">
-      <p class="hire-intro reveal">Grandad&#8217;s tales at the kitchen table. The history in the walls of your building. The reason your business exists. Haddow Media is a London documentary studio that finds the story, films it with care and gives you something to keep. <b>Whose story should we tell?</b></p>
+      <p class="hire-intro reveal">Grandad&#8217;s tales at the kitchen table. The history in the walls of your building. The reason your business exists. Haddow Media is a UK documentary studio that finds the story, films it with care and gives you something to keep. <b>Whose story should we tell?</b></p>
       <div class="rail-head pkgs-nav">
         <span class="count" id="pkg-count"><b>01</b> / 02 · swipe</span>
         <div class="rail-nav"><button type="button" data-rail="pkgs" data-dir="-1" aria-label="Previous package">&larr;</button><button type="button" data-rail="pkgs" data-dir="1" aria-label="Next package">&rarr;</button></div>

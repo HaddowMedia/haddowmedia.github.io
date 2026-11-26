@@ -244,6 +244,28 @@ html{transition:--paper .9s ease, --card .9s ease, --ink .9s ease, --muted .9s e
 .hero h1 em{font-style:normal; color:var(--red)}
 .hero .sub{font-size:clamp(17px,2.2vw,21px); color:var(--muted); max-width:40ch; margin:16px 0 0; line-height:1.5}
 @media (max-width:760px){ .hero .sub{text-align:left} }
+/* desktop: the mountains take the stage; the title sits centred over them, bigger */
+@media (min-width:900px){
+  .hero .hero-title{text-align:center; display:flex; flex-direction:column; align-items:center}
+  .hero .slate{margin-inline:auto; width:min(640px,100%)}
+  .hero h1{font-size:clamp(64px,6.6vw,120px); line-height:.95; text-wrap:balance; max-width:20ch}
+  .hero .sub{margin:22px auto 0; text-align:center; font-size:clamp(20px,1.6vw,26px); max-width:none}
+  .hero .cta{justify-content:center; margin-top:34px}
+  .hero .cta .btn{padding:15px 26px; font-size:16px}
+  .reelbg::after{background:
+    radial-gradient(ellipse 46% 42% at 50% 50%, color-mix(in srgb, var(--paper) 42%, transparent) 0%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, transparent 62%, color-mix(in srgb, var(--paper) 70%, transparent) 88%, var(--paper) 100%)}
+  .reelbg img.rest{opacity:.85}
+  html[data-theme="light"] .reelbg.settled img.alt{opacity:.92}
+  html[data-theme="light"] .hero :is(h1, .sub){text-shadow:0 0 28px color-mix(in srgb, var(--paper) 75%, transparent)}
+  .hero .sub{color:var(--ink)}
+  html:not([data-theme="light"]) .hero .sub{text-shadow:0 1px 16px rgba(0,0,0,.7)}
+  .hero .slate{background:color-mix(in srgb, var(--paper) 55%, transparent); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px)}
+  .hero .cta .btn:not(.primary){background:color-mix(in srgb, var(--paper) 45%, transparent); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px)}
+  .scrollcue{bottom:28px; font-size:13px; gap:10px; letter-spacing:.26em}
+  .scrollcue i{width:2px; height:76px}
+  .scrollcue{color:var(--ink)} html:not([data-theme="light"]) .scrollcue{text-shadow:0 1px 10px rgba(0,0,0,.8)}
+}
 .hero .lede{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:24px; margin-top:24px; align-items:end}
 .hero .lede p{font-size:19px; max-width:34ch}
 .cta{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
